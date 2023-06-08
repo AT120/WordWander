@@ -10,9 +10,7 @@ using WordWonderBackend.Main.DAL.Models;
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
-string connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new NullReferenceException("Specify connection string!");
 
-services.AddDbContext<MainDbContext>(options => options.UseNpgsql(connection));
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var storageString = "Storage";
 services.Configure<StorageSettings>(builder.Configuration.GetSection(storageString));
