@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
 
-const baseURL='https://localhost:7045/api/backend/'
+const baseURL='https://localhost:7112/api/books/'
 
 const instance = axios.create({
     baseURL: baseURL
 })
 
-function getBooks(page){
-    return instance.get(`restaurants/${page}`)
+function getBooks(page, name, sortBy){
+    return instance.get(`${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
         if(response.status ===200){
             return response.data;

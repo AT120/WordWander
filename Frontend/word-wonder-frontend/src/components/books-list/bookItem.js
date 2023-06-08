@@ -10,7 +10,7 @@ function BookItem(props){
     return(
         <Card>
             <Card.Header  className='d-flex justify-content-between'>
-                 <span>{props.title}</span>
+                 <span>{props.name}</span>
                  <button className="btn btn-sm btn-outline-danger" onClick={handleClick}>Удалить</button> 
             </Card.Header>
             <Card.Body>

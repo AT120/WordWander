@@ -8,7 +8,15 @@ var services = builder.Services;
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new NullReferenceException("Specify connection string!");
 services.AddDbContext<MainDbContext>(options => options.UseNpgsql(connection));
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();
@@ -24,7 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();

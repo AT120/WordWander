@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 using WordWonderBackend.Main.Common.Interfaces;
 using WordWonderBackend.Main.Common.Models.DTO;
 using WordWonderBackend.Main.Common.Models.Enums;
@@ -14,18 +15,20 @@ namespace WordWonderBackend.Main.BL.Services
         {
             _context = context;
         }
-        public async Task<List<BookShortDTO>> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
+        public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
         {
             int pageCount;
-            if ((_context.Books.Count() % _pageSize) == 0)
+            var query = _context.Books.Where(x=>Regex.IsMatch(x.Name, name)).AsQueryable();
+            int bookCount = await query.CountAsync();
+
+            if ((bookCount % _pageSize) == 0)
             {
-                pageCount = (_context.Books.Count() / _pageSize);
+                pageCount = (bookCount / _pageSize);
             }
             else
             {
-                pageCount = (_context.Books.Count() / _pageSize) + 1;
+                pageCount = (bookCount / _pageSize) + 1;
             }
-            var query = _context.Books.Where(x => true).AsQueryable();
             switch (sort)
             {
                 case BookSortParam.NameAsc:
@@ -42,7 +45,8 @@ namespace WordWonderBackend.Main.BL.Services
                         .Take(_pageSize)
                         .Select(x => x.ToShortDTO())
                         .ToListAsync();
-            return books;
+
+            return new BooksPaginationDTO(books, pageCount);
         }
     }
 }

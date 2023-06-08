@@ -10,6 +10,6 @@ namespace WordWonderBackend.Main.Common.Interfaces
 {
     public interface IBookListService
     {
-        public Task<List<BookShortDTO>> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort);
+        public Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort);
     }
 }
