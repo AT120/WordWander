@@ -40,7 +40,7 @@ public class AuthService : IAuthService
         }
         catch
         {
-            throw new BackendException("This username is already taken");
+            throw new BackendException(400, "This username is already taken");
         }
     }
 
