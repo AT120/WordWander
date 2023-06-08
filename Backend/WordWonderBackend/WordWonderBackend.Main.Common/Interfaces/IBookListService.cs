@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace WordWonderBackend.Main.Common.Interfaces
 {
     public interface IBookListService
     {
-        public Task<List<BookShortDTO>> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort);
+        public Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort);
+        public Task PostBookToList(IFormFile file, string title, string description);
     }
 }

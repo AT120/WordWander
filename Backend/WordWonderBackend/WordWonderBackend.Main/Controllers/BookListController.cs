@@ -20,9 +20,22 @@ namespace WordWonderBackend.Main.Controllers
                 var books = await _bookListService.GetUserBooks(page, name, new Guid(), sortedBy);
                 return Ok(books);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("add")]
+        public async Task<IActionResult> PostBook (IFormFile file, string title, string description) 
+        {
+            try
+            {
+                await _bookListService.PostBookToList(file, title, description);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem (ex.Message, statusCode:501);
             }
         }
     }

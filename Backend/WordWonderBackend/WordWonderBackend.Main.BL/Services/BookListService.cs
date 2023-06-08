@@ -1,8 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Aspose.Words;
+using System.Text.RegularExpressions;
 using WordWonderBackend.Main.Common.Interfaces;
 using WordWonderBackend.Main.Common.Models.DTO;
 using WordWonderBackend.Main.Common.Models.Enums;
 using WordWonderBackend.Main.DAL;
+using WordWonderBackend.Main.DAL.Models;
+using Aspose.Words.WebExtensions;
+using WordWonderBackend.Main.Common.Models.Settings;
+using Microsoft.Extensions.Options;
 
 namespace WordWonderBackend.Main.BL.Services
 {
@@ -10,22 +17,26 @@ namespace WordWonderBackend.Main.BL.Services
     {
         private readonly int _pageSize = 5;
         private readonly MainDbContext _context;
-        public BookListService(MainDbContext context) 
+        private readonly StorageSettings _storageSettings;
+        public BookListService(MainDbContext context, IOptions<StorageSettings> storageSettings) 
         {
             _context = context;
+            _storageSettings = storageSettings.Value;
         }
-        public async Task<List<BookShortDTO>> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
+        public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
         {
             int pageCount;
-            if ((_context.Books.Count() % _pageSize) == 0)
+            var query = _context.Books.Where(x=>Regex.IsMatch(x.Name, name)).AsQueryable();
+            int bookCount = await query.CountAsync();
+
+            if ((bookCount % _pageSize) == 0)
             {
-                pageCount = (_context.Books.Count() / _pageSize);
+                pageCount = (bookCount / _pageSize);
             }
             else
             {
-                pageCount = (_context.Books.Count() / _pageSize) + 1;
+                pageCount = (bookCount / _pageSize) + 1;
             }
-            var query = _context.Books.Where(x => true).AsQueryable();
             switch (sort)
             {
                 case BookSortParam.NameAsc:
@@ -42,7 +53,29 @@ namespace WordWonderBackend.Main.BL.Services
                         .Take(_pageSize)
                         .Select(x => x.ToShortDTO())
                         .ToListAsync();
-            return books;
+
+            return new BooksPaginationDTO(books, pageCount);
+        }
+
+        public async Task PostBookToList(IFormFile file, string title, string description)
+        {
+            if(file.Length== 0 || file==null)
+            {
+                throw new ArgumentNullException("Файл не был загружен");
+            }
+            int pageCount;
+            string fileExtension = Path.GetExtension(file.FileName);
+            var id = Guid.NewGuid();
+            using (var stream = file.OpenReadStream())
+            {
+                var document = new Document(stream);
+                pageCount = document.PageCount;
+                var filePath=_storageSettings.FolderPath+id.ToString()+fileExtension;
+                document.Save(filePath);
+            }
+            Console.WriteLine(title, description, pageCount, fileExtension, id);
+            await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension, id));
+            await _context.SaveChangesAsync();
         }
     }
 }
