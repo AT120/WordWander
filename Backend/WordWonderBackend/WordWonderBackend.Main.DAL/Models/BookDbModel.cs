@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WordWonderBackend.Main.Common.Models.DTO;
+﻿using WordWonderBackend.Main.Common.Models.DTO;
 
 namespace WordWonderBackend.Main.DAL.Models
 {
