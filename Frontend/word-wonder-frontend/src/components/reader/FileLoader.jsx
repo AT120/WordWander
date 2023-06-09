@@ -1,11 +1,11 @@
 import React from "react"
 import Files from "react-files"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { uploadBookFileActionCreator } from "../../reducers/readerReducer";
 
 function  FileLoader() {
     const dispatch = useDispatch();
-
+    const file = useSelector(state => state.readerReducer.bookFile)
     const handleChange = (files) => {
         dispatch(uploadBookFileActionCreator(files[0]))
         // console.log(files)
@@ -15,8 +15,11 @@ function  FileLoader() {
         console.log('error code ' + error.code + ': ' + error.message)
     }
 
-
+    
     //TODO: форматы книг
+    if (file)
+        return 
+        
     return(
         <Files
             onChange={handleChange}
