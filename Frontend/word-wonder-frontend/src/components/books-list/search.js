@@ -19,7 +19,7 @@ function SearchElem() {
     }
     return (
         <div style={{paddingBottom:'5px'}}>            
-            <h3>YourBooks</h3>
+            <h3>Ваши книги</h3>
             <InputGroup>
                 <FormControl
                 type="text"
