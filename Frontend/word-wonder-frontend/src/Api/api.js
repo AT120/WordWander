@@ -18,6 +18,20 @@ function getBooks(page, name, sortBy){
     });
 }
 
+function postBook(title, description, file){
+    const formData = new FormData();
+    formData.append("file", file);
+    return instance.post(`add?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`, formData)
+    .then(response => {
+        if(response.status ===200){
+
+            return response.status;
+        }
+    })
+    .catch(error => {
+        return error.status
+    });
+}
 function deleteBook(id){
     return instance.delete(`restaurants/${id}`)
     .then(response => {
@@ -32,5 +46,6 @@ function deleteBook(id){
 }
 export const bookApi = {
     getBooks : getBooks,
-    deleteBook : deleteBook
+    deleteBook : deleteBook,
+    postBook : postBook
 }

@@ -13,7 +13,7 @@ function Books(){
             <div className ='card-deck'>
                 {
                     state.books.map((value)=>{
-                        return  <BookItem name={value.name} description={value.description} id={value.id} key={value.id} page={state.page}/>
+                        return  <BookItem currentPage={value.page} pageNumber={value.pageNumber} name={value.name} description={value.description} id={value.id} key={value.id} page={state.page}/>
                     })
                 }
             </div>            

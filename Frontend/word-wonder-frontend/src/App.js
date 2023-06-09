@@ -1,4 +1,4 @@
-
+import AddBook from './components/books-list/addBook';
 import './App.css';
 import Books from './components/books-list/books';
 import PaginationBar from './components/books-list/paginationBar';
@@ -7,9 +7,10 @@ function App() {
   return (
     <div className="App">
       <div className='container'>
-        <SearchElem/>
+        <SearchElem />
         <Books/>
         <PaginationBar/>
+        <AddBook/>
         </div>  
     </div>
   );

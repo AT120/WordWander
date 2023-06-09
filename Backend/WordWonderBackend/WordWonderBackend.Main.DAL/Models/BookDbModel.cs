@@ -12,7 +12,7 @@ namespace WordWonderBackend.Main.DAL.Models
         public string Extension { get; set; }
         public BookShortDTO ToShortDTO()
         {
-            return new BookShortDTO { Id = Id, Description = Description, Name = Name };
+            return new BookShortDTO { Id = Id, Description = Description, Name = Name, Page = CurrentPage, PageNumber = PageCount };
         }
         public BookDbModel(string title, string description, int pageCount, string extension, Guid? id=null) 
         {

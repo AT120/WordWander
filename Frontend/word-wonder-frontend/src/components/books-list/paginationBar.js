@@ -5,13 +5,12 @@ function PaginationBar(){
     const state = useSelector(state=>state.booksPage);
     const dispatch = useDispatch();
     const handleClick = (page)=>{
-        console.log(page)
         dispatch(loadBooksThunkCreator(page, state.searchTerm, state.sortBy))
     }
     return(
         <Pagination>
             <Pagination.First  onClick={()=>handleClick(1)} />
-            <Pagination.Prev  onClick={()=>handleClick(state.page-1)} />
+            <Pagination.Prev  onClick={()=>handleClick(Math.max(1,state.page-1))} />
          
             {
                 state.page > 2 && (
@@ -38,7 +37,7 @@ function PaginationBar(){
                         <Pagination.Ellipsis />)
             }
 
-            <Pagination.Next onClick={()=>handleClick(state.page+1)} />
+            <Pagination.Next onClick={()=>handleClick(Math.min(state.page+1, state.numberOfPages))} />
              <Pagination.Last onClick={() => handleClick(state.numberOfPages)} />
         </Pagination>
     )

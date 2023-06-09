@@ -18,7 +18,7 @@ function SearchElem() {
         dispatch(loadBooksThunkCreator(state.page, state.searchName, sortOption))
     }
     return (
-        <div>            
+        <div style={{paddingBottom:'5px'}}>            
             <h3>YourBooks</h3>
             <InputGroup>
                 <FormControl
