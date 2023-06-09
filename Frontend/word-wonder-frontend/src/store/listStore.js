@@ -6,6 +6,6 @@ import bookListReducer from '../reducers/book-list-reducer';
 let reducers = combineReducers({
     booksPage : bookListReducer
 });
-let store = createStore (reducers, applyMiddleware(thunk));
+let listStore = createStore (reducers, applyMiddleware(thunk));
 
-export default store;
+export default listStore;
