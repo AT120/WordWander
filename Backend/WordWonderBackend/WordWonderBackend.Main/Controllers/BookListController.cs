@@ -26,7 +26,7 @@ namespace WordWonderBackend.Main.Controllers
             }
         }
         [HttpPost("add")]
-        public async Task<IActionResult> PostBook(IFormFile file, string title, string description)
+        public async Task<IActionResult> PostBook(IFormFile file, string title, string description="")
         {
             try
             {
