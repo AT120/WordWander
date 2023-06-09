@@ -8,7 +8,6 @@ import { setBookViewActionCreator } from "../../reducers/readerReducer"
 
 function BookViewMin() {
     const bookFile = useSelector(state => state.readerReducer.bookFile)
-    // const  = useSelector(state => state.bookView)
     const dispatch = useDispatch()
 
 

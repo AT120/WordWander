@@ -78,7 +78,7 @@ body {
 #progress-slider {
     flex-grow: 1;
     margin: 0 12px;
-    visibility: hidden;
+    /* visibility: hidden; */
 }
 #side-bar {
     visibility: hidden;
