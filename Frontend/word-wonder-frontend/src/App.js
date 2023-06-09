@@ -1,11 +1,13 @@
 import AddBook from './components/books-list/addBook';
 import './App.css';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Books from './components/books-list/books';
 import PaginationBar from './components/books-list/paginationBar';
 import SearchElem from './components/books-list/search';
+import { Provider } from 'react-redux';
+import store from './store/store';
 function App() {
   return (
+    <Provider store={store}>
     <div className="App">
       <div className='container'>
         <SearchElem />
@@ -14,6 +16,7 @@ function App() {
         <AddBook/>
         </div>  
     </div>
+    </Provider>
   );
 }
 
