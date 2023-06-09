@@ -10,10 +10,10 @@ namespace WordWonderBackend.Main.Controllers
     {
         private readonly IBookListService _bookListService;
         public BookListController(IBookListService bookListService) {
-         _bookListService= bookListService;
+            _bookListService = bookListService;
         }
         [HttpGet("{page}")]
-        public async Task<IActionResult> GetUserBooks(int page, BookSortParam? sortedBy, string name="")
+        public async Task<IActionResult> GetUserBooks(int page, BookSortParam? sortedBy, string name = "")
         {
             try
             {
@@ -26,7 +26,7 @@ namespace WordWonderBackend.Main.Controllers
             }
         }
         [HttpPost("add")]
-        public async Task<IActionResult> PostBook (IFormFile file, string title, string description) 
+        public async Task<IActionResult> PostBook(IFormFile file, string title, string description)
         {
             try
             {
@@ -35,7 +35,20 @@ namespace WordWonderBackend.Main.Controllers
             }
             catch (Exception ex)
             {
-                return Problem (ex.Message, statusCode:501);
+                return Problem(ex.Message, statusCode: 501);
+            }
+        }
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteBook(Guid id)
+        {
+            try
+            {
+                await _bookListService.DeleteBookFromList(id);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

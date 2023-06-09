@@ -11,9 +11,10 @@ function Books(){
     return(
         <div>
             <div className ='card-deck'>
-                {
-                    state.books.map((value)=>{
-                        return  <BookItem currentPage={value.page} pageNumber={value.pageNumber} name={value.name} description={value.description} id={value.id} key={value.id} page={state.page}/>
+
+                {                    
+                    state.books!=null && state.books.map((value)=>{
+                        return  <BookItem currentPage={value.page} pageNumber={value.pageNumber} name={value.name} description={value.description} id={value.id} key={value.id} page={state.page} sortBy={state.sortBy} searchName={state.searchName}/>
                     })
                 }
             </div>            

@@ -5,7 +5,7 @@ import { deleteBookThunkCreator } from '../../reducers/book-list-reducer';
 function BookItem(props){
     const dispatch = useDispatch()
     const handleClick = ()=>{
-        dispatch(deleteBookThunkCreator(props.id, props.page))
+        dispatch(deleteBookThunkCreator(props.id, props.page, props.searchName, props.sortBy))
     }
     return(
         <Card className='card'>

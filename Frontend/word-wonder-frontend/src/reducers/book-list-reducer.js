@@ -58,16 +58,20 @@ const bookListReducer = (state=initialState, action)=>{
             return newState
         case(DELETE_BOOK):
             newState.books = action.books
-            console.log(action.books)
+            newState.numberOfPages=action.numberOfPages
+            if(newState.page>action.numberOfPages){
+                newState.page=action.numberOfPages
+            }
             return newState
         case(ADD_BOOK):
             newState.books = action.books
-            newState.page = 1
+            newState.numberOfPages = action.numberOfPages
             newState.showModal=false
             newState.addBook.loading=false
             newState.addBook.description=""
             newState.addBook.title=""
             newState.addBook.file=null
+            newState.numberOfPages=action.numberOfPages
             return newState
         case(EDIT_BOOK):
             newState.books = action.books
@@ -87,7 +91,7 @@ export function loadBooksActionCreator(books, page, sortBy, searchName=""){
 
 export function loadBooksThunkCreator(page, name=null, sortBy=null){
     return (dispatch) =>{
-        bookApi.getBooks(page, name, sortBy).then(data=>{
+        bookApi.getBooks(Math.max(page, 1), name, sortBy).then(data=>{
             dispatch(loadBooksActionCreator(data, page, sortBy, name))
         })
     }
@@ -95,8 +99,8 @@ export function loadBooksThunkCreator(page, name=null, sortBy=null){
 export function changeModalStateActionCreator(){
     return {type: CHANGE_MODAL_STATE}
 }
-export function deleteBookActionCreator(books){
-    return  {type: DELETE_BOOK, books : books}
+export function deleteBookActionCreator(data){
+    return  {type: DELETE_BOOK, books : data.books, numberOfPages:data.numberOfPages}
 }
 
 export function setSortByActionCreator(sortBy){
@@ -110,25 +114,25 @@ export function setAddBookParamsActionCreator(title=null, description=null, file
     return {type: SET_NEW_BOOK_PARAMS, title:title, description:description, file:file}
 }
 
-export function addBookActionCreator(books){
-    return  {type: ADD_BOOK, books : books}
+export function addBookActionCreator(data){
+    return  {type: ADD_BOOK, books : data.books, numberOfPages:data.numberOfPages}
 }
-export function deleteBookThunkCreator(id, page){
+export function deleteBookThunkCreator(id, page, name=null, sortBy=null){
     
     return async (dispatch) =>{
         await bookApi.deleteBook(id);
-        bookApi.getBooks(page).then(data=>{
-            dispatch(deleteBookActionCreator(data.books))
+        bookApi.getBooks(page, name, sortBy).then(data=>{
+            dispatch(deleteBookActionCreator(data))
         })
     }
 }
 
-export function postBookThunkCreator(title, description, file){
+export function postBookThunkCreator(title, description, file, page){
     return async (dispatch) =>{
     var statusCode = await bookApi.postBook(title, description, file);
     if(statusCode===200){
-    bookApi.getBooks(1).then(data=>{
-        dispatch(addBookActionCreator(data.books))
+    bookApi.getBooks(page).then(data=>{
+        dispatch(addBookActionCreator(data))
     })
     }
     else{

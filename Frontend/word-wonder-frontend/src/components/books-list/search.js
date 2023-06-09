@@ -10,7 +10,7 @@ function SearchElem() {
     }
     const  handleKeyDown = (event) =>{
         if (event.key === "Enter") {
-        dispatch(loadBooksThunkCreator(state.page, state.searchTerm, state.sortBy))
+        dispatch(loadBooksThunkCreator(1, state.searchTerm, state.sortBy))
         }
     }
     const handleSortBy = (sortOption) =>{

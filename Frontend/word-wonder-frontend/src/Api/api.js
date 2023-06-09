@@ -33,7 +33,7 @@ function postBook(title, description, file){
     });
 }
 function deleteBook(id){
-    return instance.delete(`restaurants/${id}`)
+    return instance.delete(`delete/${id}`)
     .then(response => {
         if(response.status ===200){
             console.log("test")

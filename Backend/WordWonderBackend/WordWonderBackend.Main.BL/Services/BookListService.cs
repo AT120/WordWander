@@ -23,6 +23,8 @@ namespace WordWonderBackend.Main.BL.Services
             _context = context;
             _storageSettings = storageSettings.Value;
         }
+
+
         public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
         {
             int pageCount;
@@ -76,6 +78,26 @@ namespace WordWonderBackend.Main.BL.Services
             Console.WriteLine(title, description, pageCount, fileExtension, id);
             await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension, id));
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteBookFromList(Guid id)
+        {
+            var book = _context.Books.FirstOrDefault(x => x.Id == id);
+            if (book == null)
+            {
+                throw new ArgumentException($"There is no book with this {id} id!");
+            }
+            var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
+            if (File.Exists(filePath))
+            {
+                await Task.Run(() => File.Delete(filePath));
+                _context.Remove(book);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException($"There is no file with this {id} id!");
+            }
         }
     }
 }

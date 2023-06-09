@@ -13,5 +13,6 @@ namespace WordWonderBackend.Main.Common.Interfaces
     {
         public Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort);
         public Task PostBookToList(IFormFile file, string title, string description);
+        public Task DeleteBookFromList(Guid id);
     }
 }

@@ -23,7 +23,7 @@ function AddBook() {
 
 const handleUpload = () => {
     dispatch(startLoadingActionCreator())
-    dispatch(postBookThunkCreator(state.addBook.title, state.addBook.description, state.addBook.file))
+    dispatch(postBookThunkCreator(state.addBook.title, state.addBook.description, state.addBook.file, state.page))
 }
     return (
         <div>
