@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 const UPLOAD_BOOK_FILE = 0
 const GET_BOOK_FILE = 1
 const SET_BOOK_VIEW = 2
+const NEW_TEXT_TO_TRANSLATE = 3
 
 const initialState = {
     bookFile: 0,
-    bookView: 0
+    bookView: 0,
+    textToTranslate: ''
 }
 
 const readerReducer = (state = initialState, action) => {
@@ -23,6 +25,10 @@ const readerReducer = (state = initialState, action) => {
         case SET_BOOK_VIEW:
             newState.bookView = action.bookView
             return newState
+        case NEW_TEXT_TO_TRANSLATE:
+            newState.textToTranslate = action.text
+            console.log(action.text)
+            return newState
         default:
             return state;
     }
@@ -38,6 +44,10 @@ export function getBookActionCreator(file) {
 
 export function setBookViewActionCreator(bookView) {
     return {type: SET_BOOK_VIEW, bookView: bookView}
+}
+
+export function newTextToTranslateActionCreator(text) {
+    return {type: NEW_TEXT_TO_TRANSLATE, text: text}
 }
 
 export default readerReducer;
