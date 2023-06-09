@@ -1,0 +1,6 @@
+[submodule "Frontend/foliate-js"]
+	path = Frontend/foliate-js
+	url = https://github.com/AT120/foliate-js.git
+[submodule "Frontend/word-wonder-frontend/src/foliate-js"]
+	path = Frontend/word-wonder-frontend/src/foliate-js
+	url = https://github.com/AT120/foliate-js.git

@@ -1,4 +1,4 @@
-import { bookApi } from "../Api/api";
+import { bookApi } from "../api/api";
 
 const LOAD_BOOKS = "LOAD_BOOKS";
 const ADD_BOOK = "ADD_BOOK";
