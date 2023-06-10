@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  loadBooksThunkCreator } from "../../reducers/book-list-reducer";
+import Cookies from 'js-cookie';
 import BookItem from "./bookItem";
 function Books(){
     const state = useSelector(state=>state.booksPage);

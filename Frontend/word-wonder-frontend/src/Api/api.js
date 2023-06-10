@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
-
-const baseURL='https://localhost:7112/api/books/'
+import Cookies from 'js-cookie';
+const baseURL='https://localhost:7112/api/'
 
 const instance = axios.create({
     baseURL: baseURL
 })
 
 function getBooks(page, name, sortBy){
-    return instance.get(`${page}`, {params: {name: name, sortedBy: sortBy}} )
+    return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
         if(response.status ===200){
             return response.data;
@@ -21,7 +21,7 @@ function getBooks(page, name, sortBy){
 function postBook(title, description, file){
     const formData = new FormData();
     formData.append("file", file);
-    return instance.post(`add?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`, formData)
+    return instance.post(`books/add?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`, formData)
     .then(response => {
         if(response.status ===200){
 
@@ -33,7 +33,7 @@ function postBook(title, description, file){
     });
 }
 function deleteBook(id){
-    return instance.delete(`delete/${id}`)
+    return instance.delete(`books/delete/${id}`)
     .then(response => {
         if(response.status ===200){
             console.log("test")
@@ -48,4 +48,31 @@ export const bookApi = {
     getBooks : getBooks,
     deleteBook : deleteBook,
     postBook : postBook
+}
+
+function login(login, password){
+    console.log(login, password)
+    const formData = new FormData();
+    formData.append('userName', login)
+    formData.append('password', password)
+    return instance.post('auth/login',    
+        {
+            userName: login,
+            password : password
+        }   
+).then(response => {
+        if(response.status ===200){
+
+            const cookies = Cookies.get('myCookie');
+            console.log(cookies);
+            return response;
+        }
+    })
+    .catch(error => {
+        return error
+    });
+}
+
+export const authApi = {
+    login : login
 }
