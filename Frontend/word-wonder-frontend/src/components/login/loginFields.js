@@ -1,9 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Card } from "react-bootstrap";
 import { changeFieldsActionCreator, loginThunkCretor } from "../../reducers/login-reducer";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 function LoginFields(){
     const state = useSelector(state=>state.loginPage)
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     const handleChangeWrapper = (field) => (event) => {
         switch(field){
             case 0:
@@ -14,8 +17,13 @@ function LoginFields(){
                 break;
        }}
        const handleClick = () => {
-            dispatch(loginThunkCretor(state.login, state.password))
+            dispatch(loginThunkCretor(state.login, state.password))           
        }
+       useEffect(()=>{
+        if(state.logedIn){
+        navigate("/list")
+        }
+    },[state.logedIn]);
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
         <Card className=" bg-light" style={{ width: '700px', height: '300px' }}>

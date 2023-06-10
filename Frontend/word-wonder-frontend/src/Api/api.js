@@ -10,6 +10,7 @@ function getBooks(page, name, sortBy){
     return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
         if(response.status ===200){
+            console.log("test")
             return response.data;
         }
     })
@@ -51,7 +52,6 @@ export const bookApi = {
 
 function login(login, password){
 
-    console.log(login, password)
     const formData = new FormData();
     formData.append('userName', login)
     formData.append('password', password)
@@ -72,4 +72,21 @@ function login(login, password){
 
 export const authApi = {
     login : login
+}
+
+function checkLogin(){
+     instance.get(`books/${1}`, {params: {name: "", sortedBy: null}} )
+    .then(response => {
+        if(response.status ===200){
+            console.log("test")
+            return true;
+        }
+    })
+    .catch(error => {
+        console.log("test2")
+        return false //TODO: добавить обработку ошибок
+    });
+}
+export const checkAuth = {
+    checkLogin : checkLogin   
 }
