@@ -17,7 +17,6 @@ const readerReducer = (state = initialState, action) => {
         case UPLOAD_BOOK_FILE:
             newState.bookFile = action.file
             newState.bookView = 0 //TODO: а может надо по умному елемент удалять?
-            console.log(action.file)
             return newState;
         case GET_BOOK_FILE:
             console.log(state.bookFile)
@@ -27,7 +26,6 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case NEW_TEXT_TO_TRANSLATE:
             newState.textToTranslate = action.text
-            console.log(action.text)
             return newState
         default:
             return state;
