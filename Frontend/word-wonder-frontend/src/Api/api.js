@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-const baseURL='https://localhost:7112/api/'
+const baseURL='http://localhost:5194/api/'
 
 const instance = axios.create({
-    baseURL: baseURL
+    baseURL: baseURL,
+    withCredentials : true
 })
-
 function getBooks(page, name, sortBy){
     return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
@@ -36,7 +36,6 @@ function deleteBook(id){
     return instance.delete(`books/delete/${id}`)
     .then(response => {
         if(response.status ===200){
-            console.log("test")
             return response;
         }
     })
@@ -51,6 +50,7 @@ export const bookApi = {
 }
 
 function login(login, password){
+
     console.log(login, password)
     const formData = new FormData();
     formData.append('userName', login)
@@ -59,12 +59,9 @@ function login(login, password){
         {
             userName: login,
             password : password
-        }   
+        } 
 ).then(response => {
         if(response.status ===200){
-
-            const cookies = Cookies.get('myCookie');
-            console.log(cookies);
             return response;
         }
     })

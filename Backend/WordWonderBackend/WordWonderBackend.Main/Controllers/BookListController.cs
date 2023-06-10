@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WordWonderBackend.Main.Common.Interfaces;
 using WordWonderBackend.Main.Common.Models.Enums;
 
@@ -12,6 +13,7 @@ namespace WordWonderBackend.Main.Controllers
         public BookListController(IBookListService bookListService) {
             _bookListService = bookListService;
         }
+        [Authorize]
         [HttpGet("{page}")]
         public async Task<IActionResult> GetUserBooks(int page, BookSortParam? sortedBy, string name = "")
         {

@@ -26,8 +26,7 @@ export function changeFieldsActionCreator(login, password){
 export function loginThunkCretor(login, password){
     return (dispatch) =>{
        var result = authApi.login(login, password)
-       console.log(result);
-       console.log(document.cookie)
+        
     }
 }
 export default loginReducer

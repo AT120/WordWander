@@ -19,7 +19,7 @@ services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                          policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials();
                       });
 });
 builder.AddDB<MainDbContext>();
