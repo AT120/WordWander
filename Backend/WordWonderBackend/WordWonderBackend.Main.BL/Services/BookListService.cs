@@ -28,7 +28,7 @@ namespace WordWonderBackend.Main.BL.Services
         public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
         {
             int pageCount;
-            var query = _context.Books.Where(x=>Regex.IsMatch(x.Name, name)).AsQueryable();
+            var query = _context.Books.Where(x=>Regex.IsMatch(x.Name, name) && x.UserId==userId).AsQueryable();
             int bookCount = await query.CountAsync();
 
             if ((bookCount % _pageSize) == 0)
@@ -59,7 +59,7 @@ namespace WordWonderBackend.Main.BL.Services
             return new BooksPaginationDTO(books, pageCount);
         }
 
-        public async Task PostBookToList(IFormFile file, string title, string description)
+        public async Task PostBookToList(IFormFile file, string title, string description, Guid userId)
         {
             if(file.Length== 0 || file==null)
             {
@@ -76,13 +76,13 @@ namespace WordWonderBackend.Main.BL.Services
                 document.Save(filePath);
             }
             Console.WriteLine(title, description, pageCount, fileExtension, id);
-            await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension, id));
+            await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension,userId, id));
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteBookFromList(Guid id)
+        public async Task DeleteBookFromList(Guid id, Guid userId)
         {
-            var book = _context.Books.FirstOrDefault(x => x.Id == id);
+            var book = _context.Books.FirstOrDefault(x => x.Id == id && x.UserId==userId);
             if (book == null)
             {
                 throw new ArgumentException($"There is no book with this {id} id!");

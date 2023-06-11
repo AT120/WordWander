@@ -7,12 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginPage from './components/login/loginPage';
 import PrivateWrapper from './PrivateRoute';
 import { checkAuth } from './Api/api';
+import RegistrationPage from './components/registration/registrationPage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
       <Route path='login' element={<LoginPage />} />
-
+      <Route path='registration' element={<RegistrationPage />} />
       <Route element={<PrivateWrapper/>}>
         <Route path='list' element={<BookPage />} />
       </Route>

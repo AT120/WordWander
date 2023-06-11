@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Card } from "react-bootstrap";
-import { changeFieldsActionCreator, loginThunkCretor } from "../../reducers/login-reducer";
-import { useNavigate, NavLink } from "react-router-dom";
+import { changeFieldsActionCreator, registerThunkCretor } from "../../reducers/registration-reducer";
+import { useNavigate, NavLink  } from "react-router-dom";
 import React, { useEffect } from "react";
-
-function LoginFields(){
-    const state = useSelector(state=>state.loginPage)
+function RegistrationFields(){
+    const state = useSelector(state=>state.registrationPage)
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const handleChangeWrapper = (field) => (event) => {
@@ -18,7 +17,7 @@ function LoginFields(){
                 break;
        }}
        const handleClick = () => {
-            dispatch(loginThunkCretor(state.login, state.password))           
+            dispatch(registerThunkCretor(state.login, state.password))           
        }
        useEffect(()=>{
         if(state.logedIn){
@@ -29,7 +28,7 @@ function LoginFields(){
         <div className="d-flex justify-content-center align-items-center vh-100">
         <Card className=" bg-light" style={{ width: '700px', height: '300px' }}>
             <Card.Header>
-                <h2 className="justify-content-center">Авторизация</h2>
+                <h2 className="justify-content-center">Регистрация</h2>
             </Card.Header>
             <Card.Body>
                 <Form>
@@ -52,11 +51,12 @@ function LoginFields(){
                         placeholder="Введите пароль"
                         />
                     </Form.Group>
-                <div className='d-flex justify-content-between'>
+                
+                    <div className='d-flex justify-content-between'>
                     <Button  style={{marginTop:'10px'}} variant="primary" onClick={handleClick}>
-                        Войти
+                        Зарегистрироваться 
                     </Button>
-                    <NavLink className="nav-link" style={{marginTop:'10px', color: 'blue'}} to='/registration'>Регистрация</NavLink>
+                    <NavLink className="nav-link" style={{marginTop:'10px', color: 'blue'}} to='/login'>Log In</NavLink>
                 </div>
                 </Form>
             </Card.Body>
@@ -64,4 +64,4 @@ function LoginFields(){
         </div>      
     )
 }
-export default LoginFields
+export default RegistrationFields

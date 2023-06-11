@@ -70,21 +70,41 @@ function login(login, password){
     });
 }
 
-export const authApi = {
-    login : login
-}
+function register(login, password){
 
-function checkLogin(){
-     instance.get(`books/${1}`, {params: {name: "", sortedBy: null}} )
-    .then(response => {
+    const formData = new FormData();
+    formData.append('userName', login)
+    formData.append('password', password)
+    return instance.post('auth/register',    
+        {
+            userName: login,
+            password : password
+        } 
+).then(response => {
         if(response.status ===200){
-            console.log("test")
-            return true;
+            return response;
         }
     })
     .catch(error => {
-        console.log("test2")
-        return false //TODO: добавить обработку ошибок
+        return error
+    });
+}
+
+export const authApi = {
+    login : login,
+    register : register
+}
+
+function checkLogin(){
+    return instance.get(`auth/authorized` )
+    .then(response => {
+        if(response.status ===200){
+            console.log("test")
+            return response.data;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
     });
 }
 export const checkAuth = {

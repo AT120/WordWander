@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using WordWonderBackend.Main.Common.Interfaces;
 using WordWonderBackend.Main.Common.Models.Enums;
+using System.Web;
+using WordWonderBackend.Main.BL.Statics;
 
 namespace WordWonderBackend.Main.Controllers
 {
@@ -19,7 +21,8 @@ namespace WordWonderBackend.Main.Controllers
         {
             try
             {
-                var books = await _bookListService.GetUserBooks(page, name, new Guid(), sortedBy);
+                
+                var books = await _bookListService.GetUserBooks(page, name, ClaimsManager.GetIdClaim(User), sortedBy);
                 return Ok(books);
             }
             catch (Exception ex)
@@ -27,12 +30,15 @@ namespace WordWonderBackend.Main.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpPost("add")]
         public async Task<IActionResult> PostBook(IFormFile file, string title, string description="")
         {
             try
             {
-                await _bookListService.PostBookToList(file, title, description);
+                var cookie = Request.Cookies[".AspNetCore.Cookies"];
+                Console.WriteLine(cookie);
+                await _bookListService.PostBookToList(file, title, description, ClaimsManager.GetIdClaim(User));
                 return Ok();
             }
             catch (Exception ex)
@@ -45,7 +51,7 @@ namespace WordWonderBackend.Main.Controllers
         {
             try
             {
-                await _bookListService.DeleteBookFromList(id);
+                await _bookListService.DeleteBookFromList(id, ClaimsManager.GetIdClaim(User));
                 return Ok();
             }
             catch(Exception ex)

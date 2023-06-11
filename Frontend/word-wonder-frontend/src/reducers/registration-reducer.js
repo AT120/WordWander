@@ -10,7 +10,7 @@ let initialState = {
     logedIn:false
 }
 
-const loginReducer = (state=initialState, action) =>{
+const registrationReducer = (state=initialState, action) =>{
     let newState = {...state}
     switch(action.type){
         case(CHANGE_FIELDS):
@@ -31,9 +31,9 @@ export function changeFieldsActionCreator(login, password){
 export function setLogedInActionCreator(status){
   return  {type:SET_LOG_IN, status:status}
 }
-export function loginThunkCretor(login, password){
+export function registerThunkCretor(login, password){
     return (dispatch) =>{
-        authApi.login(login, password).then(response=>{
+        authApi.register(login, password).then(response=>{
             if(response.status===200){
                 dispatch(setLogedInActionCreator(true))
             }
@@ -44,4 +44,4 @@ export function loginThunkCretor(login, password){
 
     }
 }
-export default loginReducer
+export default registrationReducer 

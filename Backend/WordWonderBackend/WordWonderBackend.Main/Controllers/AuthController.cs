@@ -69,5 +69,13 @@ public class AuthController : Controller
         {
             return Problem("Unknown server error", statusCode: 500);
         }
-    } 
+    }
+    [HttpGet("authorized")]
+    [Authorize] 
+    public async Task<IActionResult> CheckIfAuthorized()
+    {
+        return Ok();
+    }
+    
+    
 }
