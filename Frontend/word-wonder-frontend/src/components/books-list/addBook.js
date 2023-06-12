@@ -27,7 +27,7 @@ const handleUpload = () => {
 }
     return (
         <div>
-        <Button variant="primary" className="upload-button" onClick={handleCloseModal}>
+        <Button variant="primary" className="upload-button" onClick={handleCloseModal} style={{marginBottom:'2%', zIndex:"9999"}}>
             <FaPlus className="plus-icon" />
         </Button>
 

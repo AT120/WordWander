@@ -25,7 +25,7 @@ function RegistrationFields(){
         }
     },[state.logedIn]);
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="d-flex justify-content-center vh-100" style={{marginTop:'20%'}}>
         <Card className=" bg-light" style={{ width: '700px', height: '300px' }}>
             <Card.Header>
                 <h2 className="justify-content-center">Регистрация</h2>
