@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import React from 'react'
 import { Navigate, Route, useLocation, Outlet } from 'react-router-dom'
 import { checkAuth } from './Api/api';
+import { Spinner } from 'react-bootstrap';
 
 
 const PrivateWrapper = () => {
@@ -23,7 +24,11 @@ const PrivateWrapper = () => {
     }, []);
   
     if (isLoading) {
-      return <div>Loading...</div>; 
+      return (
+        <div className="d-flex justify-content-center align-items-center ">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      );
     }
   
     return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;

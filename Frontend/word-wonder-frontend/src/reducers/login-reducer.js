@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 const CHANGE_FIELDS="CHANGE_FIELDS";
 const SET_LOG_IN="SET_LOG_IN"
+const SET_STATE="SET_STATE"
 let initialState = {
     login:"",
     password:"",
@@ -20,11 +21,16 @@ const loginReducer = (state=initialState, action) =>{
         case (SET_LOG_IN):
             newState.logedIn=action.status
             return newState
+        case (SET_STATE):
+            newState=action.state
+            return newState
         default:
             return newState
     }
 }
-
+export function stateFromLocationActionCreator(state){
+    return {type: SET_STATE, state:state}
+}
 export function changeFieldsActionCreator(login, password){
     return {type: CHANGE_FIELDS, login:login, password:password}
 }

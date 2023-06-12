@@ -90,9 +90,25 @@ function register(login, password){
     });
 }
 
+
+function logout(){
+
+    const formData = new FormData();
+    return instance.post('auth/logout',)
+    .then(response => {
+        if(response.status ===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        return error
+    });
+}
 export const authApi = {
     login : login,
-    register : register
+    register : register,
+    logout : logout
+    
 }
 
 function checkLogin(){

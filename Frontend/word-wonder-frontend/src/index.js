@@ -14,8 +14,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
-    <Navigation />
-    <div style={{ marginTop: '60px' }}>
+
     <Routes>
       <Route  path='login' element={<LoginPage />} />
       <Route path='registration' element={<RegistrationPage />} />
@@ -23,8 +22,6 @@ root.render(
         <Route path='list' element={<BookPage />} />
       </Route>
     </Routes>
-    </div>
-    <Footer/>
   </BrowserRouter>,
   
 );
