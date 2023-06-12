@@ -55,13 +55,12 @@ function Navigation() {
           <NavLink className="nav-link" to="/registration" style={{color:'white', marginLeft:'15px'}}>Регистрация</NavLink>
           </>
           }
-        </Nav>
-        {
+                  {
           isAuthenticated &&
-        <Nav className="d-flex">
-          <NavLink className="nav-link"  style={{color:'white', marginLeft:'15px'}} onClick={handleClick}>Выйти</NavLink>
+          <NavLink className="nav-link my-sm-0"  style={{color:'white', marginLeft:'15px'}} onClick={handleClick}>Выйти</NavLink>
+        } 
         </Nav>
-        }  
+ 
       </Navbar.Collapse>
     </Navbar>
   );

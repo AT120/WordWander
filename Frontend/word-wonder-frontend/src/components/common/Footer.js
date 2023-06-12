@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 function Footer() {
   return (
-    <footer className="footer bg-dark text-light fixed-bottom" style={{zIndex: '-9999'}}>
+    <footer className="footer bg-dark text-light fixed-bottom" style={{zIndex: '9999'}}>
       <Container>
         <Row>
           <Col md={6}>
