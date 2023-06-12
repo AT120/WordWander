@@ -2,32 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import BookPage from './components/books-list/bookPage';
-import { BrowserRouter, Switch, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginPage from './components/login/loginPage';
 import PrivateWrapper from './PrivateRoute';
-import { checkAuth } from './Api/api';
 import RegistrationPage from './components/registration/registrationPage';
-import Navigation from './components/common/Navigation';
-import Footer from './components/common/Footer';
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Reader from './pages/ReaderPage';
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
-
     <Routes>
       <Route  path='login' element={<LoginPage />} />
       <Route path='registration' element={<RegistrationPage />} />
       <Route element={<PrivateWrapper/>}>
         <Route path='list' element={<BookPage />} />
       </Route>
+      <Route path="reader" element={<Reader />} />
     </Routes>
   </BrowserRouter>,
-  
-);
-
-
-
-
-
-
+)

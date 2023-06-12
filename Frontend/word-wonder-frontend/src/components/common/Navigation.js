@@ -3,7 +3,7 @@ import { Navbar, Nav} from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import logo from './favicon.ico'
 import { useEffect, useState } from 'react';
-import { authApi, checkAuth } from '../../Api/api';
+import { authApi, checkAuth } from '../../api/api';
 import { useNavigate } from "react-router-dom";
 
 function Navigation() {

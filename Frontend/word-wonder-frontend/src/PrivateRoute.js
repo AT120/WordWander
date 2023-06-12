@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { Navigate, Route, useLocation, Outlet } from 'react-router-dom'
-import { checkAuth } from './Api/api';
+import { checkAuth } from './api/api';
 import { Spinner } from 'react-bootstrap';
 
 

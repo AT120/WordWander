@@ -1,0 +1,31 @@
+#translate-popup {
+    width: 100%;
+    min-height: 15%;
+    background-color: black;
+    position: absolute;
+    border-radius: 0 0 10% 10%;
+    transition: 0.2s ease-out;
+    top: 0;
+    display: flex;
+    z-index: 100;
+}
+
+#translate-popup.hidden {
+
+    transition: 0.3s ease-out;
+    transform: translateY(-100%);
+}
+#translate-popup button {
+    /* padding: 3px; */
+    border-radius: 6px;
+    background: none;
+    border: 0;
+    color: gray;
+    width: 10%;
+    height: auto;
+}
+
+.text {
+    color:white;
+    font-size: x-large;
+}

@@ -1,4 +1,4 @@
-import { authApi } from "../Api/api"
+import { authApi } from "../api/api"
 import { push } from "react-router-redux";
 import { useHistory } from "react-router-dom";
 
