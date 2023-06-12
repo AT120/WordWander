@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordWonderBackend.Main.BL.Statics
+namespace WordWanderBackend.Main.BL.Statics
 {
     public static class ClaimsManager
     {
