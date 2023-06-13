@@ -10,7 +10,8 @@ using WordWanderBackend.Main.DAL.Models;
 using Aspose.Words.WebExtensions;
 using WordWanderBackend.Main.Common.Models.Settings;
 using Microsoft.Extensions.Options;
-
+using WordWanderBackend.Main.Common.Const;
+using FB2Library;
 namespace WordWanderBackend.Main.BL.Services
 {
     public class BookListService : IBookListService
@@ -66,12 +67,14 @@ namespace WordWanderBackend.Main.BL.Services
                 throw new ArgumentNullException("Файл не был загружен");
             }
             string fileExtension = Path.GetExtension(file.FileName);
+            if (!FileExtensions.AvaliableFileExtensions.Contains(fileExtension)) {
+                throw new InvalidOperationException($"Unsupported file format: {fileExtension}");
+            }
             var id = Guid.NewGuid();
-            using (var stream = file.OpenReadStream())
+            var filePath = _storageSettings.FolderPath + id.ToString() + fileExtension;
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                var document = new Document(stream);
-                var filePath=_storageSettings.FolderPath+id.ToString()+fileExtension;
-                document.Save(filePath);
+                await file.CopyToAsync(stream);
             }
             await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension,userId, id));
             await _context.SaveChangesAsync();

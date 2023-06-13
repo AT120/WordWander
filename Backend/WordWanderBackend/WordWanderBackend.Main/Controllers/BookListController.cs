@@ -27,7 +27,7 @@ namespace WordWonderBackend.Main.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message, statusCode: 501);
             }
         }
         [Authorize]
@@ -40,6 +40,14 @@ namespace WordWonderBackend.Main.Controllers
                 Console.WriteLine(cookie);
                 await _bookListService.PostBookToList(file, title, description, ClaimsManager.GetIdClaim(User));
                 return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return Problem(ex.Message, statusCode: 404);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
             catch (Exception ex)
             {
@@ -54,9 +62,13 @@ namespace WordWonderBackend.Main.Controllers
                 await _bookListService.DeleteBookFromList(id, ClaimsManager.GetIdClaim(User));
                 return Ok();
             }
-            catch(Exception ex)
+            catch(ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message, statusCode:404);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, statusCode: 501);
             }
         }
     }

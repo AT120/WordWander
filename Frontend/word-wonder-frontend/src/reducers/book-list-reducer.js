@@ -27,7 +27,7 @@ export const bookInitialState = {
         description:"",
         file:null,
         loading:false,
-        error:false
+        error:null
     }  
 }
 let initialState = bookInitialState
@@ -46,6 +46,7 @@ const bookListReducer = (state=initialState, action)=>{
             newState.addBook.title = action.title===null ? newAddBookState.title : action.title
             newState.addBook.description = action.description===null ? newAddBookState.description : action.description
             newState.addBook.file = action.file===null ? newAddBookState.file : action.file
+            newState.addBook.error = null
             return newState
         case(SET_SEARCH_TERM):
             newState.searchTerm = action.value
@@ -78,7 +79,7 @@ const bookListReducer = (state=initialState, action)=>{
             newState.books = action.books
             return newState
         case(SHOW_ERROR_MESSAGE):
-            newState.addBook.error=true;
+            newState.addBook.error=action.error;
             newState.addBook.loading=false;
             return newState;
 
@@ -132,21 +133,31 @@ export function deleteBookThunkCreator(id, page, name=null, sortBy=null){
 
 export function postBookThunkCreator(title, description, file, page){
     return async (dispatch) =>{
-    var statusCode = await bookApi.postBook(title, description, file);
+    var statusCode = await bookApi.postBook(title, description, file).then(data=>{
+        console.log(data)
+        if(data.status!=200){
+            if(data.detail===undefined){
+                dispatch(errorToPostBookActionCreator("Enter book Title and add file!"))
+            }
+            else{
+            dispatch(errorToPostBookActionCreator(data.detail))
+            }
+        }
+        else{
+            return data.status
+        }
+    });
     if(statusCode===200){
     bookApi.getBooks(page).then(data=>{
         dispatch(addBookActionCreator(data))
     })
     }
-    else{
 
-        dispatch(errorToPostBookActionCreator())
-    }
 }
 }
 
-export function errorToPostBookActionCreator(){
-    return {type:SHOW_ERROR_MESSAGE}
+export function errorToPostBookActionCreator(error){
+    return {type:SHOW_ERROR_MESSAGE, error:error}
 }
 export function startLoadingActionCreator(){
     return {type: START_LOADING}
