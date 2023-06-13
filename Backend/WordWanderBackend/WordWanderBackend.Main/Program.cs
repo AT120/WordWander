@@ -30,6 +30,7 @@ services.AddSwaggerGen();
 services.AddScoped<IBookListService, BookListService>();
 services.AddTransient<IPasswordHasher<UserDbModel>, PasswordHasher<UserDbModel>>(); 
 services.AddScoped<IAuthService, AuthService>();
+services.AddScoped<ITranslateService, LibreTranslateService>();
 services.SetupCookieAuth();
 
 
@@ -40,8 +41,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MigrateDBWhenNecessary<MainDbContext>();
 }
+
+app.MigrateDBWhenNecessary<MainDbContext>();
 
 app.UseHttpsRedirection();
 
