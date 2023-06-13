@@ -73,7 +73,6 @@ namespace WordWanderBackend.Main.BL.Services
                 var filePath=_storageSettings.FolderPath+id.ToString()+fileExtension;
                 document.Save(filePath);
             }
-            Console.WriteLine(title, description, fileExtension, id);
             await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension,userId, id));
             await _context.SaveChangesAsync();
         }
