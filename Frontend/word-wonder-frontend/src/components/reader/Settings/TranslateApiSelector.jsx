@@ -14,16 +14,19 @@ export default function TranslateApiSelector() {
     }
 
     return (
-        <Form.Select onChange={changeTranslator}>
-            <option selected={translateApiType === availableTranslators.LibreTranslate}
+        <Form.Group>
+            <Form.Label >Переводчик</Form.Label>
+            <Form.Select onChange={changeTranslator}>
+                <option selected={translateApiType === availableTranslators.LibreTranslate}
                     value={availableTranslators.LibreTranslate}>
-                        LibreTranslate
-            </option>
+                    LibreTranslate
+                </option>
 
-            <option selected={translateApiType === availableTranslators.GoogleTranslate} 
+                <option selected={translateApiType === availableTranslators.GoogleTranslate}
                     value={availableTranslators.GoogleTranslate}>
-                        GoogleTranslate
-            </option>
-        </Form.Select>
+                    GoogleTranslate
+                </option>
+            </Form.Select>
+        </Form.Group>
     )
 }

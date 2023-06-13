@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --active-bg: rgba(0, 0, 0, .05);
 }
 @supports (color-scheme: light dark) {
@@ -7,15 +7,15 @@
             --active-bg: rgba(255, 255, 255, .1);
         }
     }
-}
+} */
 html {
     height: 100%;
 }
 body {
     margin: 0 auto;
     height: 100%;
-    font: menu;
-    font-family: system-ui, sans-serif;
+    /* font: menu; */
+    /* font-family: system-ui, sans-serif; */
 }
 #drop-target {
     height: 100vh;
