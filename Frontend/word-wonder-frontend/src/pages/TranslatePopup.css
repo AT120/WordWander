@@ -1,13 +1,14 @@
 #translate-popup {
     width: 100%;
     min-height: 15%;
-    background-color: black;
+    background-color: var(--active-secondary-bg);
     position: absolute;
     border-radius: 0 0 10% 10%;
     transition: 0.2s ease-out;
     top: 0;
     display: flex;
     z-index: 100;
+    color: var(--active-secondary-fg)
 }
 
 #translate-popup.hidden {
@@ -26,6 +27,6 @@
 }
 
 .text {
-    color:white;
+    /* color:white; */
     font-size: x-large;
 }

@@ -1,16 +1,19 @@
 :root {
-    --active-fg: black;
-    --active-bg: white;
+    --active-main-fg: black;
+    --active-main-bg: white;
+    --active-secondary-fg: white;
+    --active-secondary-bg: #2B2B2B;
 }
+
 
 @supports (color-scheme: light dark) {
     @media (prefers-color-scheme: dark) {
         :root {
-            --bs-body-bg: #1A1920;
-            --active-bg: #1A1920;
+            --bs-body-bg: #121212;
+            --active-main-bg: #121212;
             /* --active-bg: rgba(255, 255, 255, .1); */
             --bs-body-color: white;
-            --active-fg: white;
+            --active-main-fg: white;
         }
         .btn-close {
             background-color: white;
@@ -184,7 +187,7 @@ body {
     text-decoration: none;
 }
 #toc-view a:hover {
-    background: var(--active-bg);
+    background: var(--active-main-bg);
 }
 #toc-view span {
     color: GrayText;
@@ -203,7 +206,7 @@ body {
 }
 #toc-view [aria-current] {
     font-weight: bold;
-    background: var(--active-bg);
+    background: var(--active-main-bg);
 }
 #toc-view [aria-expanded="false"] svg {
     transform: rotate(-90deg);
