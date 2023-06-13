@@ -65,18 +65,16 @@ namespace WordWanderBackend.Main.BL.Services
             {
                 throw new ArgumentNullException("Файл не был загружен");
             }
-            int pageCount;
             string fileExtension = Path.GetExtension(file.FileName);
             var id = Guid.NewGuid();
             using (var stream = file.OpenReadStream())
             {
                 var document = new Document(stream);
-                pageCount = document.PageCount;
                 var filePath=_storageSettings.FolderPath+id.ToString()+fileExtension;
                 document.Save(filePath);
             }
-            Console.WriteLine(title, description, pageCount, fileExtension, id);
-            await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension,userId, id));
+            Console.WriteLine(title, description, fileExtension, id);
+            await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension,userId, id));
             await _context.SaveChangesAsync();
         }
 

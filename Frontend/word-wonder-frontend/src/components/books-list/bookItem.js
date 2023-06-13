@@ -1,14 +1,16 @@
 import {Card, ProgressBar} from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { deleteBookThunkCreator } from '../../reducers/book-list-reducer';
+import { useNavigate } from 'react-router-dom';
 
 function BookItem(props){
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const handleClickDelete = ()=>{
         dispatch(deleteBookThunkCreator(props.id, props.page, props.searchName, props.sortBy))
     }
     const handleClickRead = ()=>{
-        console.log("not implemented")
+        navigate("/reader",{state:props.id})
     }
     return(
         <Card className='card' style={{minWidth:'230px'}}>
@@ -23,7 +25,7 @@ function BookItem(props){
                 <em>{props.description}</em>
             </Card.Body>
             <div style={{padding: '0 10px 5px 10px'}}>
-                <span style={{ fontSize:'12px'}} >{props.currentPage} / {props.pageNumber} страниц</span>
+                <span style={{ fontSize:'12px'}} >{props.currentPercent} / 100 %</span>
                 <ProgressBar style={{height:'6px'}}  variant='info' striped  now={props.currentPage} max={props.pageNumber} />
             </div>
         </Card>

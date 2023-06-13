@@ -3,6 +3,7 @@ import { Form, Button, Card } from "react-bootstrap";
 import { changeFieldsActionCreator, registerThunkCretor } from "../../reducers/registration-reducer";
 import { useNavigate, NavLink  } from "react-router-dom";
 import React, { useEffect } from "react";
+import { bookInitialState } from "../../reducers/book-list-reducer";
 function RegistrationFields(){
     const state = useSelector(state=>state.registrationPage)
     const dispatch = useDispatch()
@@ -21,7 +22,7 @@ function RegistrationFields(){
        }
        useEffect(()=>{
         if(state.logedIn){
-        navigate("/list")
+        navigate("/list",{state:{bookInitialState}})
         }
     },[state.logedIn]);
     return (
@@ -51,7 +52,7 @@ function RegistrationFields(){
                         placeholder="Введите пароль"
                         />
                     </Form.Group>
-                
+                    {state.error && <p className="text-danger">{state.error}</p>}
                     <div className='d-flex justify-content-between'>
                     <Button  style={{marginTop:'10px'}} variant="primary" onClick={handleClick}>
                         Зарегистрироваться 
