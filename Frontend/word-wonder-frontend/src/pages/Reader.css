@@ -1,23 +1,39 @@
-/* :root {
-    --active-bg: rgba(0, 0, 0, .05);
+:root {
+    --active-fg: black;
+    --active-bg: white;
 }
+
 @supports (color-scheme: light dark) {
     @media (prefers-color-scheme: dark) {
         :root {
-            --active-bg: rgba(255, 255, 255, .1);
+            --bs-body-bg: #1A1920;
+            --active-bg: #1A1920;
+            /* --active-bg: rgba(255, 255, 255, .1); */
+            --bs-body-color: white;
+            --active-fg: white;
+        }
+        .btn-close {
+            background-color: white;
         }
     }
-} */
+}
+
 html {
     height: 100%;
+    color-scheme: light dark;
     /* overflow: hidden; */
 }
+
 body {
     margin: 0 auto;
     height: 100%;
+    /* background-color: var(--active-bg); */
+    /* color: var(--active-fg) */
     /* font: menu; */
     /* font-family: system-ui, sans-serif; */
 }
+
+
 #drop-target {
     height: 100vh;
     display: flex;
