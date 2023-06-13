@@ -11,12 +11,11 @@ function getBooks(page, name, sortBy){
     return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
         if(response.status ===200){
-            console.log("test")
             return response.data;
         }
     })
     .catch(error => {
-        console.log(error.response.data.error) //TODO: добавить обработку ошибок
+//TODO: добавить обработку ошибок
     });
 }
 
@@ -116,7 +115,6 @@ function checkLogin(){
     return instance.get(`auth/authorized` )
     .then(response => {
         if(response.status ===200){
-            console.log("test")
             return response.data;
         }
     })

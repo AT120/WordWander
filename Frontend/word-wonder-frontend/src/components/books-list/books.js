@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  loadBooksThunkCreator, setLocationStateActionCreator } from "../../reducers/book-list-reducer";
-import Cookies from 'js-cookie';
 import BookItem from "./bookItem";
 import { useLocation } from "react-router-dom";
 function Books(){
@@ -11,7 +10,6 @@ function Books(){
 
     
     useEffect(()=>{
-        console.log(state.page, state.searchTerm, state.sortBy)
         dispatch(loadBooksThunkCreator(state.page, state.searchTerm, state.sortBy))
     },[dispatch, state.page]);
     return(
