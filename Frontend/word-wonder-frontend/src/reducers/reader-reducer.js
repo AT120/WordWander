@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import translate, { availableTranslators, changeTranslator } from "../api/translate-api";
+import { getReaderCss } from "../components/reader/BookViewMin";
 
 const UPLOAD_BOOK_FILE = 0
 const GET_BOOK_FILE = 1
@@ -9,6 +10,7 @@ const NEW_TRANSLATED_TEXT = 4
 const SET_TRANSLATE_API = 5
 const SET_SOURCE_LANG = 6
 const SET_TARGET_LANG = 7
+const SET_FONT_SIZE = 8
 
 const initialState = {
     bookFile: 0,
@@ -17,7 +19,8 @@ const initialState = {
     translatedText: '',
     sourceLanguage: 'en', //TODO: убрать
     targetLanguage: 'ru',
-    translateApiType: availableTranslators.LibreTranslate
+    translateApiType: availableTranslators.LibreTranslate,
+    fontSize: 12,
 }
 
 const readerReducer = (state = initialState, action) => {
@@ -50,9 +53,20 @@ const readerReducer = (state = initialState, action) => {
         case SET_TARGET_LANG:    
             newState.targetLanguage = action.language
             return newState
+        case SET_FONT_SIZE:
+            newState.fontSize = action.fontSize
+            if (newState.bookView)
+                newState.bookView.renderer.setStyles?.(
+                    getReaderCss(newState.fontSize)
+                )
+            return newState
         default:
-            return state;
+            return state
     }
+}
+
+export function setNewFontSizeActionCreator(fontSize) {
+    return {type: SET_FONT_SIZE, fontSize: fontSize}
 }
 
 export function setNewTranslateApiActionCretor(api) {

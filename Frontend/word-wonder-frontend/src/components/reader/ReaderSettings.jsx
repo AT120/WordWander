@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import TranslateApiSelector from './Settings/TranslateApiSelector';
 import LanguageSelector from './Settings/LanguageSelector';
+import FontSizeSettings from './Settings/FontSizeSettings';
 
 export default function ReaderSettings() {
     const [show, setShow] = useState(false);
@@ -23,6 +24,7 @@ export default function ReaderSettings() {
                 <Offcanvas.Body>
                     <TranslateApiSelector />
                     <LanguageSelector />
+                    <FontSizeSettings />
                 </Offcanvas.Body>
             </Offcanvas>
 

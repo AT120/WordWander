@@ -17,7 +17,6 @@ function Reader() {
             {/* TODO: авторизация */}
             <TranslatePopup />
             <FileLoader />
-            {/* <BookViewWrapper/> */}
             <BookViewMin />
             <BookNavigation />
         </Provider> 
