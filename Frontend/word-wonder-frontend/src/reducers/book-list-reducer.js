@@ -10,7 +10,7 @@ const SET_NEW_BOOK_PARAMS = "SET_NEW_BOOK_PARAMS";
 const CHANGE_MODAL_STATE = "CHANGE_MODAL_STATE";
 const START_LOADING = "START_LOADING";
 const SHOW_ERROR_MESSAGE="SHOW_ERROR_MESSAGE"
-let initialState = {
+export const bookInitialState = {
     books : [],
     numberOfPages: 0,
     page : 1,
@@ -28,13 +28,14 @@ let initialState = {
         file:null,
         loading:false,
         error:false
-    }
+    }  
 }
+let initialState = bookInitialState
 const bookListReducer = (state=initialState, action)=>{
     let newState = {...state};
     let newAddBookState = {...state.addBook}
     switch(action.type){
-        case(LOAD_BOOKS):
+        case(LOAD_BOOKS):            
             newState.page = action.page
             newState.books = action.books
             newState.numberOfPages = action.numberOfPages
@@ -80,6 +81,7 @@ const bookListReducer = (state=initialState, action)=>{
             newState.addBook.error=true;
             newState.addBook.loading=false;
             return newState;
+
         default:
             return newState
     }
@@ -96,6 +98,7 @@ export function loadBooksThunkCreator(page, name=null, sortBy=null){
         })
     }
 }
+
 export function changeModalStateActionCreator(){
     return {type: CHANGE_MODAL_STATE}
 }

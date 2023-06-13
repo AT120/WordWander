@@ -67,7 +67,7 @@ function login(login, password){
         }
     })
     .catch(error => {
-        return error
+        return error.response.data
     });
 }
 
@@ -87,7 +87,7 @@ function register(login, password){
         }
     })
     .catch(error => {
-        return error
+        return error.response.data
     });
 }
 

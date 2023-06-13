@@ -3,7 +3,7 @@ import { Form, Button, Card } from "react-bootstrap";
 import { changeFieldsActionCreator, loginThunkCretor, stateFromLocationActionCreator } from "../../reducers/login-reducer";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
 import React, { useEffect } from "react";
-
+import { bookInitialState } from "../../reducers/book-list-reducer";
 function LoginFields(){
     const state = useSelector(state=>state.loginPage)
     const location = useLocation()
@@ -57,6 +57,7 @@ function LoginFields(){
                         placeholder="Введите пароль"
                         />
                     </Form.Group>
+                    {state.error && <p className="text-danger">{state.error}</p>}
                 <div className='d-flex justify-content-between'>
                     <Button  style={{marginTop:'10px'}} variant="primary" onClick={handleClick}>
                         Войти
