@@ -15,8 +15,8 @@ services:
     healthcheck:
       test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
     volumes:
-      - "./LibreTranslate/Models/share:/home/libretranslate/.local/share"
-      - "./LibreTranslate/Models/cache:/home/libretranslate/.local/cache"
+      - "./LibreTranslate/LibreTranslateModels/share:/home/libretranslate/.local/share"
+      - "./LibreTranslate/LibreTranslateModels/cache:/home/libretranslate/.local/cache"
       
 
   backend:
