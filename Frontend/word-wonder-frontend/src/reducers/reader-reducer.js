@@ -7,6 +7,8 @@ const SET_BOOK_VIEW = 2
 const NEW_TEXT_TO_TRANSLATE = 3
 const NEW_TRANSLATED_TEXT = 4
 const SET_TRANSLATE_API = 5
+const SET_SOURCE_LANG = 6
+const SET_TARGET_LANG = 7
 
 const initialState = {
     bookFile: 0,
@@ -42,6 +44,12 @@ const readerReducer = (state = initialState, action) => {
             newState.translateApiType = action.newApi
             changeTranslator(action.newApi)
             return newState
+        case SET_SOURCE_LANG:
+            newState.sourceLanguage = action.language
+            return newState
+        case SET_TARGET_LANG:    
+            newState.targetLanguage = action.language
+            return newState
         default:
             return state;
     }
@@ -61,6 +69,14 @@ export function getBookActionCreator(file) {
 
 export function setBookViewActionCreator(bookView) {
     return {type: SET_BOOK_VIEW, bookView: bookView}
+}
+
+export function setSourceLanguageActionCreator(lang) {
+    return {type: SET_SOURCE_LANG, language: lang}
+}
+
+export function setTargetLanguageActionCreator(lang) {
+    return {type: SET_TARGET_LANG, language: lang}
 }
 
 export function newTextToTranslateThunkCreator(text) {
