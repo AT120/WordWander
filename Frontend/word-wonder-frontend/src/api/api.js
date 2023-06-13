@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
-const baseURL='http://localhost:5194/api/'
+
+export const baseURL='http://localhost:8080/api/'
 
 const instance = axios.create({
     baseURL: baseURL,
@@ -126,3 +127,5 @@ function checkLogin(){
 export const checkAuth = {
     checkLogin : checkLogin   
 }
+
+

@@ -1,14 +1,21 @@
 import { connect } from "react-redux";
+import translate, { availableTranslators, changeTranslator } from "../api/translate-api";
 
 const UPLOAD_BOOK_FILE = 0
 const GET_BOOK_FILE = 1
 const SET_BOOK_VIEW = 2
 const NEW_TEXT_TO_TRANSLATE = 3
+const NEW_TRANSLATED_TEXT = 4
+const SET_TRANSLATE_API = 5
 
 const initialState = {
     bookFile: 0,
     bookView: 0,
-    textToTranslate: ''
+    textToTranslate: '',
+    translatedText: '',
+    sourceLanguage: 'en', //TODO: убрать
+    targetLanguage: 'ru',
+    translateApiType: availableTranslators.LibreTranslate
 }
 
 const readerReducer = (state = initialState, action) => {
@@ -26,10 +33,22 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case NEW_TEXT_TO_TRANSLATE:
             newState.textToTranslate = action.text
+            newState.translatedText = 0
+            return newState
+        case NEW_TRANSLATED_TEXT:
+            newState.translatedText = action.text
+            return newState
+        case SET_TRANSLATE_API:
+            newState.translateApiType = action.newApi
+            changeTranslator(action.newApi)
             return newState
         default:
             return state;
     }
+}
+
+export function setNewTranslateApiActionCretor(api) {
+    return {type: SET_TRANSLATE_API, newApi: api}
 }
 
 export function uploadBookFileActionCreator(file) {
@@ -44,8 +63,22 @@ export function setBookViewActionCreator(bookView) {
     return {type: SET_BOOK_VIEW, bookView: bookView}
 }
 
-export function newTextToTranslateActionCreator(text) {
-    return {type: NEW_TEXT_TO_TRANSLATE, text: text}
+export function newTextToTranslateThunkCreator(text) {
+    return async (dispatch, getState) => {
+        if (text.length === 0)
+            return
+
+        dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text})
+        const state = getState().readerReducer
+        const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
+        if (translatedText)
+            dispatch({type: NEW_TRANSLATED_TEXT, text: translatedText})
+        else
+            console.log('ээээ') //TODO: обработка ошибок
+    }
+
 }
+
+
 
 export default readerReducer;

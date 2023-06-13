@@ -2,7 +2,7 @@ import React, { createElement, createRef } from "react"
 import { getView } from "../../foliate-js/reader-import"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { newTextToTranslateActionCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
+import { newTextToTranslateThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
 import { setOnTextChosenCallback } from "../../foliate-js/text-selector"
 
 
@@ -13,7 +13,7 @@ function BookViewMin() {
     useEffect(() => {
         async function loadBookView() {
             setOnTextChosenCallback((text) => {
-                dispatch(newTextToTranslateActionCreator(text))
+                dispatch(newTextToTranslateThunkCreator(text))
             })
             const view = await getView(bookFile)
             await view.goToTextStart()
