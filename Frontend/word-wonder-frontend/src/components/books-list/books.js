@@ -18,7 +18,7 @@ function Books(){
 
                 {                    
                     state.books!=null && state.books.map((value)=>{
-                        return  <BookItem currentPercent={value.currentPercent}  name={value.name} description={value.description} id={value.id} key={value.id} page={state.page} sortBy={state.sortBy} searchName={state.searchName}/>
+                        return  <BookItem currentPercent={value.currentPercent} error={state.deleteErrorIn!=value.id? null : state.deleteError}  name={value.name} description={value.description} id={value.id} key={value.id} page={state.page} sortBy={state.sortBy} searchName={state.searchName}/>
                     })
                 }
             </div>            

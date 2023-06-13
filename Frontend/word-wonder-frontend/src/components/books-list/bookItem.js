@@ -17,6 +17,7 @@ function BookItem(props){
             <Card.Header  className='d-flex justify-content-between'>
                  <span>{props.name}</span>
                  <span>
+                    {props.error &&  <p className="text-danger">{props.error}</p>}
                     <button style={{marginRight:'5px'}} className="btn btn-sm btn-outline-warning" onClick={handleClickRead}>Читать</button> 
                     <button className="btn btn-sm btn-outline-danger" onClick={handleClickDelete}>Удалить</button> 
                  </span>

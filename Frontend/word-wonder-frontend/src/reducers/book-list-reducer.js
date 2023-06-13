@@ -10,6 +10,7 @@ const SET_NEW_BOOK_PARAMS = "SET_NEW_BOOK_PARAMS";
 const CHANGE_MODAL_STATE = "CHANGE_MODAL_STATE";
 const START_LOADING = "START_LOADING";
 const SHOW_ERROR_MESSAGE="SHOW_ERROR_MESSAGE"
+const SHOW_DELETE_ERROR="SHOW_DELETE_ERROR"
 export const bookInitialState = {
     books : [],
     numberOfPages: 0,
@@ -28,7 +29,9 @@ export const bookInitialState = {
         file:null,
         loading:false,
         error:null
-    }  
+    },
+    deleteErrorIn: null,
+    deleteError:null
 }
 let initialState = bookInitialState
 const bookListReducer = (state=initialState, action)=>{
@@ -41,6 +44,8 @@ const bookListReducer = (state=initialState, action)=>{
             newState.numberOfPages = action.numberOfPages
             newState.searchName = action.searchName
             newState.sortBy = action.sortBy
+            newState.deleteErrorIn= null
+            newState.deleteError=null
             return newState
         case (SET_NEW_BOOK_PARAMS):
             newState.addBook.title = action.title===null ? newAddBookState.title : action.title
@@ -82,7 +87,10 @@ const bookListReducer = (state=initialState, action)=>{
             newState.addBook.error=action.error;
             newState.addBook.loading=false;
             return newState;
-
+        case(SHOW_DELETE_ERROR):
+            newState.deleteErrorIn = action.id
+            newState.deleteError = action.error
+            return newState
         default:
             return newState
     }
@@ -124,13 +132,21 @@ export function addBookActionCreator(data){
 export function deleteBookThunkCreator(id, page, name=null, sortBy=null){
     
     return async (dispatch) =>{
-        await bookApi.deleteBook(id);
+       await bookApi.deleteBook(id).then(data=>{
+            if(data.status!=200){
+                dispatch(setDeleteErrorActionCreator(id,data.detail))
+            }
+        });
+
         bookApi.getBooks(page, name, sortBy).then(data=>{
             dispatch(deleteBookActionCreator(data))
         })
     }
 }
 
+export function setDeleteErrorActionCreator(id,error){
+    return {type: SHOW_DELETE_ERROR, id:id,error:error}
+}
 export function postBookThunkCreator(title, description, file, page){
     return async (dispatch) =>{
     var statusCode = await bookApi.postBook(title, description, file).then(data=>{

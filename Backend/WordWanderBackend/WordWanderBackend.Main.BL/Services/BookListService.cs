@@ -96,7 +96,7 @@ namespace WordWanderBackend.Main.BL.Services
             }
             else
             {
-                throw new ArgumentException($"There is no file with this {id} id!");
+                throw new ArgumentException($"There is no file with this {book.Name} name!");
             }
         }
     }

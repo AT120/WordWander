@@ -38,11 +38,11 @@ function deleteBook(id){
     return instance.delete(`books/delete/${id}`)
     .then(response => {
         if(response.status ===200){
-            return response;
+            return response
         }
     })
     .catch(error => {
-        console.log(error.response) //TODO: добавить обработку ошибок
+        return error.response.data //TODO: добавить обработку ошибок
     });
 }
 export const bookApi = {
