@@ -26,11 +26,12 @@ function postBook(title, description, file){
     .then(response => {
         if(response.status ===200){
 
-            return response.status;
+            return response;
         }
     })
     .catch(error => {
-        return error.status
+        console.log(error.response.data)
+        return error.response.data
     });
 }
 function deleteBook(id){
