@@ -1,15 +1,18 @@
 #translate-popup-mobile {
     width: 100%;
     min-height: 15%;
+    max-height: 70%;
     background-color: var(--active-secondary-bg);
     position: absolute;
     border-radius: 0 0 10% 10%;
+    box-sizing: border-box;
     transition: 0.2s ease-out;
     top: 0;
     display: flex;
     z-index: 100;
     color: var(--active-secondary-fg);
-    font-size: x-large;
+    overflow-y: scroll;
+    /* font-size: x-large; */
 }
 
 #translate-popup-mobile.hidden {
