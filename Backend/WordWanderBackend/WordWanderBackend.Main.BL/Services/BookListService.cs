@@ -105,7 +105,7 @@ namespace WordWanderBackend.Main.BL.Services
             }
         }
 
-        public async Task<IFormFile> GetBookById(Guid id, Guid userId)
+        public async Task<FileStream> GetBookById(Guid id, Guid userId)
         {
             var book = await _context.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
             if (book == null)
@@ -114,15 +114,20 @@ namespace WordWanderBackend.Main.BL.Services
             }
             MemoryStream memoryStream = new MemoryStream();
             var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
-            using (var fileStream = new FileStream(filePath, FileMode.Open))
-            {
-                await fileStream.CopyToAsync(memoryStream);
-            }
-            IFormFile file = new FormFile(memoryStream, 0, memoryStream.Length, id.ToString(), id.ToString())
-            {
-                Headers = new HeaderDictionary(),
-            };
-            return file;
+
+            return new FileStream(filePath, FileMode.Open);
+
+            // using (var fileStream = new FileStream(filePath, FileMode.Open))
+
+
+            // {
+            //     await fileStream.CopyToAsync(memoryStream);
+            // }
+            // IFormFile file = new FormFile(memoryStream, 0, memoryStream.Length, id.ToString(), id.ToString())
+            // {
+            //     Headers = new HeaderDictionary(),
+            // };
+            // return file;
         }
     }
 }

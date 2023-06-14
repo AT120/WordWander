@@ -45,10 +45,20 @@ function deleteBook(id){
         return error.response.data //TODO: добавить обработку ошибок
     });
 }
+
+async function loadBook(id) {
+    const resp = await instance.get(`books/get/${id}`, {responseType:'blob'})
+        // .catch(error => null) //TODO: добавить обработку ошибок
+    if (!resp || resp.status !== 200)
+        return null //TODO: добавить обработку ошибок
+    // return resp.data
+    return new File([resp.data], `book-${id}.fb2`, {type: 'application/x-fictionbook'}) //TODO:
+}
 export const bookApi = {
     getBooks : getBooks,
     deleteBook : deleteBook,
-    postBook : postBook
+    postBook : postBook,
+    loadBook : loadBook
 }
 
 function login(login, password){

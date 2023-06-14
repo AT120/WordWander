@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import translate, { availableTranslators, changeTranslator } from "../api/translate-api";
 import { getReaderCss } from "../components/reader/BookViewMin";
+import { bookApi } from "../api/api";
 
 const UPLOAD_BOOK_FILE = 0
 const GET_BOOK_FILE = 1
@@ -136,9 +137,15 @@ export function newTextToTranslateThunkCreator(text, event) {
         else
             console.log('ээээ') //TODO: обработка ошибок
     }
-
 }
 
+export function loadBookThunkCreator(guid) {
+    return async (dispatch) => {
+        const book = await bookApi.loadBook(guid)
+        if (book)
+            dispatch(uploadBookFileActionCreator(book))
+    }
+}
 
 
 export default readerReducer;
