@@ -18,6 +18,7 @@ function Navigation() {
         logedIn:false
     }})
       )
+    window.location.reload();
   }
     useEffect(() => {
       checkAuth.checkLogin()

@@ -11,12 +11,11 @@ function getBooks(page, name, sortBy){
     return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {
         if(response.status ===200){
-            console.log("test")
             return response.data;
         }
     })
     .catch(error => {
-        console.log(error.response.data.error) //TODO: добавить обработку ошибок
+//TODO: добавить обработку ошибок
     });
 }
 
@@ -27,22 +26,23 @@ function postBook(title, description, file){
     .then(response => {
         if(response.status ===200){
 
-            return response.status;
+            return response;
         }
     })
     .catch(error => {
-        return error.status
+        console.log(error.response.data)
+        return error.response.data
     });
 }
 function deleteBook(id){
     return instance.delete(`books/delete/${id}`)
     .then(response => {
         if(response.status ===200){
-            return response;
+            return response
         }
     })
     .catch(error => {
-        console.log(error.response) //TODO: добавить обработку ошибок
+        return error.response.data //TODO: добавить обработку ошибок
     });
 }
 export const bookApi = {
@@ -67,7 +67,7 @@ function login(login, password){
         }
     })
     .catch(error => {
-        return error
+        return error.response.data
     });
 }
 
@@ -87,7 +87,7 @@ function register(login, password){
         }
     })
     .catch(error => {
-        return error
+        return error.response.data
     });
 }
 
@@ -116,7 +116,6 @@ function checkLogin(){
     return instance.get(`auth/authorized` )
     .then(response => {
         if(response.status ===200){
-            console.log("test")
             return response.data;
         }
     })

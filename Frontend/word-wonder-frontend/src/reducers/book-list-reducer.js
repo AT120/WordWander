@@ -10,7 +10,8 @@ const SET_NEW_BOOK_PARAMS = "SET_NEW_BOOK_PARAMS";
 const CHANGE_MODAL_STATE = "CHANGE_MODAL_STATE";
 const START_LOADING = "START_LOADING";
 const SHOW_ERROR_MESSAGE="SHOW_ERROR_MESSAGE"
-let initialState = {
+const SHOW_DELETE_ERROR="SHOW_DELETE_ERROR"
+export const bookInitialState = {
     books : [],
     numberOfPages: 0,
     page : 1,
@@ -27,24 +28,30 @@ let initialState = {
         description:"",
         file:null,
         loading:false,
-        error:false
-    }
+        error:null
+    },
+    deleteErrorIn: null,
+    deleteError:null
 }
+let initialState = bookInitialState
 const bookListReducer = (state=initialState, action)=>{
     let newState = {...state};
     let newAddBookState = {...state.addBook}
     switch(action.type){
-        case(LOAD_BOOKS):
+        case(LOAD_BOOKS):            
             newState.page = action.page
             newState.books = action.books
             newState.numberOfPages = action.numberOfPages
             newState.searchName = action.searchName
             newState.sortBy = action.sortBy
+            newState.deleteErrorIn= null
+            newState.deleteError=null
             return newState
         case (SET_NEW_BOOK_PARAMS):
             newState.addBook.title = action.title===null ? newAddBookState.title : action.title
             newState.addBook.description = action.description===null ? newAddBookState.description : action.description
             newState.addBook.file = action.file===null ? newAddBookState.file : action.file
+            newState.addBook.error = null
             return newState
         case(SET_SEARCH_TERM):
             newState.searchTerm = action.value
@@ -77,9 +84,13 @@ const bookListReducer = (state=initialState, action)=>{
             newState.books = action.books
             return newState
         case(SHOW_ERROR_MESSAGE):
-            newState.addBook.error=true;
+            newState.addBook.error=action.error;
             newState.addBook.loading=false;
             return newState;
+        case(SHOW_DELETE_ERROR):
+            newState.deleteErrorIn = action.id
+            newState.deleteError = action.error
+            return newState
         default:
             return newState
     }
@@ -96,6 +107,7 @@ export function loadBooksThunkCreator(page, name=null, sortBy=null){
         })
     }
 }
+
 export function changeModalStateActionCreator(){
     return {type: CHANGE_MODAL_STATE}
 }
@@ -120,30 +132,48 @@ export function addBookActionCreator(data){
 export function deleteBookThunkCreator(id, page, name=null, sortBy=null){
     
     return async (dispatch) =>{
-        await bookApi.deleteBook(id);
+       await bookApi.deleteBook(id).then(data=>{
+            if(data.status!=200){
+                dispatch(setDeleteErrorActionCreator(id,data.detail))
+            }
+        });
+
         bookApi.getBooks(page, name, sortBy).then(data=>{
             dispatch(deleteBookActionCreator(data))
         })
     }
 }
 
+export function setDeleteErrorActionCreator(id,error){
+    return {type: SHOW_DELETE_ERROR, id:id,error:error}
+}
 export function postBookThunkCreator(title, description, file, page){
     return async (dispatch) =>{
-    var statusCode = await bookApi.postBook(title, description, file);
+    var statusCode = await bookApi.postBook(title, description, file).then(data=>{
+        console.log(data)
+        if(data.status!=200){
+            if(data.detail===undefined){
+                dispatch(errorToPostBookActionCreator("Enter book Title and add file!"))
+            }
+            else{
+            dispatch(errorToPostBookActionCreator(data.detail))
+            }
+        }
+        else{
+            return data.status
+        }
+    });
     if(statusCode===200){
     bookApi.getBooks(page).then(data=>{
         dispatch(addBookActionCreator(data))
     })
     }
-    else{
 
-        dispatch(errorToPostBookActionCreator())
-    }
 }
 }
 
-export function errorToPostBookActionCreator(){
-    return {type:SHOW_ERROR_MESSAGE}
+export function errorToPostBookActionCreator(error){
+    return {type:SHOW_ERROR_MESSAGE, error:error}
 }
 export function startLoadingActionCreator(){
     return {type: START_LOADING}

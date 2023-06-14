@@ -10,7 +10,8 @@ using WordWanderBackend.Main.DAL.Models;
 using Aspose.Words.WebExtensions;
 using WordWanderBackend.Main.Common.Models.Settings;
 using Microsoft.Extensions.Options;
-
+using WordWanderBackend.Main.Common.Const;
+using FB2Library;
 namespace WordWanderBackend.Main.BL.Services
 {
     public class BookListService : IBookListService
@@ -65,18 +66,17 @@ namespace WordWanderBackend.Main.BL.Services
             {
                 throw new ArgumentNullException("Файл не был загружен");
             }
-            int pageCount;
             string fileExtension = Path.GetExtension(file.FileName);
-            var id = Guid.NewGuid();
-            using (var stream = file.OpenReadStream())
-            {
-                var document = new Document(stream);
-                pageCount = document.PageCount;
-                var filePath=_storageSettings.FolderPath+id.ToString()+fileExtension;
-                document.Save(filePath);
+            if (!FileExtensions.AvaliableFileExtensions.Contains(fileExtension)) {
+                throw new InvalidOperationException($"Unsupported file format: {fileExtension}");
             }
-            Console.WriteLine(title, description, pageCount, fileExtension, id);
-            await _context.Books.AddAsync(new BookDbModel(title, description, pageCount, fileExtension,userId, id));
+            var id = Guid.NewGuid();
+            var filePath = _storageSettings.FolderPath + id.ToString() + fileExtension;
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension,userId, id));
             await _context.SaveChangesAsync();
         }
 
@@ -96,7 +96,7 @@ namespace WordWanderBackend.Main.BL.Services
             }
             else
             {
-                throw new ArgumentException($"There is no file with this {id} id!");
+                throw new ArgumentException($"There is no file with this {book.Name} name!");
             }
         }
     }

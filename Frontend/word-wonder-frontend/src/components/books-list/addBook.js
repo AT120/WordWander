@@ -55,7 +55,8 @@ const handleUpload = () => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-            {state.addBook.error &&  <Alert variant="danger" className="text-danger">Error</Alert>}
+
+            {state.addBook.error &&  <p className="text-danger">{state.addBook.error}</p>}
                 <Button variant="primary" onClick={handleUpload} disabled={state.addBook.loading}>                   
                     {state.addBook.loading ? 
                         (

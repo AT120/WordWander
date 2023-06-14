@@ -6,8 +6,7 @@ namespace WordWanderBackend.Main.DAL.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public int CurrentPage { get; set; }
-        public int PageCount { get; set; }
+        public float CurrentPercent { get; set; }
         public string Description { get; set; }
         public string Extension { get; set; }
 
@@ -15,16 +14,15 @@ namespace WordWanderBackend.Main.DAL.Models
         public UserDbModel User { get; set; }
         public BookShortDTO ToShortDTO()
         {
-            return new BookShortDTO { Id = Id, Description = Description, Name = Name, Page = CurrentPage, PageNumber = PageCount };
+            return new BookShortDTO { Id = Id, Description = Description, Name = Name, CurrentPercent = (int)CurrentPercent };
         }
-        public BookDbModel(string title, string description, int pageCount, string extension, Guid userId, Guid? id=null) 
+        public BookDbModel(string title, string description, string extension, Guid userId, Guid? id=null) 
         {
             Id = id==null ? Guid.NewGuid(): (Guid)id;
             Name = title;
             UserId= userId;
             Description = description;
-            PageCount = pageCount;
-            CurrentPage = 1;
+            CurrentPercent = 0;
             Extension = extension;
         }
         public BookDbModel() { }
