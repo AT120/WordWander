@@ -58,9 +58,10 @@ function BookViewMin() {
 
     useEffect(() => {
         async function loadBookView() {
-            setOnTextChosenCallback((text) => {
-                dispatch(newTextToTranslateThunkCreator(text))
+            setOnTextChosenCallback((text, event) => {
+                dispatch(newTextToTranslateThunkCreator(text, event))
             })
+            
             const view = await getView(bookFile)
             await view.goToTextStart()
             view.renderer.setStyles(getReaderCss(fontSize))

@@ -11,20 +11,37 @@ const SET_TRANSLATE_API = 5
 const SET_SOURCE_LANG = 6
 const SET_TARGET_LANG = 7
 const SET_FONT_SIZE = 8
+const UPDATE_TRANSLATE_POSITION = 9
 
 const initialState = {
     bookFile: 0,
     bookView: 0,
-    textToTranslate: '',
-    translatedText: '',
+    translation: {
+        textToTranslate: '',
+        translatedText: '',
+        position: {x: 0, y: 0}
+    },
     sourceLanguage: 'en', //TODO: убрать
     targetLanguage: 'ru',
     translateApiType: availableTranslators.LibreTranslate,
     fontSize: 12,
+    overflow: false
+}
+
+function clampPosition(position, maxXPercent, maxYPercent) {
+    const maxX = (1 - maxXPercent) * window.innerWidth
+    const maxY = (1 - maxYPercent) * window.innerHeight
+    position.x = Math.min(position.x, maxX)
+    position.y = Math.min(position.y, maxY)
+    // const 
+    // const 
+    // position.x
 }
 
 const readerReducer = (state = initialState, action) => {
     let newState = {...state};
+    newState.translation = {...state.translation}
+
     switch (action.type) {
         case UPLOAD_BOOK_FILE:
             newState.bookFile = action.file
@@ -37,11 +54,16 @@ const readerReducer = (state = initialState, action) => {
             newState.bookView = action.bookView
             return newState
         case NEW_TEXT_TO_TRANSLATE:
-            newState.textToTranslate = action.text
-            newState.translatedText = 0
+            newState.translation.textToTranslate = action.text
+            newState.translation.translatedText = 0
+            newState.translation.position = {
+                x: action.event.screenX - window.screenX,
+                y: action.event.y
+            }
+            // clampPosition(newState.translation.clickPosition, 0.4, 0.3)
             return newState
         case NEW_TRANSLATED_TEXT:
-            newState.translatedText = action.text
+            newState.translation.translatedText = action.text
             return newState
         case SET_TRANSLATE_API:
             newState.translateApiType = action.newApi
@@ -60,9 +82,16 @@ const readerReducer = (state = initialState, action) => {
                     getReaderCss(newState.fontSize)
                 )
             return newState
+        case UPDATE_TRANSLATE_POSITION:
+            newState.translation.position = action.position
+            return newState
         default:
             return state
     }
+}
+
+export function updateTranslatePositionActionCreator(position) {
+    return {type: UPDATE_TRANSLATE_POSITION, position: position}
 }
 
 export function setNewFontSizeActionCreator(fontSize) {
@@ -93,12 +122,13 @@ export function setTargetLanguageActionCreator(lang) {
     return {type: SET_TARGET_LANG, language: lang}
 }
 
-export function newTextToTranslateThunkCreator(text) {
+export function newTextToTranslateThunkCreator(text, event) {
     return async (dispatch, getState) => {
         if (text.length === 0)
             return
 
-        dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text})
+        console.log(event)
+        dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text, event: event})
         const state = getState().readerReducer
         const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
         if (translatedText)
