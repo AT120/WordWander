@@ -1,8 +1,7 @@
-import React, { createElement, createRef } from "react"
 import { getView } from "../../foliate-js/reader-import"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { newTextToTranslateThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
+import { loadBookThunkCreator, newTextToTranslateThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
 import { setOnTextChosenCallback } from "../../foliate-js/text-selector"
 
 const hyphenate = false;
@@ -50,11 +49,14 @@ export function getReaderCss(fontSize) {
 // const lightThemeCss
 
 
-function BookViewMin() {
+function BookViewMin({fileId}) {
     const bookFile = useSelector(state => state.readerReducer.bookFile)
     // do not recreate view on font change
     const fontSize = useSelector(state => state.readerReducer.fontSize, eq => true)
     const dispatch = useDispatch()
+    
+    if (!bookFile)
+        dispatch(loadBookThunkCreator(fileId))
 
     useEffect(() => {
         async function loadBookView() {

@@ -8,7 +8,9 @@ import BookNavigation from '../components/reader/BookNavigation';
 import TranslatePopup from '../components/reader/TranslatePopup';
 import ReaderSettings from '../components/reader/ReaderSettings';
 import DocumentMeta from 'react-document-meta';
-
+import { useLocation } from 'react-router';
+import { loadBookThunkCreator } from '../reducers/reader-reducer';
+// import "./Reader.css"
 const meta = {
     meta: {
       name: {
@@ -18,6 +20,10 @@ const meta = {
 }
 
 function Reader() {
+    const location = useLocation()
+    console.log(location)
+    
+
     require("./Reader.css")
     return (
         <DocumentMeta {...meta}>
@@ -26,7 +32,7 @@ function Reader() {
                 {/* TODO: авторизация */}
                 <TranslatePopup />
                 <FileLoader />
-                <BookViewMin />
+                <BookViewMin fileId={location.state}/>
                 <BookNavigation />
             </Provider>
         </DocumentMeta>
