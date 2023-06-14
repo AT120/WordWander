@@ -71,5 +71,19 @@ namespace WordWonderBackend.Main.Controllers
                 return Problem(ex.Message, statusCode: 501);
             }
         }
+        [Authorize]
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetBookById(Guid id)
+        {
+            try
+            {
+               var file = await _bookListService.GetBookById(id, ClaimsManager.GetIdClaim(User)); 
+                return Ok(file);
+            }
+            catch(Exception ex)
+            {
+                return Problem(ex.Message, statusCode: 501);
+            }
+        }
     }
 }
