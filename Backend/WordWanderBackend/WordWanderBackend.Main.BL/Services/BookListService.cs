@@ -12,6 +12,10 @@ using WordWanderBackend.Main.Common.Models.Settings;
 using Microsoft.Extensions.Options;
 using WordWanderBackend.Main.Common.Const;
 using FB2Library;
+using System.IO;
+using SkiaSharp;
+using System.Net.Mime;
+
 namespace WordWanderBackend.Main.BL.Services
 {
     public class BookListService : IBookListService
@@ -19,7 +23,7 @@ namespace WordWanderBackend.Main.BL.Services
         private readonly int _pageSize = 5;
         private readonly MainDbContext _context;
         private readonly StorageSettings _storageSettings;
-        public BookListService(MainDbContext context, IOptions<StorageSettings> storageSettings) 
+        public BookListService(MainDbContext context, IOptions<StorageSettings> storageSettings)
         {
             _context = context;
             _storageSettings = storageSettings.Value;
@@ -29,7 +33,7 @@ namespace WordWanderBackend.Main.BL.Services
         public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
         {
             int pageCount;
-            var query = _context.Books.Where(x=>Regex.IsMatch(x.Name, name) && x.UserId==userId).AsQueryable();
+            var query = _context.Books.Where(x => Regex.IsMatch(x.Name, name) && x.UserId == userId).AsQueryable();
             int bookCount = await query.CountAsync();
 
             if ((bookCount % _pageSize) == 0)
@@ -62,12 +66,13 @@ namespace WordWanderBackend.Main.BL.Services
 
         public async Task PostBookToList(IFormFile file, string title, string description, Guid userId)
         {
-            if(file.Length== 0 || file==null)
+            if (file.Length == 0 || file == null)
             {
                 throw new ArgumentNullException("Файл не был загружен");
             }
             string fileExtension = Path.GetExtension(file.FileName);
-            if (!FileExtensions.AvaliableFileExtensions.Contains(fileExtension)) {
+            if (!FileExtensions.AvaliableFileExtensions.Contains(fileExtension))
+            {
                 throw new InvalidOperationException($"Unsupported file format: {fileExtension}");
             }
             var id = Guid.NewGuid();
@@ -76,13 +81,13 @@ namespace WordWanderBackend.Main.BL.Services
             {
                 await file.CopyToAsync(stream);
             }
-            await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension,userId, id));
+            await _context.Books.AddAsync(new BookDbModel(title, description, fileExtension, userId, id));
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteBookFromList(Guid id, Guid userId)
         {
-            var book = _context.Books.FirstOrDefault(x => x.Id == id && x.UserId==userId);
+            var book = _context.Books.FirstOrDefault(x => x.Id == id && x.UserId == userId);
             if (book == null)
             {
                 throw new ArgumentException($"There is no book with this {id} id!");
@@ -98,6 +103,26 @@ namespace WordWanderBackend.Main.BL.Services
             {
                 throw new ArgumentException($"There is no file with this {book.Name} name!");
             }
+        }
+
+        public async Task<IFormFile> GetBookById(Guid id, Guid userId)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
+            if (book == null)
+            {
+                throw new ArgumentException($"This user {userId} haven't go book with this {id} id!");
+            }
+            MemoryStream memoryStream = new MemoryStream();
+            var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                await fileStream.CopyToAsync(memoryStream);
+            }
+            IFormFile file = new FormFile(memoryStream, 0, memoryStream.Length, id.ToString(), id.ToString())
+            {
+                Headers = new HeaderDictionary(),
+            };
+            return file;
         }
     }
 }
