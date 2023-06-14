@@ -11,16 +11,8 @@ import Reader from './pages/ReaderPage';
 import DocumentMeta from 'react-document-meta';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const meta = {
-  meta: {
-    name: {
-      'color-scheme': 'light dark'
-    }
-  }
-}
 
 root.render(
-  <DocumentMeta {...meta}>
     <BrowserRouter>
       <Routes>
         <Route path='login' element={<LoginPage />} />
@@ -31,5 +23,4 @@ root.render(
         <Route path="reader" element={<Reader />} />
       </Routes>
     </BrowserRouter>
-  </DocumentMeta>
 )
