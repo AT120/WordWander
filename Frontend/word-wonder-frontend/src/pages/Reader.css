@@ -1,22 +1,42 @@
 :root {
-    --active-bg: rgba(0, 0, 0, .05);
+    --active-main-fg: black;
+    --active-main-bg: white;
+    --active-secondary-fg: white;
+    --active-secondary-bg: #2B2B2B;
 }
+
+
 @supports (color-scheme: light dark) {
     @media (prefers-color-scheme: dark) {
         :root {
-            --active-bg: rgba(255, 255, 255, .1);
+            --bs-body-bg: #121212;
+            --active-main-bg: #121212;
+            /* --active-bg: rgba(255, 255, 255, .1); */
+            --bs-body-color: white;
+            --active-main-fg: white;
+        }
+        .btn-close {
+            background-color: white;
         }
     }
 }
+
 html {
     height: 100%;
+    color-scheme: light dark;
+    /* overflow: hidden; */
 }
+
 body {
     margin: 0 auto;
     height: 100%;
-    font: menu;
-    font-family: system-ui, sans-serif;
+    /* background-color: var(--active-bg); */
+    /* color: var(--active-fg) */
+    /* font: menu; */
+    /* font-family: system-ui, sans-serif; */
 }
+
+
 #drop-target {
     height: 100vh;
     display: flex;
@@ -167,7 +187,7 @@ body {
     text-decoration: none;
 }
 #toc-view a:hover {
-    background: var(--active-bg);
+    background: var(--active-main-bg);
 }
 #toc-view span {
     color: GrayText;
@@ -186,48 +206,13 @@ body {
 }
 #toc-view [aria-current] {
     font-weight: bold;
-    background: var(--active-bg);
+    background: var(--active-main-bg);
 }
 #toc-view [aria-expanded="false"] svg {
     transform: rotate(-90deg);
 }
 #toc-view [aria-expanded="false"] + [role="group"] {
     display: none;
-}
-.menu-container {
-    position: relative;
-}
-.menu, .menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.menu {
-    visibility: hidden;
-    position: absolute;
-    right: 0;
-    background: Canvas;
-    color: CanvasText;
-    border-radius: 6px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, .2), 0 0 16px rgba(0, 0, 0, .1);
-    padding: 6px;
-    cursor: default;
-}
-.menu.show {
-    visibility: visible;
-}
-.menu li {
-    padding: 6px 12px;
-    padding-left: 24px;
-    border-radius: 6px;
-}
-.menu li:hover {
-    background: var(--active-bg);
-}
-.menu li[aria-checked="true"] {
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%2F%3E%3C%2Fsvg%3E');
 }
 .popover {
     background: Canvas;

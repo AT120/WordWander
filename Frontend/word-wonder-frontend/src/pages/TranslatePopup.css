@@ -1,21 +1,25 @@
-#translate-popup {
+#translate-popup-mobile {
     width: 100%;
     min-height: 15%;
-    background-color: black;
+    max-height: 70%;
+    background-color: var(--active-secondary-bg);
     position: absolute;
     border-radius: 0 0 10% 10%;
+    box-sizing: border-box;
     transition: 0.2s ease-out;
     top: 0;
     display: flex;
     z-index: 100;
+    color: var(--active-secondary-fg);
+    overflow-y: scroll;
+    /* font-size: x-large; */
 }
 
-#translate-popup.hidden {
-
+#translate-popup-mobile.hidden {
     transition: 0.3s ease-out;
     transform: translateY(-100%);
 }
-#translate-popup button {
+#translate-popup-mobile button {
     /* padding: 3px; */
     border-radius: 6px;
     background: none;
@@ -25,7 +29,31 @@
     height: auto;
 }
 
-.text {
-    color:white;
-    font-size: x-large;
+.spacer {
+    width: 0.1rem;
+    background-color: var(--active-secondary-fg);
+    padding: 0.1rem;
+}
+
+#translate-popup-desktop {
+    position: absolute;
+    background-color: var(--active-secondary-bg);
+    color: var(--active-secondary-fg);
+    z-index: 100;
+    border:0.5rem solid var(--active-secondary-bg);
+    outline: 0.1rem solid var(--active-secondary-fg);
+    border-radius: 5px;
+    max-width: 40%;
+    max-height: 30%;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    display: inline-block;
+
+}
+#translate-popup-desktop .btn-close {
+    background-color: white;
+}
+
+#translate-popup-desktop.hidden {
+    display: none;
 }

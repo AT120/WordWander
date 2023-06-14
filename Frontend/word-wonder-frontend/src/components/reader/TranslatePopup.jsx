@@ -1,38 +1,45 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDebugValue, useEffect, useRef, useState } from "react";
+import TranslateMobile from "./Translate/TranslateMobile";
+import TranslateDesktop from "./Translate/TranslateDesktop";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTranslatePositionActionCreator } from "../../reducers/reader-reducer";
 
-
-
-
-let prevText = ''
 export default function TranslatePopup() {
-    const textToTranslate = useSelector(state => state.readerReducer.textToTranslate)
-    const [hidden, hide] = useState(true)
-    const hidePopup = () => hide(true)
+    const [isMobile, setMobile] = useState(window.innerWidth / window.innerHeight < 1);
+    const translation = useSelector(state => state.readerReducer.translation)
+    const dispatch = useDispatch();
+    const ref = useRef(null)
 
-    if (prevText !== textToTranslate) {
-        prevText = textToTranslate
-        hide(false)
-        return;
+    const updateMobile = () => {
+        setMobile(window.innerWidth / window.innerHeight < 1);
     }
 
-    return (
-        <div id="translate-popup" className={`d-flex flex-column ${(hidden) ? 'hidden' : ''}`}>
-            <div className="d-flex flex-row flex-grow-1">
-                <div className="text flex-grow-1 p-3">
-                    {textToTranslate}
-                </div>
-                <div className="text flex-grow-1 p-3">
-                    {textToTranslate}
-                </div>
-            </div>
-            <div className="d-flex justify-content-center">
-                <button onClick={hidePopup}>
-                    <svg class="icon" viewBox="0 0 25 20" style={{ height: "4rem" }}>
-                        <path d="M 3 15 L 12 12 L 21 15" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    )
+    useEffect(() => {
+        window.addEventListener("resize", updateMobile);
+        if (ref.current && !isMobile) {
+            const xOverflow = ref.current.offsetWidth + translation.position.x - window.innerWidth;
+            const yOverflow = ref.current.offsetHeight + translation.position.y - window.innerHeight;
+            if (xOverflow > 0 || yOverflow > 0) {
+                const newPosition = { ...translation.position }
+                if (xOverflow > 0) {
+                    newPosition.x = newPosition.x - xOverflow - 10
+                }
+                if (yOverflow > 0)
+                    newPosition.y = newPosition.y - yOverflow - 10
+
+                dispatch(updateTranslatePositionActionCreator(newPosition))
+            }
+        }
+
+
+        return () => window.removeEventListener("resize", updateMobile);
+    })
+
+
+    if (isMobile)
+        return <TranslateMobile translation={translation} />
+    else
+        return <TranslateDesktop reference={ref} translation={translation} />
+
+
 }
