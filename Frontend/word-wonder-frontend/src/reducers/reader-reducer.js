@@ -8,6 +8,7 @@ const SET_FONT_SIZE = 103
 const UPDATE_PROGRESS = 104
 
 const initialState = {
+    bookId: null,
     bookFile: 0,
     bookView: 0,
     fontSize: 12,
@@ -28,6 +29,7 @@ const readerReducer = (state = initialState, action) => {
     switch (action.type) {
         case UPLOAD_BOOK_FILE:
             newState.bookFile = action.file
+            newState.bookId = action.guid
             newState.bookView = 0 //TODO: а может надо по умному елемент удалять?
             return newState;
         case GET_BOOK_FILE:
@@ -58,8 +60,8 @@ export function setNewFontSizeActionCreator(fontSize) {
     return {type: SET_FONT_SIZE, fontSize: fontSize}
 }
 
-export function uploadBookFileActionCreator(file) {
-    return {type: UPLOAD_BOOK_FILE, file: file};
+export function uploadBookFileActionCreator(file, guid) {
+    return {type: UPLOAD_BOOK_FILE, file: file, guid: guid};
 }
 
 export function getBookActionCreator(file) {
@@ -74,7 +76,7 @@ export function loadBookThunkCreator(guid) {
     return async (dispatch) => {
         const book = await bookApi.loadBook(guid)
         if (book)
-            dispatch(uploadBookFileActionCreator(book))
+            dispatch(uploadBookFileActionCreator(book, guid))
     }
 }
 
@@ -83,9 +85,14 @@ function updateProgressActionCreator(details) {
 }
 
 export function updateProgressThunkCreator(details) {
-    return async (dispatch) => {
-        dispatch(updateProgressActionCreator(details))
+    return async (dispatch, getState) => {
+        const state = getState()
+        const fraction = state.readerReducer.progress.fraction
+        const bookId = state.readerReducer.bookId
+        if (fraction && bookId && fraction !== details.fraction )
+            bookApi.sendProgress(bookId, details.fraction)
 
+        dispatch(updateProgressActionCreator(details))
     }
 }
 

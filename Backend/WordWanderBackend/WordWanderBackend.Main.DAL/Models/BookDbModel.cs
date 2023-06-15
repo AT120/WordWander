@@ -6,7 +6,7 @@ namespace WordWanderBackend.Main.DAL.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public float CurrentPercent { get; set; }
+        public double CurrentPercent { get; set; }
         public string Description { get; set; }
         public string Extension { get; set; }
 

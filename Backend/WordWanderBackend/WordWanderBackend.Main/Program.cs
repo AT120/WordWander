@@ -12,7 +12,7 @@ var services = builder.Services;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var storageString = "Storage"; //TODO: in config
+var storageString = "Storage";
 services.Configure<StorageSettings>(builder.Configuration.GetSection(storageString));
 services.AddCors(options =>
 {
@@ -33,6 +33,7 @@ services.AddScoped<IBookListService, BookListService>();
 services.AddTransient<IPasswordHasher<UserDbModel>, PasswordHasher<UserDbModel>>();
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<ITranslateService, LibreTranslateService>();
+services.AddScoped<IBookService, BookService>();
 services.SetupCookieAuth();
 
 

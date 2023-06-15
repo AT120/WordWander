@@ -54,11 +54,17 @@ async function loadBook(id) {
     // return resp.data
     return new File([resp.data], `book-${id}.fb2`, {type: 'application/x-fictionbook'}) //TODO:
 }
+
+function sendProgress(bookId, fraction) {
+    instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100})
+}
+
 export const bookApi = {
     getBooks : getBooks,
     deleteBook : deleteBook,
     postBook : postBook,
-    loadBook : loadBook
+    loadBook : loadBook,
+    sendProgress: sendProgress,
 }
 
 function login(login, password){
