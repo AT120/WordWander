@@ -5,18 +5,25 @@ const UPLOAD_BOOK_FILE = 100
 const GET_BOOK_FILE = 101
 const SET_BOOK_VIEW = 102
 const SET_FONT_SIZE = 103
+const UPDATE_PROGRESS = 104
 
 const initialState = {
     bookFile: 0,
     bookView: 0,
     fontSize: 12,
-    overflow: false
+    overflow: false,
+    progress: {
+        fraction: 0.0,
+        loc: null,
+        page: null,
+        toc: null
+    },
 }
 
 
 const readerReducer = (state = initialState, action) => {
     let newState = {...state};
-    newState.translation = {...state.translation}
+    newState.progress = {...state.progress}
 
     switch (action.type) {
         case UPLOAD_BOOK_FILE:
@@ -35,6 +42,12 @@ const readerReducer = (state = initialState, action) => {
                 newState.bookView.renderer.setStyles?.(
                     getReaderCss(newState.fontSize)
                 )
+            return newState
+        case UPDATE_PROGRESS:
+            newState.progress.fraction = action.details.fraction
+            newState.progress.loc = action.details.location
+            newState.progress.page = action.details.pageItem
+            newState.progress.toc = action.details.tocItem
             return newState
         default:
             return state
@@ -65,5 +78,15 @@ export function loadBookThunkCreator(guid) {
     }
 }
 
+function updateProgressActionCreator(details) {
+    return {type: UPDATE_PROGRESS, details: details}
+}
+
+export function updateProgressThunkCreator(details) {
+    return async (dispatch) => {
+        dispatch(updateProgressActionCreator(details))
+
+    }
+}
 
 export default readerReducer;

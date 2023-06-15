@@ -25,7 +25,8 @@ function GetSectionMarks(book) {
 
 function ProgressSlider() {
     const bookView = useSelector(state => state.readerReducer.bookView)
-
+    const fraction = useSelector(state => state.readerReducer.progress.fraction)
+    
     return (
         <input 
             id="progress-slider"
@@ -33,7 +34,8 @@ function ProgressSlider() {
             onInput={e => sliderInputHandler(e, bookView)}
             type="range" 
             min="0" 
-            max="1" 
+            max="1"
+            value={fraction} 
             step="any" 
             list="tick-marks"
         />
