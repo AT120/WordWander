@@ -19,8 +19,8 @@ function getTextSize(text) {
     if (text.length < 150)
         return 'medium'
 
-    if (text.length < 200)
-        return 'small'
+    return 'small'
+
 }
 
 let prevText = ''
@@ -42,27 +42,26 @@ export default function TranslateMobile({ translation }) {
             className={`d-flex flex-column ${(hidden) ? 'hidden' : ''}`}
             style={{ 'font-size': getTextSize(textToTranslate) }}
         >
-            <div className="d-flex flex-column">
 
-                    <div className="d-flex">
-                        <div className="col-6 px-3">
-                            {textToTranslate}
-                        </div>
-                        <div className="col-6 px-3">
-                            {(translatedText) ? translatedText : '...'}
-                            {/* TODO: анимация */}
-                        </div>
-                    </div>
-                <div>
-                    <div className="d-flex justify-content-center ">
-                        <button onClick={hidePopup}>
-                            <svg className="icon" viewBox="0 0 25 20" style={{ height: "4rem" }}>
-                                <path d="M 3 15 L 12 12 L 21 15" />
-                            </svg>
-                        </button>
-                    </div>
+
+            <div className="d-flex text-field">
+                <div className="col-6 px-3">
+                    {textToTranslate}
+                </div>
+                <div className="col-6 px-3">
+                    {(translatedText) ? translatedText : '...'}
+                    {/* TODO: анимация */}
                 </div>
             </div>
+            <div className="d-flex justify-content-center mt-auto">
+                <button onClick={hidePopup}>
+                    <svg className="icon" viewBox="0 0 25 20" style={{ height: "4rem" }}>
+                        <path d="M 3 15 L 12 12 L 21 15" />
+                    </svg>
+                </button>
+            </div>
+
+
         </div>
     )
 }

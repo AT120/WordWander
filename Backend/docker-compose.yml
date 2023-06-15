@@ -30,6 +30,7 @@ services:
       - "8080:80"
     volumes:
       - "./WordWanderBackend/appsettings.json:/app/appsettings.json"
+      - "./BookStorage:/books"
   
 
   database:
