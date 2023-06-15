@@ -5,6 +5,8 @@ function sliderInputHandler(event, bookView) {
     bookView.goToFraction(parseFloat(event.target.value))
 }
 
+
+
 function GetSectionMarks(book) {
     let sizes = book.sections
         .filter(s => s.linear !== 'no')
@@ -18,12 +20,23 @@ function GetSectionMarks(book) {
     })
 }
 
+
+
+
 function ProgressSlider() {
     const bookView = useSelector(state => state.readerReducer.bookView)
 
     return (
-        <input id="progress-slider" dir={bookView.book.dir} onInput={e => sliderInputHandler(e, bookView)}
-            type="range" min="0" max="1" step="any" list="tick-marks" />
+        <input 
+            id="progress-slider"
+            dir={bookView.book.dir} 
+            onInput={e => sliderInputHandler(e, bookView)}
+            type="range" 
+            min="0" 
+            max="1" 
+            step="any" 
+            list="tick-marks"
+        />
     ) //TODO: восстанавливать прогресс
 }
 
@@ -40,11 +53,11 @@ export default function BookNavigation() {
     const bookView = useSelector(state => state.readerReducer.bookView)
     const dispatch = useDispatch()
     function nextPage() {
-        bookView.next()
+        bookView.goRight()
     }
 
     function prevPage() {
-        bookView.prev()
+        bookView.goLeft()
     }
 
     const hiddenState = (bookView) ? '' : 'visually-hidden'

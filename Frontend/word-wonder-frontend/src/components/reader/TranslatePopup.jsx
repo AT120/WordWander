@@ -2,11 +2,11 @@ import { useDebugValue, useEffect, useRef, useState } from "react";
 import TranslateMobile from "./Translate/TranslateMobile";
 import TranslateDesktop from "./Translate/TranslateDesktop";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTranslatePositionActionCreator } from "../../reducers/reader-reducer";
+import { updateTranslatePositionActionCreator } from "../../reducers/translate-reducer";
 
 export default function TranslatePopup() {
     const [isMobile, setMobile] = useState(window.innerWidth / window.innerHeight < 1);
-    const translation = useSelector(state => state.readerReducer.translation)
+    const translation = useSelector(state => state.translateReducer.translation)
     const dispatch = useDispatch();
     const ref = useRef(null)
 

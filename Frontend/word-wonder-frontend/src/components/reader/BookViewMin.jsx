@@ -1,8 +1,9 @@
 import { getView } from "../../foliate-js/reader-import"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { loadBookThunkCreator, newTextToTranslateThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
 import { setOnTextChosenCallback } from "../../foliate-js/text-selector"
+import { newTextToTranslateThunkCreator } from "../../reducers/translate-reducer";
+import { loadBookThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer";
 
 const hyphenate = false;
 export function getReaderCss(fontSize) {
@@ -47,7 +48,9 @@ export function getReaderCss(fontSize) {
     `
 }
 // const lightThemeCss
+function relocateHandler() {
 
+}
 
 function BookViewMin({fileId}) {
     const bookFile = useSelector(state => state.readerReducer.bookFile)
@@ -55,6 +58,8 @@ function BookViewMin({fileId}) {
     const fontSize = useSelector(state => state.readerReducer.fontSize, eq => true)
     const dispatch = useDispatch()
     
+
+
     if (!bookFile)
         dispatch(loadBookThunkCreator(fileId))
 
@@ -65,6 +70,7 @@ function BookViewMin({fileId}) {
             })
             
             const view = await getView(bookFile)
+            // view.addEventListener('relocate')
             await view.goToTextStart()
             view.renderer.setStyles(getReaderCss(fontSize))
             dispatch(setBookViewActionCreator(view))

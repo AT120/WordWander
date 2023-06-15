@@ -40,7 +40,7 @@ export default function TranslateMobile({ translation }) {
         <div
             id="translate-popup-mobile"
             className={`d-flex flex-column ${(hidden) ? 'hidden' : ''}`}
-            style={{ 'font-size': getTextSize(textToTranslate) }}
+            style={{ fontSize: getTextSize(textToTranslate) }}
         >
 
 

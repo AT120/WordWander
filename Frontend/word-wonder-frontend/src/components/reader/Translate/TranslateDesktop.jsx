@@ -7,27 +7,6 @@ let prevText = ''
 export default function TranslateDesktop({ translation, reference }) {
     const [hidden, hide] = useState(true);
     const handleClose = () => hide(true);
-    // const dispatch = useDispatch();
-    // const ref = useRef(null)
-
-
-    // useEffect(() => {
-    //     if (!ref.current)
-    //         return
-
-    //     const xOverflow = ref.current.offsetWidth + translation.position.x - window.innerWidth;
-    //     const yOverflow = ref.current.offsetHeight + translation.position.y - window.innerHeight;
-    //     if (xOverflow > 0 || yOverflow > 0) {
-    //         const newPosition = { ...translation.position }
-    //         if (xOverflow > 0)
-    //             newPosition.x = newPosition.x - xOverflow
-    //         if (yOverflow > 0)
-    //             newPosition.y = newPosition.y - xOverflow
-
-    //         dispatch(updateTranslatePositionActionCreator(newPosition))
-    //     }
-
-    // }, [ref.current])
 
     const textToTranslate = translation.textToTranslate
     const translatedText = translation.translatedText

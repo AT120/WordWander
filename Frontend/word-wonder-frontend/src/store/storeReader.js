@@ -1,10 +1,12 @@
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import readerReducer from '../reducers/reader-reducer';
+import translateReducer from '../reducers/translate-reducer';
 
-let reducers = combineReducers({
-    readerReducer
+const reducers = combineReducers({
+    readerReducer : readerReducer,
+    translateReducer : translateReducer
 });
-let storeReader = createStore (reducers, applyMiddleware(thunk));
+const storeReader = createStore (reducers, applyMiddleware(thunk));
 
 export default storeReader;
