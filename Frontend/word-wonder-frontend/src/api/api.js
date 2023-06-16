@@ -47,7 +47,7 @@ function deleteBook(id){
 }
 
 async function loadBook(id) {
-    const resp = await instance.get(`books/get/${id}`, {responseType:'blob'})
+    const resp = await instance.get(`books/${id}/file`, {responseType:'blob'})
         // .catch(error => null) //TODO: добавить обработку ошибок
     if (!resp || resp.status !== 200)
         return null //TODO: добавить обработку ошибок
@@ -55,8 +55,16 @@ async function loadBook(id) {
     return new File([resp.data], `book-${id}.fb2`, {type: 'application/x-fictionbook'}) //TODO:
 }
 
+async function setBookLanguage(id, sourceLanguage, targetLanguage) {
+    // Обработки ошибок не будет.
+    const resp = await instance.put(`books/${id}/languages`, {
+        sourceLangCode: sourceLanguage,
+        targetLangCode: targetLanguage
+    }).catch()
+}
+
 function sendProgress(bookId, fraction) {
-    instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100})
+    instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100}).catch()
 }
 
 export const bookApi = {
@@ -65,6 +73,7 @@ export const bookApi = {
     postBook : postBook,
     loadBook : loadBook,
     sendProgress: sendProgress,
+    setBookLanguage: setBookLanguage
 }
 
 function login(login, password){

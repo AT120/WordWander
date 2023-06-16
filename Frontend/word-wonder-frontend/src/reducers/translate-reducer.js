@@ -66,12 +66,22 @@ export function setNewTranslateApiActionCretor(api) {
     return {type: SET_TRANSLATE_API, newApi: api}
 }
 
-export function setSourceLanguageActionCreator(lang) {
-    return {type: SET_SOURCE_LANG, language: lang}
+export function setSourceLanguageThunkCreator(lang) {
+    return (dispatch, getState) => {
+        const bookId = getState().readerReducer.bookId
+        if (bookId)
+            bookApi.setBookLanguage(bookId, lang, null)
+        dispatch({type: SET_SOURCE_LANG, language: lang})
+    }
 }
 
-export function setTargetLanguageActionCreator(lang) {
-    return {type: SET_TARGET_LANG, language: lang}
+export function setTargetLanguageThunkCreator(lang) {
+    return (dispatch, getState) => {
+        const bookId = getState().readerReducer.bookId
+        if (bookId)
+            bookApi.setBookLanguage(bookId, null, lang)
+        dispatch({type: SET_TARGET_LANG, language: lang})
+    }
 }
 
 export function newTextToTranslateThunkCreator(text, event) {
@@ -79,7 +89,6 @@ export function newTextToTranslateThunkCreator(text, event) {
         if (text.length === 0)
             return
 
-        console.log(event)
         dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text, event: event})
         const state = getState().translateReducer
         const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);

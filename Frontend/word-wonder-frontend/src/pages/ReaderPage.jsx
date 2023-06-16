@@ -20,9 +20,7 @@ const meta = {
 }
 
 function Reader() {
-    const location = useLocation()
-    console.log(location)
-    
+    const location = useLocation()    
 
     require("./Reader.css")
     return (

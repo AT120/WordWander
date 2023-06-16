@@ -14,7 +14,8 @@ public static class AuthConfigurator
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => 
             {
-                options.AccessDeniedPath = "/login"; //TODO:
+                // options.AccessDeniedPath = "/login"; //TODO:
+                // options.
                 options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(3);
             });

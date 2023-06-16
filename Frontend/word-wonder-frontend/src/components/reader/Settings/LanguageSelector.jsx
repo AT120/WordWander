@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import Form from 'react-bootstrap/Form';
-import { setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "../../../reducers/translate-reducer";
+import { setSourceLanguageThunkCreator, setTargetLanguageThunkCreator } from "../../../reducers/translate-reducer";
 
 const languages = [
     ['en', 'English'], 
@@ -42,11 +42,11 @@ export default function LanguageSelector() {
     const dispatch = useDispatch()
 
     function setTargetLanguage(event) {
-        dispatch(setTargetLanguageActionCreator(event.currentTarget.value))
+        dispatch(setTargetLanguageThunkCreator(event.currentTarget.value))
     }
     
     function setSourceLanguage(event) {
-        dispatch(setSourceLanguageActionCreator(event.currentTarget.value))
+        dispatch(setSourceLanguageThunkCreator(event.currentTarget.value))
     }
 
     return (

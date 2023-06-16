@@ -1,8 +1,9 @@
 using System.Net.Http.Json;
-using System.Runtime.Versioning;
+using Microsoft.Extensions.Options;
 using ProjCommon.Exceptions;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Settings;
 
 namespace WordWanderBackend.Main.BL.Services;
 
@@ -27,8 +28,13 @@ public class LibreTranslateService : ITranslateService
     }
 
 
-    private const string baseUrl = "http://libretranslate:5000"; //TODO: в конфиг
-    private readonly HttpClient _httpClient = new() { BaseAddress = new Uri(baseUrl) };
+    private readonly LibreTranslateSettings _settings;
+    private readonly HttpClient _httpClient;
+    public LibreTranslateService(IOptions<LibreTranslateSettings> settings)
+    {
+        _settings = settings.Value;
+        _httpClient = new() { BaseAddress = new Uri(_settings.LibreTranslateApiUrl) };
+    }
 
 
     public async Task<string> DetectLanguage(string text)
@@ -46,7 +52,7 @@ public class LibreTranslateService : ITranslateService
     public async Task<string> Translate(string text, string sourceLang, string targetLang)
     {
         var resp = await _httpClient.PostAsJsonAsync("translate", new TranslateQueryDTO
-        { 
+        {
             Q = text,
             Source = sourceLang,
             Target = targetLang

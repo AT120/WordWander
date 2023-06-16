@@ -12,6 +12,8 @@ services:
       LT_DISABLE_WEB_UI: true
     expose:
       - "5000"
+    ports:
+      - "5000:5000"
     healthcheck:
       test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
     volumes:
@@ -19,18 +21,18 @@ services:
       - "./LibreTranslate/LibreTranslateModels/cache:/home/libretranslate/.local/cache"
       
 
-  backend:
-    container_name: backend
-    build: 
-      context: WordWanderBackend/
-      dockerfile: Dockerfile
-    # environment:
-      # "ASPNETCORE_ENVIRONMENT": "Development"
-    ports:
-      - "8080:80"
-    volumes:
-      - "./WordWanderBackend/appsettings.json:/app/appsettings.json"
-      - "./BookStorage:/books"
+  # backend:
+  #   container_name: backend
+  #   build: 
+  #     context: WordWanderBackend/
+  #     dockerfile: Dockerfile
+  #   # environment:
+  #     # "ASPNETCORE_ENVIRONMENT": "Development"
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - "./WordWanderBackend/appsettings.json:/app/appsettings.json"
+  #     - "./BookStorage:/books"
   
 
   database:
@@ -41,7 +43,8 @@ services:
     image: postgres:15-alpine
     expose:
       - "5432"
-    ports: 
+    ports:
+      - "5432:5432"
     volumes:
       - "./DBData:/var/lib/postgresql/data"
     

@@ -15,12 +15,11 @@ namespace WordWonderBackend.Main.Controllers
     public class BookListController : Controller
     {
         private readonly IBookListService _bookListService;
-        private readonly IBookService _bookService;
-        
-        public BookListController(IBookListService bookListService, IBookService bookService)
+
+        public BookListController(IBookListService bookListService)
         {
             _bookListService = bookListService;
-            _bookService = bookService;
+            
         }
 
         [HttpGet("{page}")]
@@ -77,39 +76,7 @@ namespace WordWonderBackend.Main.Controllers
                 return Problem(ex.Message, statusCode: 501);
             }
         }
-        [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetBookById(Guid id)
-        {
-            // try
-            // {
-            var file = await _bookListService.GetBookById(id, ClaimsManager.GetIdClaim(User));
-            return new FileStreamResult(file, "application/octet-stream");
-            // }
-            // catch(Exception ex)
-            // {
-            //     return 
-            //     // return Problem(ex.Message, statusCode: 501);
-            // }
-        }
 
-
-        [HttpPut("{id}/progress")]
-        public async Task<ActionResult> UpdateProgress(Guid id, BookProgressDTO progress)
-        {
-            try
-            {
-                await _bookService.UpdateProgress(id, ClaimsManager.GetIdClaim(User), progress.PercentReaded);
-                return Ok();
-            }
-            catch (BackendException be)
-            {
-                return Problem(be.UserMessage, statusCode: 404);
-            }
-            catch
-            {
-                return Problem("Unknown server error", statusCode: 500);
-            }
-        }
 
     }
 }

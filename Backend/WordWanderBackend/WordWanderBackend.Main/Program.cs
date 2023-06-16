@@ -14,6 +14,8 @@ var services = builder.Services;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var storageString = "Storage";
 services.Configure<StorageSettings>(builder.Configuration.GetSection(storageString));
+services.Configure<LibreTranslateSettings>(builder.Configuration.GetSection("ConnectionStrings"));
+
 services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -24,7 +26,7 @@ services.AddCors(options =>
             .WithOrigins("http://localhost:3000") //TODO: in config
     );
 });
-builder.AddDB<MainDbContext>();
+builder.AddDB<MainDbContext>("DbConnection");
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();

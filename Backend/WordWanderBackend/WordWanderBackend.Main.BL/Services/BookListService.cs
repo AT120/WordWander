@@ -104,30 +104,5 @@ namespace WordWanderBackend.Main.BL.Services
                 throw new ArgumentException($"There is no file with this {book.Name} name!");
             }
         }
-
-        public async Task<FileStream> GetBookById(Guid id, Guid userId)
-        {
-            var book = await _context.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id);
-            if (book == null)
-            {
-                throw new ArgumentException($"This user {userId} haven't go book with this {id} id!");
-            }
-            MemoryStream memoryStream = new MemoryStream();
-            var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
-
-            return new FileStream(filePath, FileMode.Open);
-
-            // using (var fileStream = new FileStream(filePath, FileMode.Open))
-
-
-            // {
-            //     await fileStream.CopyToAsync(memoryStream);
-            // }
-            // IFormFile file = new FormFile(memoryStream, 0, memoryStream.Length, id.ToString(), id.ToString())
-            // {
-            //     Headers = new HeaderDictionary(),
-            // };
-            // return file;
-        }
     }
 }
