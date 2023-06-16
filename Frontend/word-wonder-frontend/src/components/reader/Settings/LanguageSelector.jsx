@@ -1,40 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import Form from 'react-bootstrap/Form';
 import { setSourceLanguageThunkCreator, setTargetLanguageThunkCreator } from "../../../reducers/translate-reducer";
+import { languages } from "../../../const/languages";
 
-const languages = [
-    ['en', 'English'], 
-    ['ru', 'Russian'],
-    ['ar', 'Arabic'],
-    ['az', 'Azerbaijani'],
-    ['ca', 'Catalan'],
-    ['zh', 'Chinese'],
-    ['cs', 'Czech'],
-    ['da', 'Danish'],
-    ['nl', 'Dutch'],
-    ['eo', 'Esperanto'],
-    ['fi', 'Finnish'],
-    ['fr', 'French'],
-    ['de', 'German'],
-    ['el', 'Greek'],
-    ['he', 'Hebrew'],
-    ['hi', 'Hindi'],
-    ['hu', 'Hungarian'],
-    ['id', 'Indonesian'],
-    ['ga', 'Irish'],
-    ['it', 'Italian'],
-    ['ja', 'Japanese'],
-    ['ko', 'Korean'],
-    ['fa', 'Persian'],
-    ['pl', 'Polish'],
-    ['pt', 'Portuguese'],
-    ['sk', 'Slovak'],
-    ['es', 'Spanish'],
-    ['sv', 'Swedish'],
-    ['th', 'Thai'],
-    ['tr', 'Turkish'],
-    ['uk', 'Ukranian']
-]
+
 
 export default function LanguageSelector() {
     const sourceLang = useSelector(state => state.translateReducer.sourceLanguage)
@@ -44,7 +13,7 @@ export default function LanguageSelector() {
     function setTargetLanguage(event) {
         dispatch(setTargetLanguageThunkCreator(event.currentTarget.value))
     }
-    
+
     function setSourceLanguage(event) {
         dispatch(setSourceLanguageThunkCreator(event.currentTarget.value))
     }
@@ -54,8 +23,8 @@ export default function LanguageSelector() {
             <Form.Group className="mt-4">
                 <Form.Label>Язык текта</Form.Label>
                 <Form.Select onChange={setSourceLanguage} defaultValue={sourceLang}>
-                    {languages.map(lang => 
-                        <option 
+                    {languages.map(lang =>
+                        <option
                             key={lang[0]}
                             value={lang[0]}>{lang[1]}
                         </option>
@@ -66,8 +35,8 @@ export default function LanguageSelector() {
             <Form.Group className="mt-4">
                 <Form.Label>Язык перевода</Form.Label>
                 <Form.Select onChange={setTargetLanguage} defaultValue={targetLang}>
-                    {languages.map(lang => 
-                        <option 
+                    {languages.map(lang =>
+                        <option
                             key={lang[0]}
                             value={lang[0]}>{lang[1]}
                         </option>

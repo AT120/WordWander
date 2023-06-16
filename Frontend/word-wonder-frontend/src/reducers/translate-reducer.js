@@ -1,6 +1,4 @@
-import { connect } from "react-redux";
 import translate, { availableTranslators, changeTranslator } from "../api/translate-api";
-import { getReaderCss } from "../components/reader/BookViewMin";
 import { bookApi } from "../api/api";
 
 
@@ -35,7 +33,6 @@ const translateReducer = (state = initialState, action) => {
                 x: action.event.screenX - window.screenX,
                 y: action.event.y
             }
-            // clampPosition(newState.translation.clickPosition, 0.4, 0.3)
             return newState
         case NEW_TRANSLATED_TEXT:
             newState.translation.translatedText = action.text

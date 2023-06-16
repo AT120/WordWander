@@ -1,4 +1,4 @@
-import { Provider, useDispatch } from 'react-redux';
+import { Provider } from 'react-redux';
 import FileLoader from '../components/reader/FileLoader';
 import storeReader from '../store/storeReader';
 import "./TranslatePopup.css"

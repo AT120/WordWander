@@ -26,7 +26,7 @@ const initialState = {
 function updateDocumentTheme(theme) {
     //ыыыыы
     document.documentElement.style.colorScheme = theme
-    if (theme != "light dark") {
+    if (theme !== "light dark") {
         document.documentElement.className = theme
     } else {
         document.documentElement.className = 'auto'
