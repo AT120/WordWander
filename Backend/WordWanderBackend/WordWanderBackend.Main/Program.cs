@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 using WordWanderBackend.Main.BL.Configurators;
 using WordWanderBackend.Main.BL.Services;
 using WordWanderBackend.Main.Common.Interfaces;
@@ -28,6 +29,7 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddScoped<IBookListService, BookListService>();
+services.AddScoped<IDictionaryTranslationService, DictionaryService>();
 services.AddTransient<IPasswordHasher<UserDbModel>, PasswordHasher<UserDbModel>>(); 
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<ITranslateService, LibreTranslateService>();

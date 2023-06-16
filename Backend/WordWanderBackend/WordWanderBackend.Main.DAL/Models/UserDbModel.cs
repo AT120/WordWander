@@ -8,4 +8,5 @@ public class UserDbModel
     public required string UserName { get; set; }
     public required string PasswordHash { get; set; }
     public List<BookDbModel> Books { get; set; }
+    public List<DictionaryDbModel> Dictionary {get; set; }
 }

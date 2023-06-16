@@ -9,6 +9,7 @@ namespace WordWanderBackend.Main.DAL
     {
         public DbSet<BookDbModel> Books { get; set; }
         public DbSet<UserDbModel> Users { get; set; }
+        public DbSet<DictionaryDbModel> Dictionary { get; set; }
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
