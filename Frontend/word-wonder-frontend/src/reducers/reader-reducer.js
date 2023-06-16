@@ -29,7 +29,7 @@ function updateDocumentTheme(theme) {
     if (theme != "light dark") {
         document.documentElement.className = theme
     } else {
-        document.documentElement.className = ''
+        document.documentElement.className = 'auto'
     }
 }
 

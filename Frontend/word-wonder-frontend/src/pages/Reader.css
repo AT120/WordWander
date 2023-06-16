@@ -19,14 +19,14 @@
 
 @supports (color-scheme: light dark) {
     @media (prefers-color-scheme: dark) {
-        :root {
+        :root.auto {
             --bs-body-bg: #121212;
             --active-main-bg: #121212;
             --active-bg: rgba(255, 255, 255, .1);
             --bs-body-color: white;
             --active-main-fg: white;
         }
-        .btn-close {
+        :root.auto .btn-close {
             background-color: white;
         }
     }
