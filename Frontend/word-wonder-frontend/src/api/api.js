@@ -63,8 +63,12 @@ async function setBookLanguage(id, sourceLanguage, targetLanguage) {
     }).catch()
 }
 
-function sendProgress(bookId, fraction) {
-    instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100}).catch()
+async function sendProgress(bookId, fraction) {
+    try {
+        await instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100}).catch()
+    } catch {
+        
+    }
 }
 
 export const bookApi = {

@@ -6,12 +6,14 @@ const GET_BOOK_FILE = 101
 const SET_BOOK_VIEW = 102
 const SET_FONT_SIZE = 103
 const UPDATE_PROGRESS = 104
+const SET_THEME = 105
 
 const initialState = {
     bookId: null,
     bookFile: 0,
     bookView: 0,
     fontSize: 12,
+    theme: 'light dark',
     overflow: false,
     progress: {
         fraction: 0.0,
@@ -21,6 +23,15 @@ const initialState = {
     },
 }
 
+function updateDocumentTheme(theme) {
+    //ыыыыы
+    document.documentElement.style.colorScheme = theme
+    if (theme != "light dark") {
+        document.documentElement.className = theme
+    } else {
+        document.documentElement.className = ''
+    }
+}
 
 const readerReducer = (state = initialState, action) => {
     let newState = {...state};
@@ -40,16 +51,23 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case SET_FONT_SIZE:
             newState.fontSize = action.fontSize
-            if (newState.bookView)
-                newState.bookView.renderer.setStyles?.(
-                    getReaderCss(newState.fontSize)
-                )
+            newState.bookView?.renderer.setStyles( 
+                getReaderCss(newState.fontSize, newState.theme)
+            )
             return newState
         case UPDATE_PROGRESS:
             newState.progress.fraction = action.details.fraction
             newState.progress.loc = action.details.location
             newState.progress.page = action.details.pageItem
             newState.progress.toc = action.details.tocItem
+            return newState
+        case SET_THEME:
+            newState.theme = action.theme
+            console.log(action.theme)
+            newState.bookView?.renderer.setStyles(
+                getReaderCss(newState.fontSize, newState.theme)
+            )
+            updateDocumentTheme(action.theme)
             return newState
         default:
             return state
@@ -95,5 +113,9 @@ export function updateProgressThunkCreator(details) {
         dispatch(updateProgressActionCreator(details))
     }
 }
+
+export function updateThemeActionCreator(theme) {
+    return {type: SET_THEME, theme: theme}
+} 
 
 export default readerReducer;
