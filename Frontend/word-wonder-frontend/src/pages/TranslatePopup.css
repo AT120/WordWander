@@ -11,7 +11,7 @@
     display: flex;
     z-index: 100;
     color: var(--active-secondary-fg);
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     /* font-size: x-large; */
 }
 
@@ -19,6 +19,11 @@
     transition: 0.3s ease-out;
     transform: translateY(-100%);
 }
+
+#translate-popup-mobile .text-field {
+    overflow-y: scroll;
+}
+
 #translate-popup-mobile button {
     /* padding: 3px; */
     border-radius: 6px;

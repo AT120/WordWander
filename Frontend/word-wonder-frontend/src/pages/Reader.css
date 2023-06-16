@@ -1,4 +1,4 @@
-:root {
+:root, :root.light {
     --active-main-fg: black;
     --active-main-bg: white;
     --active-secondary-fg: white;
@@ -6,32 +6,44 @@
 }
 
 
+:root.dark {
+    --bs-body-bg: #121212;
+    --active-main-bg: #121212;
+    /* --active-bg: rgba(255, 255, 255, .1); */
+    --bs-body-color: white;
+    --active-main-fg: white;
+}
+:root.dark .btn-close {
+    background-color: white;
+}
+
 @supports (color-scheme: light dark) {
     @media (prefers-color-scheme: dark) {
-        :root {
+        :root.auto {
             --bs-body-bg: #121212;
             --active-main-bg: #121212;
-            /* --active-bg: rgba(255, 255, 255, .1); */
+            --active-bg: rgba(255, 255, 255, .1);
             --bs-body-color: white;
             --active-main-fg: white;
         }
-        .btn-close {
+        :root.auto .btn-close {
             background-color: white;
         }
     }
 }
 
+
 html {
     height: 100%;
-    color-scheme: light dark;
+    /* color-scheme: light dark; */
     /* overflow: hidden; */
 }
 
 body {
     margin: 0 auto;
     height: 100%;
-    /* background-color: var(--active-bg); */
-    /* color: var(--active-fg) */
+    background-color: var(--active-main-bg);
+    color: var(--active-main-fg)
     /* font: menu; */
     /* font-family: system-ui, sans-serif; */
 }
@@ -61,6 +73,7 @@ body {
     fill: none;
     stroke: currentcolor;
     stroke-width: 2px;
+    /* color: var(--active-main-fg) */
 }
 .empty-state-icon {
     margin: auto;

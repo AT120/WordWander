@@ -1,51 +1,46 @@
-import { connect } from "react-redux";
-import translate, { availableTranslators, changeTranslator } from "../api/translate-api";
 import { getReaderCss } from "../components/reader/BookViewMin";
 import { bookApi } from "../api/api";
 
-const UPLOAD_BOOK_FILE = 0
-const GET_BOOK_FILE = 1
-const SET_BOOK_VIEW = 2
-const NEW_TEXT_TO_TRANSLATE = 3
-const NEW_TRANSLATED_TEXT = 4
-const SET_TRANSLATE_API = 5
-const SET_SOURCE_LANG = 6
-const SET_TARGET_LANG = 7
-const SET_FONT_SIZE = 8
-const UPDATE_TRANSLATE_POSITION = 9
+const UPLOAD_BOOK_FILE = 100
+const GET_BOOK_FILE = 101
+const SET_BOOK_VIEW = 102
+const SET_FONT_SIZE = 103
+const UPDATE_PROGRESS = 104
+const SET_THEME = 105
 
 const initialState = {
+    bookId: null,
     bookFile: 0,
     bookView: 0,
-    translation: {
-        textToTranslate: '',
-        translatedText: '',
-        position: {x: 0, y: 0}
-    },
-    sourceLanguage: 'en', //TODO: убрать
-    targetLanguage: 'ru',
-    translateApiType: availableTranslators.LibreTranslate,
     fontSize: 12,
-    overflow: false
+    theme: 'light dark',
+    overflow: false,
+    progress: {
+        fraction: 0.0,
+        loc: null,
+        page: null,
+        toc: null
+    },
 }
 
-function clampPosition(position, maxXPercent, maxYPercent) {
-    const maxX = (1 - maxXPercent) * window.innerWidth
-    const maxY = (1 - maxYPercent) * window.innerHeight
-    position.x = Math.min(position.x, maxX)
-    position.y = Math.min(position.y, maxY)
-    // const 
-    // const 
-    // position.x
+function updateDocumentTheme(theme) {
+    //ыыыыы
+    document.documentElement.style.colorScheme = theme
+    if (theme !== "light dark") {
+        document.documentElement.className = theme
+    } else {
+        document.documentElement.className = 'auto'
+    }
 }
 
 const readerReducer = (state = initialState, action) => {
     let newState = {...state};
-    newState.translation = {...state.translation}
+    newState.progress = {...state.progress}
 
     switch (action.type) {
         case UPLOAD_BOOK_FILE:
             newState.bookFile = action.file
+            newState.bookId = action.guid
             newState.bookView = 0 //TODO: а может надо по умному елемент удалять?
             return newState;
         case GET_BOOK_FILE:
@@ -54,57 +49,37 @@ const readerReducer = (state = initialState, action) => {
         case SET_BOOK_VIEW:
             newState.bookView = action.bookView
             return newState
-        case NEW_TEXT_TO_TRANSLATE:
-            newState.translation.textToTranslate = action.text
-            newState.translation.translatedText = 0
-            newState.translation.position = {
-                x: action.event.screenX - window.screenX,
-                y: action.event.y
-            }
-            // clampPosition(newState.translation.clickPosition, 0.4, 0.3)
-            return newState
-        case NEW_TRANSLATED_TEXT:
-            newState.translation.translatedText = action.text
-            return newState
-        case SET_TRANSLATE_API:
-            newState.translateApiType = action.newApi
-            changeTranslator(action.newApi)
-            return newState
-        case SET_SOURCE_LANG:
-            newState.sourceLanguage = action.language
-            return newState
-        case SET_TARGET_LANG:    
-            newState.targetLanguage = action.language
-            return newState
         case SET_FONT_SIZE:
             newState.fontSize = action.fontSize
-            if (newState.bookView)
-                newState.bookView.renderer.setStyles?.(
-                    getReaderCss(newState.fontSize)
-                )
+            newState.bookView?.renderer.setStyles( 
+                getReaderCss(newState.fontSize, newState.theme)
+            )
             return newState
-        case UPDATE_TRANSLATE_POSITION:
-            newState.translation.position = action.position
+        case UPDATE_PROGRESS:
+            newState.progress.fraction = action.details.fraction
+            newState.progress.loc = action.details.location
+            newState.progress.page = action.details.pageItem
+            newState.progress.toc = action.details.tocItem
+            return newState
+        case SET_THEME:
+            newState.theme = action.theme
+            console.log(action.theme)
+            newState.bookView?.renderer.setStyles(
+                getReaderCss(newState.fontSize, newState.theme)
+            )
+            updateDocumentTheme(action.theme)
             return newState
         default:
             return state
     }
 }
 
-export function updateTranslatePositionActionCreator(position) {
-    return {type: UPDATE_TRANSLATE_POSITION, position: position}
-}
-
 export function setNewFontSizeActionCreator(fontSize) {
     return {type: SET_FONT_SIZE, fontSize: fontSize}
 }
 
-export function setNewTranslateApiActionCretor(api) {
-    return {type: SET_TRANSLATE_API, newApi: api}
-}
-
-export function uploadBookFileActionCreator(file) {
-    return {type: UPLOAD_BOOK_FILE, file: file};
+export function uploadBookFileActionCreator(file, guid) {
+    return {type: UPLOAD_BOOK_FILE, file: file, guid: guid};
 }
 
 export function getBookActionCreator(file) {
@@ -115,37 +90,32 @@ export function setBookViewActionCreator(bookView) {
     return {type: SET_BOOK_VIEW, bookView: bookView}
 }
 
-export function setSourceLanguageActionCreator(lang) {
-    return {type: SET_SOURCE_LANG, language: lang}
-}
-
-export function setTargetLanguageActionCreator(lang) {
-    return {type: SET_TARGET_LANG, language: lang}
-}
-
-export function newTextToTranslateThunkCreator(text, event) {
-    return async (dispatch, getState) => {
-        if (text.length === 0)
-            return
-
-        console.log(event)
-        dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text, event: event})
-        const state = getState().readerReducer
-        const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
-        if (translatedText)
-            dispatch({type: NEW_TRANSLATED_TEXT, text: translatedText})
-        else
-            console.log('ээээ') //TODO: обработка ошибок
-    }
-}
-
 export function loadBookThunkCreator(guid) {
     return async (dispatch) => {
         const book = await bookApi.loadBook(guid)
         if (book)
-            dispatch(uploadBookFileActionCreator(book))
+            dispatch(uploadBookFileActionCreator(book, guid))
     }
 }
 
+function updateProgressActionCreator(details) {
+    return {type: UPDATE_PROGRESS, details: details}
+}
+
+export function updateProgressThunkCreator(details) {
+    return async (dispatch, getState) => {
+        const state = getState()
+        const fraction = state.readerReducer.progress.fraction
+        const bookId = state.readerReducer.bookId
+        if (fraction && bookId && fraction !== details.fraction )
+            bookApi.sendProgress(bookId, details.fraction)
+
+        dispatch(updateProgressActionCreator(details))
+    }
+}
+
+export function updateThemeActionCreator(theme) {
+    return {type: SET_THEME, theme: theme}
+} 
 
 export default readerReducer;

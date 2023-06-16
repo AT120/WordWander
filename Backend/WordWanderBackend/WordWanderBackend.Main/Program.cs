@@ -12,8 +12,10 @@ var services = builder.Services;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var storageString = "Storage"; //TODO: in config
+var storageString = "Storage";
 services.Configure<StorageSettings>(builder.Configuration.GetSection(storageString));
+services.Configure<LibreTranslateSettings>(builder.Configuration.GetSection("ConnectionStrings"));
+
 services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -24,7 +26,7 @@ services.AddCors(options =>
             .WithOrigins("http://localhost:3000") //TODO: in config
     );
 });
-builder.AddDB<MainDbContext>();
+builder.AddDB<MainDbContext>("DbConnection");
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();
@@ -33,6 +35,7 @@ services.AddScoped<IBookListService, BookListService>();
 services.AddTransient<IPasswordHasher<UserDbModel>, PasswordHasher<UserDbModel>>();
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<ITranslateService, LibreTranslateService>();
+services.AddScoped<IBookService, BookService>();
 services.SetupCookieAuth();
 
 

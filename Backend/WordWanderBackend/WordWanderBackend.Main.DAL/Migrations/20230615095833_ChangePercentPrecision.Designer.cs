@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WordWanderBackend.Main.DAL;
@@ -11,9 +12,11 @@ using WordWanderBackend.Main.DAL;
 namespace WordWanderBackend.Main.DAL.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230615095833_ChangePercentPrecision")]
+    partial class ChangePercentPrecision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,14 +46,6 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SourceLanguageCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TargetLanguageCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -70,12 +65,6 @@ namespace WordWanderBackend.Main.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrefferedApi")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PrefferedFontSize")
-                        .HasColumnType("integer");
 
                     b.Property<string>("UserName")
                         .IsRequired()

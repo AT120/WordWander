@@ -1,27 +1,33 @@
+using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WordWanderBackend.Main.Common.Interfaces;
-using WordWanderBackend.Main.Common.Models.Enums;
-using System.Web;
+using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
+using WordWanderBackend.Main.Common.Interfaces;
+using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Enums;
 
 namespace WordWonderBackend.Main.Controllers
 {
     [Route("api/books/")]
     [ApiController]
+    [Authorize]
     public class BookListController : Controller
     {
         private readonly IBookListService _bookListService;
-        public BookListController(IBookListService bookListService) {
+
+        public BookListController(IBookListService bookListService)
+        {
             _bookListService = bookListService;
+            
         }
-        [Authorize]
+
         [HttpGet("{page}")]
         public async Task<IActionResult> GetUserBooks(int page, BookSortParam? sortedBy, string name = "")
         {
             try
             {
-                
+
                 var books = await _bookListService.GetUserBooks(page, name, ClaimsManager.GetIdClaim(User), sortedBy);
                 return Ok(books);
             }
@@ -30,9 +36,8 @@ namespace WordWonderBackend.Main.Controllers
                 return Problem(ex.Message, statusCode: 501);
             }
         }
-        [Authorize]
         [HttpPost("add")]
-        public async Task<IActionResult> PostBook(IFormFile file, string title, string description="")
+        public async Task<IActionResult> PostBook(IFormFile file, string title, string description = "")
         {
             try
             {
@@ -62,29 +67,10 @@ namespace WordWonderBackend.Main.Controllers
                 await _bookListService.DeleteBookFromList(id, ClaimsManager.GetIdClaim(User));
                 return Ok();
             }
-            catch(ArgumentException ex)
-            {
-                return Problem(ex.Message, statusCode:404);
-            }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return Problem(ex.Message, statusCode: 501);
             }
-        }
-        [Authorize]
-        [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetBookById(Guid id)
-        {
-            // try
-            // {
-                var file = await _bookListService.GetBookById(id, ClaimsManager.GetIdClaim(User)); 
-                return new FileStreamResult(file, "application/octet-stream");
-            // }
-            // catch(Exception ex)
-            // {
-            //     return 
-            //     // return Problem(ex.Message, statusCode: 501);
-            // }
         }
     }
 }

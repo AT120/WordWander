@@ -1,15 +1,16 @@
 import { getView } from "../../foliate-js/reader-import"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
-import { loadBookThunkCreator, newTextToTranslateThunkCreator, setBookViewActionCreator } from "../../reducers/reader-reducer"
 import { setOnTextChosenCallback } from "../../foliate-js/text-selector"
+import { newTextToTranslateThunkCreator } from "../../reducers/translate-reducer";
+import { loadBookThunkCreator, setBookViewActionCreator, updateProgressThunkCreator, updateThemeActionCreator } from "../../reducers/reader-reducer";
 
 const hyphenate = false;
-export function getReaderCss(fontSize) {
+export function getReaderCss(fontSize, colorScheme = "light dark") {
     return  `
         @namespace epub "http://www.idpf.org/2007/ops";
         html {
-            color-scheme: light dark;
+            color-scheme: ${colorScheme};
         }
         /* https://github.com/whatwg/html/issues/5426 */
         @media (prefers-color-scheme: dark) {
@@ -46,7 +47,6 @@ export function getReaderCss(fontSize) {
         }
     `
 }
-// const lightThemeCss
 
 
 function BookViewMin({fileId}) {
@@ -55,6 +55,10 @@ function BookViewMin({fileId}) {
     const fontSize = useSelector(state => state.readerReducer.fontSize, eq => true)
     const dispatch = useDispatch()
     
+    function relocateHandler(event) {
+        dispatch(updateProgressThunkCreator(event.detail))
+    }
+
     if (!bookFile)
         dispatch(loadBookThunkCreator(fileId))
 
@@ -65,9 +69,11 @@ function BookViewMin({fileId}) {
             })
             
             const view = await getView(bookFile)
+            view.addEventListener('relocate', relocateHandler)
             await view.goToTextStart()
             view.renderer.setStyles(getReaderCss(fontSize))
             dispatch(setBookViewActionCreator(view))
+            dispatch(updateThemeActionCreator('light dark'))
         }
 
         if (bookFile)

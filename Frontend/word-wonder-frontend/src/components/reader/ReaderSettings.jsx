@@ -3,6 +3,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas'
 import TranslateApiSelector from './Settings/TranslateApiSelector';
 import LanguageSelector from './Settings/LanguageSelector';
 import FontSizeSettings from './Settings/FontSizeSettings';
+import ThemeSwitcher from './Settings/ThemeSwitcher';
 
 export default function ReaderSettings() {
     const [show, setShow] = useState(false);
@@ -25,6 +26,7 @@ export default function ReaderSettings() {
                     <TranslateApiSelector />
                     <LanguageSelector />
                     <FontSizeSettings />
+                    <ThemeSwitcher />
                 </Offcanvas.Body>
             </Offcanvas>
 
