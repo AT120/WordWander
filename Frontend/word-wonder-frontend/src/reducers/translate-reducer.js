@@ -13,7 +13,7 @@ const initialState = {
     translation: {
         textToTranslate: '',
         translatedText: '',
-        position: {x: 0, y: 0}
+        position: { x: 0, y: 0 }
     },
     sourceLanguage: 'en', //TODO: убрать
     targetLanguage: 'ru',
@@ -22,8 +22,8 @@ const initialState = {
 
 
 const translateReducer = (state = initialState, action) => {
-    let newState = {...state};
-    newState.translation = {...state.translation}
+    let newState = { ...state };
+    newState.translation = { ...state.translation }
 
     switch (action.type) {
         case NEW_TEXT_TO_TRANSLATE:
@@ -44,7 +44,7 @@ const translateReducer = (state = initialState, action) => {
         case SET_SOURCE_LANG:
             newState.sourceLanguage = action.language
             return newState
-        case SET_TARGET_LANG:    
+        case SET_TARGET_LANG:
             newState.targetLanguage = action.language
             return newState
         case UPDATE_TRANSLATE_POSITION:
@@ -56,11 +56,19 @@ const translateReducer = (state = initialState, action) => {
 }
 
 export function updateTranslatePositionActionCreator(position) {
-    return {type: UPDATE_TRANSLATE_POSITION, position: position}
+    return { type: UPDATE_TRANSLATE_POSITION, position: position }
 }
 
-export function setNewTranslateApiActionCretor(api) {
-    return {type: SET_TRANSLATE_API, newApi: api}
+export function setNewTranslateApiActionCreator(api) {
+    return { type: SET_TRANSLATE_API, newApi: api }
+}
+
+export function setSourceLanguageActionCreator(lang) {
+    return { type: SET_SOURCE_LANG, language: lang }
+}
+
+export function setTargetLanguageActionCreator(lang) {
+    return { type: SET_TARGET_LANG, language: lang }
 }
 
 export function setSourceLanguageThunkCreator(lang) {
@@ -68,7 +76,7 @@ export function setSourceLanguageThunkCreator(lang) {
         const bookId = getState().readerReducer.bookId
         if (bookId)
             bookApi.setBookLanguage(bookId, lang, null)
-        dispatch({type: SET_SOURCE_LANG, language: lang})
+        dispatch(setSourceLanguageActionCreator(lang))
     }
 }
 
@@ -77,7 +85,7 @@ export function setTargetLanguageThunkCreator(lang) {
         const bookId = getState().readerReducer.bookId
         if (bookId)
             bookApi.setBookLanguage(bookId, null, lang)
-        dispatch({type: SET_TARGET_LANG, language: lang})
+        dispatch(setTargetLanguageActionCreator(lang))
     }
 }
 
@@ -86,11 +94,11 @@ export function newTextToTranslateThunkCreator(text, event) {
         if (text.length === 0)
             return
 
-        dispatch({type: NEW_TEXT_TO_TRANSLATE, text: text, event: event})
+        dispatch({ type: NEW_TEXT_TO_TRANSLATE, text: text, event: event })
         const state = getState().translateReducer
         const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
         if (translatedText)
-            dispatch({type: NEW_TRANSLATED_TEXT, text: translatedText})
+            dispatch({ type: NEW_TRANSLATED_TEXT, text: translatedText })
         else
             console.log('ээээ') //TODO: обработка ошибок
     }

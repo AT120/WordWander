@@ -35,7 +35,7 @@ function ProgressSlider() {
             type="range" 
             min="0" 
             max="1"
-            value={fraction} 
+            value={fraction.toString()} 
             step="any" 
             list="tick-marks"
         />

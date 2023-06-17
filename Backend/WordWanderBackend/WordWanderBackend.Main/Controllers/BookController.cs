@@ -6,6 +6,7 @@ using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.DAL.Migrations;
 
 namespace WordWanderBackend.Main.Controllers;
 
@@ -70,6 +71,27 @@ public class BookController : Controller
                 languages.TargetLangCode);
                 
             return Ok();
+        }
+        catch (BackendException be)
+        {
+            return Problem(be.UserMessage, statusCode: be.StatusCode);
+        }
+        catch
+        {
+            return Problem("Unknown server error", statusCode: 500);
+        }
+    }
+
+    [HttpGet("{id}/parameters")]
+    public async Task<ActionResult<ReaderParametersDTO>> GetParameters(Guid id)
+    {
+
+        try
+        {
+            var parameters = await _bookService.GetReaderParameters(
+                id,
+                ClaimsManager.GetIdClaim(User));
+            return parameters;
         }
         catch (BackendException be)
         {

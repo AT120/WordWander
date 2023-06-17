@@ -10,6 +10,8 @@ export default function ReaderSettings() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    
+
     return (
         <div id="settings" >
             <button onClick={handleShow}>

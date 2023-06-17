@@ -7,7 +7,7 @@ import { loadBookThunkCreator, setBookViewActionCreator, updateProgressThunkCrea
 
 const hyphenate = false;
 export function getReaderCss(fontSize, colorScheme = "light dark") {
-    return  `
+    return `
         @namespace epub "http://www.idpf.org/2007/ops";
         html {
             color-scheme: ${colorScheme};
@@ -49,37 +49,44 @@ export function getReaderCss(fontSize, colorScheme = "light dark") {
 }
 
 
-
-function BookViewMin({fileId}) {
+function BookViewMin({ fileId }) {
     const bookFile = useSelector(state => state.readerReducer.bookFile)
+    const bookView = useSelector(state => state.readerReducer.bookView)
     // do not recreate view on font change
-    const fontSize = useSelector(state => state.readerReducer.fontSize, eq => true)
+    const fontSize = useSelector(state => state.readerReducer.fontSize)
+    const theme = useSelector(state => state.readerReducer.theme)
+    const progress = useSelector(state => state.readerReducer.progress.fraction)
     const dispatch = useDispatch()
-    
+
+
     function relocateHandler(event) {
         dispatch(updateProgressThunkCreator(event.detail))
     }
-
-    if (!bookFile)
+    if (!bookFile) {
         dispatch(loadBookThunkCreator(fileId))
+    }
+
 
     useEffect(() => {
         async function loadBookView() {
             setOnTextChosenCallback((text, event) => {
                 dispatch(newTextToTranslateThunkCreator(text, event))
             })
-            
+
+            console.log(fontSize, theme, progress, bookFile)
             const view = await getView(bookFile)
-            view.addEventListener('relocate', relocateHandler)
-            await view.goToTextStart()
-            view.renderer.setStyles(getReaderCss(fontSize))
+            // view.renderer.setStyles(getReaderCss(fontSize, theme))
             dispatch(setBookViewActionCreator(view))
-            dispatch(updateThemeActionCreator('light dark'))
+            dispatch(updateThemeActionCreator(theme))
+            await view.goToFraction(progress)
+            view.addEventListener('relocate', relocateHandler)
         }
 
-        if (bookFile)
+        if (bookFile && !bookView) {
             loadBookView()
-    })
+        }
+
+    }, [bookFile])
 
 }
 

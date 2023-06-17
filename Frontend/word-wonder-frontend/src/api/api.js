@@ -66,10 +66,25 @@ async function setBookLanguage(id, sourceLanguage, targetLanguage) {
 async function sendProgress(bookId, fraction) {
     try {
         await instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100}).catch()
-    } catch {
+    } catch { 
         
     }
 }
+
+async function loadReaderParameters(bookId) {
+    try {
+        const resp = await instance.get(`books/${bookId}/parameters`)
+        if (!resp || resp.status !== 200) {
+            console.log('Cant load reader parameters. The default ones will be used')
+            return null
+        }
+        return resp.data
+    } catch {
+        console.log('Cant load reader parameters. The default ones will be used')
+        return null
+    }
+}
+
 
 export const bookApi = {
     getBooks : getBooks,
@@ -77,7 +92,8 @@ export const bookApi = {
     postBook : postBook,
     loadBook : loadBook,
     sendProgress: sendProgress,
-    setBookLanguage: setBookLanguage
+    setBookLanguage: setBookLanguage,
+    loadReaderParameters: loadReaderParameters,
 }
 
 function login(login, password){

@@ -1,5 +1,6 @@
 import { getReaderCss } from "../components/reader/BookViewMin";
 import { bookApi } from "../api/api";
+import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 
 const UPLOAD_BOOK_FILE = 100
 const GET_BOOK_FILE = 101
@@ -34,14 +35,14 @@ function updateDocumentTheme(theme) {
 }
 
 const readerReducer = (state = initialState, action) => {
-    let newState = {...state};
-    newState.progress = {...state.progress}
+    let newState = { ...state };
+    newState.progress = { ...state.progress }
 
     switch (action.type) {
         case UPLOAD_BOOK_FILE:
             newState.bookFile = action.file
             newState.bookId = action.guid
-            newState.bookView = 0 //TODO: а может надо по умному елемент удалять?
+            newState.bookView = 0 //TODO: а может надо по умному элемент удалять?
             return newState;
         case GET_BOOK_FILE:
             console.log(state.bookFile)
@@ -51,9 +52,10 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case SET_FONT_SIZE:
             newState.fontSize = action.fontSize
-            newState.bookView?.renderer.setStyles( 
-                getReaderCss(newState.fontSize, newState.theme)
-            )
+            if (newState.bookView)
+                newState.bookView.renderer.setStyles(
+                    getReaderCss(newState.fontSize, newState.theme)
+                )
             return newState
         case UPDATE_PROGRESS:
             newState.progress.fraction = action.details.fraction
@@ -63,7 +65,6 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case SET_THEME:
             newState.theme = action.theme
-            console.log(action.theme)
             newState.bookView?.renderer.setStyles(
                 getReaderCss(newState.fontSize, newState.theme)
             )
@@ -75,31 +76,53 @@ const readerReducer = (state = initialState, action) => {
 }
 
 export function setNewFontSizeActionCreator(fontSize) {
-    return {type: SET_FONT_SIZE, fontSize: fontSize}
+    return { type: SET_FONT_SIZE, fontSize: fontSize }
 }
 
 export function uploadBookFileActionCreator(file, guid) {
-    return {type: UPLOAD_BOOK_FILE, file: file, guid: guid};
+    return { type: UPLOAD_BOOK_FILE, file: file, guid: guid };
 }
 
 export function getBookActionCreator(file) {
-    return {type: GET_BOOK_FILE};
+    return { type: GET_BOOK_FILE };
 }
 
 export function setBookViewActionCreator(bookView) {
-    return {type: SET_BOOK_VIEW, bookView: bookView}
+    return { type: SET_BOOK_VIEW, bookView: bookView }
 }
 
 export function loadBookThunkCreator(guid) {
     return async (dispatch) => {
+        const params = await bookApi.loadReaderParameters(guid)
         const book = await bookApi.loadBook(guid)
+        if (params) {
+            dispatch(setTargetLanguageActionCreator(params.targetLanguage))
+            dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+            dispatch(setNewFontSizeActionCreator(params.fontSize))
+            dispatch(setNewTranslateApiActionCreator(params.translationApi))
+            dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100 }))
+            switch (params.colorScheme) {
+                case 0:
+                    dispatch(updateThemeActionCreator('light dark'))
+                    break;
+                case 1:
+                    dispatch(updateThemeActionCreator('dark'))
+                    break;
+                case 2:
+                    dispatch(updateThemeActionCreator('light'))
+                    break;
+            }
+
+        }
+
         if (book)
             dispatch(uploadBookFileActionCreator(book, guid))
     }
 }
 
-function updateProgressActionCreator(details) {
-    return {type: UPDATE_PROGRESS, details: details}
+export function updateProgressActionCreator(details) {
+    // console.log(details.fraction)
+    return { type: UPDATE_PROGRESS, details: details }
 }
 
 export function updateProgressThunkCreator(details) {
@@ -107,7 +130,7 @@ export function updateProgressThunkCreator(details) {
         const state = getState()
         const fraction = state.readerReducer.progress.fraction
         const bookId = state.readerReducer.bookId
-        if (fraction && bookId && fraction !== details.fraction )
+        if (fraction && bookId && fraction !== details.fraction)
             bookApi.sendProgress(bookId, details.fraction)
 
         dispatch(updateProgressActionCreator(details))
@@ -115,7 +138,8 @@ export function updateProgressThunkCreator(details) {
 }
 
 export function updateThemeActionCreator(theme) {
-    return {type: SET_THEME, theme: theme}
-} 
+    return { type: SET_THEME, theme: theme }
+}
+
 
 export default readerReducer;
