@@ -1,14 +1,11 @@
 import { Provider, useDispatch } from 'react-redux';
-import FileLoader from '../components/reader/FileLoader';
 import storeReader from '../store/storeReader';
 import "./TranslatePopup.css"
 import "./ReaderSettings.css"
-import BookViewMin from '../components/reader/BookViewMin';
-import BookNavigation from '../components/reader/BookNavigation';
+import BookLoader from '../components/reader/BookLoader';
 import TranslatePopup from '../components/reader/TranslatePopup';
 import ReaderSettings from '../components/reader/ReaderSettings';
 import { useLocation } from 'react-router';
-import { useEffect } from 'react';
 // import "./Reader.css"
 
 function Reader() {
@@ -22,9 +19,9 @@ function Reader() {
             <ReaderSettings />
             {/* TODO: авторизация */}
             <TranslatePopup />
-            <FileLoader />
-            <BookViewMin fileId={location.state} />
-            <BookNavigation />
+            {/* <FileLoader /> */}
+            <BookLoader fileId={location.state} />
+            {/* <BookNavigation /> */}
         </Provider>
     )
 }

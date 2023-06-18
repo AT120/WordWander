@@ -1,9 +1,6 @@
 import { createElement, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-
-function sliderInputHandler(event, bookView) {
-    bookView.goToFraction(parseFloat(event.target.value))
-}
+import { updateProgressActionCreator } from "../../../reducers/reader-reducer"
 
 
 
@@ -23,47 +20,54 @@ function GetSectionMarks(book) {
 
 
 
-function ProgressSlider() {
-    const bookView = useSelector(state => state.readerReducer.bookView)
+function ProgressSlider({ bookView }) {
     const fraction = useSelector(state => state.readerReducer.progress.fraction)
-    
+    const dispatch = useDispatch()
+
+    function sliderInputHandler(event) {
+        dispatch(updateProgressActionCreator({
+            fraction: parseFloat(event.target.value),
+            shouldBeUpdated: true
+        }))
+    }
+
+
     return (
-        <input 
+        <input
             id="progress-slider"
-            dir={bookView.book.dir} 
-            onInput={e => sliderInputHandler(e, bookView)}
-            type="range" 
-            min="0" 
+            dir={bookView.current.book.dir}
+            onInput={sliderInputHandler}
+            type="range"
+            min="0"
             max="1"
-            value={fraction.toString()} 
-            step="any" 
+            value={fraction.toString()}
+            step="any"
             list="tick-marks"
         />
-    ) //TODO: восстанавливать прогресс
+    )
 }
 
-function SliderTicks() {
-    const bookView = useSelector(state => state.readerReducer.bookView)
+function SliderTicks({ bookView }) {
     return (
         <datalist id="tick-marks">
-            {GetSectionMarks(bookView.book)}
+            {GetSectionMarks(bookView.current.book)}
         </datalist>
     )
 }
 
 export default function BookNavigation() {
     const bookView = useSelector(state => state.readerReducer.bookView)
-    const dispatch = useDispatch()
+
     function nextPage() {
-        bookView.goRight()
+        bookView.current.goRight()
     }
 
     function prevPage() {
-        bookView.goLeft()
+        bookView.current.goLeft()
     }
 
     const hiddenState = (bookView) ? '' : 'visually-hidden'
-    if (!bookView)
+    if (!bookView.current?.book)
         return
 
     return (
@@ -73,8 +77,8 @@ export default function BookNavigation() {
                     <path d="M 15 6 L 9 12 L 15 18" />
                 </svg>
             </button>
-            <ProgressSlider />
-            <SliderTicks />
+            <ProgressSlider bookView={bookView} />
+            <SliderTicks bookView={bookView} />
             <button id="right-button" aria-label="Go right" onClick={nextPage}>
                 <svg className="icon" width="24" height="24" aria-hidden="true">
                     <path d="M 9 6 L 15 12 L 9 18" />
