@@ -6,7 +6,6 @@ using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
-using WordWanderBackend.Main.DAL.Migrations;
 
 namespace WordWanderBackend.Main.Controllers;
 
@@ -59,18 +58,17 @@ public class BookController : Controller
         }
     }
 
-    [HttpPut("{id}/languages")]
-    public async Task<ActionResult> UpdateLanguages(Guid id, LanguagesDTO languages)
+
+    [HttpGet("{id}/parameters")]
+    public async Task<ActionResult<ReaderParametersWithProgress>> GetParameters(Guid id)
     {
+
         try
         {
-            await _bookService.SetBookLanguages(
+            var parameters = await _bookService.GetReaderParameters(
                 id,
-                ClaimsManager.GetIdClaim(User),
-                languages.SourceLangCode,
-                languages.TargetLangCode);
-                
-            return Ok();
+                ClaimsManager.GetIdClaim(User));
+            return parameters;
         }
         catch (BackendException be)
         {
@@ -82,16 +80,17 @@ public class BookController : Controller
         }
     }
 
-    [HttpGet("{id}/parameters")]
-    public async Task<ActionResult<ReaderParametersDTO>> GetParameters(Guid id)
+    [HttpPut("{id}/parameters")]
+    public async Task<ActionResult> SetParameters(Guid id, ReaderParameters parameters)
     {
-
         try
         {
-            var parameters = await _bookService.GetReaderParameters(
+            await _bookService.SetReaderParameters(
                 id,
-                ClaimsManager.GetIdClaim(User));
-            return parameters;
+                ClaimsManager.GetIdClaim(User),
+                parameters);
+            
+            return Ok();
         }
         catch (BackendException be)
         {

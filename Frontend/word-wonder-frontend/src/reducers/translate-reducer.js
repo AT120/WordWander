@@ -71,24 +71,6 @@ export function setTargetLanguageActionCreator(lang) {
     return { type: SET_TARGET_LANG, language: lang }
 }
 
-export function setSourceLanguageThunkCreator(lang) {
-    return (dispatch, getState) => {
-        const bookId = getState().readerReducer.bookId
-        if (bookId)
-            bookApi.setBookLanguage(bookId, lang, null)
-        dispatch(setSourceLanguageActionCreator(lang))
-    }
-}
-
-export function setTargetLanguageThunkCreator(lang) {
-    return (dispatch, getState) => {
-        const bookId = getState().readerReducer.bookId
-        if (bookId)
-            bookApi.setBookLanguage(bookId, null, lang)
-        dispatch(setTargetLanguageActionCreator(lang))
-    }
-}
-
 export function newTextToTranslateThunkCreator(text, event) {
     return async (dispatch, getState) => {
         if (text.length === 0)

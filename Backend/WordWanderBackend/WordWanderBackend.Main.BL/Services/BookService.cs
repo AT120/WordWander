@@ -43,21 +43,8 @@ public class BookService : IBookService
         return new FileStream(filePath, FileMode.Open, FileAccess.Read);
     }
 
-    public async Task SetBookLanguages(Guid bookId, Guid userId, string? sourceLang, string? targetLang)
-    {
-        var book = await _dbcontext.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookId)
-            ?? throw new BackendException(404, $"User {userId} does not have book with {bookId} id");
-        
-        //TODO: check language existence
-        if (sourceLang != null)
-            book.SourceLanguageCode = sourceLang;
-        if (targetLang != null)
-            book.TargetLanguageCode = targetLang;
 
-        await _dbcontext.SaveChangesAsync();
-    }
-
-    public async Task<ReaderParametersDTO> GetReaderParameters(Guid bookId, Guid userId)
+    public async Task<ReaderParametersWithProgress> GetReaderParameters(Guid bookId, Guid userId)
     {
         var user = await _dbcontext.Users.FindAsync(userId)
             ?? throw new BackendException(403, "User does not exist");
@@ -67,7 +54,7 @@ public class BookService : IBookService
         if (book == null || book.UserId != userId)
             throw new BackendException(404, "Book does not exist");
         
-        return new ReaderParametersDTO
+        return new ReaderParametersWithProgress
         {
             ColorTheme = user.PrefferedColorTheme,
             FontSize = user.PrefferedFontSize,
@@ -76,5 +63,26 @@ public class BookService : IBookService
             TargetLanguage = book.TargetLanguageCode,
             TranslationApi = user.PrefferedApi
         };
+    }
+
+    public async Task SetReaderParameters(Guid bookId, Guid userId, ReaderParameters parameters)
+    {
+        var user = await _dbcontext.Users.FindAsync(userId)
+            ?? throw new BackendException(403, "User does not exist");
+
+        var book = await _dbcontext.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookId)
+            ?? throw new BackendException(404, $"Book does not exist");
+        
+        //TODO: check language existence
+        if (parameters.SourceLanguage != null)
+            book.SourceLanguageCode = parameters.SourceLanguage;
+        if (parameters.TargetLanguage != null)
+            book.TargetLanguageCode = parameters.TargetLanguage;
+        
+        user.PrefferedApi = parameters.TranslationApi;
+        user.PrefferedColorTheme = parameters.ColorTheme;
+        user.PrefferedFontSize = parameters.FontSize;
+
+        await _dbcontext.SaveChangesAsync();
     }
 }

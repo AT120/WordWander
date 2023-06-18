@@ -55,14 +55,6 @@ async function loadBook(id) {
     return new File([resp.data], `book-${id}.fb2`, {type: 'application/x-fictionbook'}) //TODO:
 }
 
-async function setBookLanguage(id, sourceLanguage, targetLanguage) {
-    // Обработки ошибок не будет.
-    const resp = await instance.put(`books/${id}/languages`, {
-        sourceLangCode: sourceLanguage,
-        targetLangCode: targetLanguage
-    }).catch()
-}
-
 async function sendProgress(bookId, fraction) {
     try {
         await instance.put(`books/${bookId}/progress`, {percentReaded: fraction * 100}).catch()
@@ -85,6 +77,17 @@ async function loadReaderParameters(bookId) {
     }
 }
 
+async function sendReaderParameters(bookId, params) {
+    try {
+        const resp = await instance.put(`books/${bookId}/parameters`, params);
+        if (!resp || resp.status !== 200) {
+            console.log('Cant sync reader params')
+        }
+    } catch {
+        console.log('Cant sync reader params')
+    }
+}
+
 
 export const bookApi = {
     getBooks : getBooks,
@@ -92,8 +95,8 @@ export const bookApi = {
     postBook : postBook,
     loadBook : loadBook,
     sendProgress: sendProgress,
-    setBookLanguage: setBookLanguage,
     loadReaderParameters: loadReaderParameters,
+    sendReaderParameters: sendReaderParameters,
 }
 
 function login(login, password){

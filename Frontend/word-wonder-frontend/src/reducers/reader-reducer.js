@@ -65,9 +65,10 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case SET_THEME:
             newState.theme = action.theme
-            newState.bookView?.renderer.setStyles(
-                getReaderCss(newState.fontSize, newState.theme)
-            )
+            if (newState.bookView)
+                newState.bookView.renderer.setStyles(
+                    getReaderCss(newState.fontSize, newState.theme)
+                )
             updateDocumentTheme(action.theme)
             return newState
         default:
@@ -94,14 +95,14 @@ export function setBookViewActionCreator(bookView) {
 export function loadBookThunkCreator(guid) {
     return async (dispatch) => {
         const params = await bookApi.loadReaderParameters(guid)
-        const book = await bookApi.loadBook(guid)
+        const book = await bookApi.loadBook(guid) //TODO: race condition
         if (params) {
             dispatch(setTargetLanguageActionCreator(params.targetLanguage))
             dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
             dispatch(setNewFontSizeActionCreator(params.fontSize))
             dispatch(setNewTranslateApiActionCreator(params.translationApi))
             dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100 }))
-            switch (params.colorScheme) {
+            switch (params.colorTheme) {
                 case 0:
                     dispatch(updateThemeActionCreator('light dark'))
                     break;
@@ -121,8 +122,31 @@ export function loadBookThunkCreator(guid) {
 }
 
 export function updateProgressActionCreator(details) {
-    // console.log(details.fraction)
     return { type: UPDATE_PROGRESS, details: details }
+}
+
+export function sendReaderParametersThunkCreator() {
+    return async (dispatch, getState) => {
+        const state = getState()
+        const bookId = state.readerReducer.bookId
+        
+        const theme = state.readerReducer.theme
+        let themeToApi = 0;
+        if (theme === 'dark')
+            themeToApi = 1
+        else if (theme === 'light')
+            themeToApi = 2
+
+        const params = {
+            sourceLanguage: state.translateReducer.sourceLanguage,
+            targetLanguage: state.translateReducer.targetLanguage,
+            translationApi: state.translateReducer.translateApiType,
+            colorTheme: themeToApi,
+            fontSize: state.readerReducer.fontSize
+        }
+
+        await bookApi.sendReaderParameters(bookId, params)
+    }
 }
 
 export function updateProgressThunkCreator(details) {

@@ -4,13 +4,17 @@ import TranslateApiSelector from './Settings/TranslateApiSelector';
 import LanguageSelector from './Settings/LanguageSelector';
 import FontSizeSettings from './Settings/FontSizeSettings';
 import ThemeSwitcher from './Settings/ThemeSwitcher';
+import { useDispatch } from 'react-redux';
+import { sendReaderParametersThunkCreator } from '../../reducers/reader-reducer';
 
 export default function ReaderSettings() {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
+    const dispatch = useDispatch();
     const handleShow = () => setShow(true);
-
-    
+    const handleClose = () => {
+        dispatch(sendReaderParametersThunkCreator())
+        setShow(false);
+    }
 
     return (
         <div id="settings" >
