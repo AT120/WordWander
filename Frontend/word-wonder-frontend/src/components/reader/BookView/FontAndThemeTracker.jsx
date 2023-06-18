@@ -65,7 +65,6 @@ export default function FontAndThemeTracker() {
 
     useEffect(() => {
         return () => {
-            console.log('reseted theme')
             resetDocumentTheme()
         }
     }, [])

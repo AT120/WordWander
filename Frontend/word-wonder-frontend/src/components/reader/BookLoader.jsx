@@ -21,11 +21,6 @@ function BookLoader({ fileId }) {
         })
 
         dispatch(loadBookThunkCreator(fileId))
-
-        return () => {
-            // navigate(0)
-            console.log('BookLoader')
-        } 
     }, [])
 
 

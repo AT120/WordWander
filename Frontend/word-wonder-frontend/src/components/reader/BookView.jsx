@@ -7,6 +7,7 @@ import { setBookViewActionCreator, updateProgressThunkCreator } from "../../redu
 
 export default function BookView() {
     const book = useSelector(state => state.readerReducer.book)
+    // это исправляет двойную отрисовку foliate-view. наверняка можно как-то чище
     const bookViewUpdated = useSelector(state => state.readerReducer.bookView)
     const bookView = useRef(null);
     const dispatch = useDispatch()

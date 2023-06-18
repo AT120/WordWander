@@ -17,9 +17,9 @@ root.render(
         <Route element={<Navigate to='/login' />} />
         <Route path='login'  element={<LoginPage />} />
         <Route path='registration' element={<RegistrationPage />} />
-        {/* <Route element={<PrivateWrapper />}> */}
+        <Route element={<PrivateWrapper />}>
           <Route path='list' element={<BookPage />} />
-        {/* </Route> */}
+        </Route>
         <Route path="reader" element={<Reader />} />
       </Routes>
     </BrowserRouter>
