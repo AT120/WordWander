@@ -77,14 +77,16 @@ namespace WordWanderBackend.Main.BL.Services
 
 			//TODO: Добавить сортировку dictionary
 
-			List<TranslationDto>? tranlations = await _context.Dictionary.Where(d=>d.User.Id.Equals(userId)).Select(d=> new TranslationDto
+			List<TranslationDto>? tranlations = await _context.Dictionary.Where(d=>d.User.Id.Equals(userId)).Include(d=>d.Book).Select(d=> new TranslationDto
 			{
 				DefaultLanguage=d.DefaultLanguage,
 				DefaultSequnce=d.DefaultSequnce,
 				TranslatedSequence=d.TranslatedSequence,
 				TranslatedLangauge=d.TranslatedLangauge,
 				TranslationId=d.Id,
-				BookId=d.Book.Id
+				BookId=d.Book.Id,
+				BookTitle=d.Book.Name,
+				Created=d.CreationDate
 				
 			}).ToListAsync();
 
