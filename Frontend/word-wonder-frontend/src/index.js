@@ -8,6 +8,7 @@ import PrivateWrapper from './PrivateRoute';
 import RegistrationPage from './components/registration/registrationPage';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Reader from './pages/ReaderPage';
+import Dictionary from './components/dictionary/dictionary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -19,7 +20,8 @@ root.render(
         <Route path='registration' element={<RegistrationPage />} />
         <Route element={<PrivateWrapper />}>
           <Route path='list' element={<BookPage />} />
-        </Route>
+          <Route path='dictionary' element={<Dictionary/>}/>
+      </Route>
         <Route path="reader" element={<Reader />} />
       </Routes>
     </BrowserRouter>

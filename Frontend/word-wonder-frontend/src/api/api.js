@@ -176,3 +176,37 @@ export const checkAuth = {
 }
 
 
+//Dict
+
+function getDictionary(){
+    return instance.get('dictionary')
+    .then(response => {
+        if(response.status ===200){
+            console.log("dictionaryGet")
+            return response.data;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+function deleteTranslation(translationId){
+    return instance.delete(`dictionary/delete/${translationId}`)
+    .then(response=>{
+        if(response.status===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+
+function saveTranslation(){
+
+}
+export const dictApi={
+    saveTranslation:saveTranslation,
+    getDictionary:getDictionary,
+    deleteTranslation:deleteTranslation
+}

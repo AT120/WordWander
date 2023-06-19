@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WordWanderBackend.Main.DAL;
@@ -11,9 +12,11 @@ using WordWanderBackend.Main.DAL;
 namespace WordWanderBackend.Main.DAL.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230615120110_Dictionary")]
+    partial class Dictionary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,8 +31,8 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<double>("CurrentPercent")
-                        .HasColumnType("double precision");
+                    b.Property<int>("CurrentPage")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -43,13 +46,8 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SourceLanguageCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("TargetLanguageCode")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("PageCount")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -73,7 +71,7 @@ namespace WordWanderBackend.Main.DAL.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("DefaultLanguage")
+                    b.Property<string>("DefaultLanguageCode")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -81,7 +79,7 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TranslatedLangauge")
+                    b.Property<string>("TranslatedLangaugeCode")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -109,17 +107,6 @@ namespace WordWanderBackend.Main.DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("PrefferedApi")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PrefferedColorTheme")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PrefferedFontSize")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(12);
 
                     b.Property<string>("UserName")
                         .IsRequired()

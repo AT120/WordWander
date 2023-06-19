@@ -14,7 +14,8 @@ namespace WordWanderBackend.Main.DAL.Models
 
         public Guid UserId { get; set; }
         public UserDbModel User { get; set; }
-        public BookShortDTO ToShortDTO()
+		public List<DictionaryDbModel> Dictionary { get; set; }
+		public BookShortDTO ToShortDTO()
         {
             return new BookShortDTO { Id = Id, Description = Description, Name = Name, CurrentPercent = (int)CurrentPercent };
         }

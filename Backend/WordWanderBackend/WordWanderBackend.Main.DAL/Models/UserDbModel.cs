@@ -12,4 +12,5 @@ public class UserDbModel
     public TranslationApi PrefferedApi { get; set; }
     public int PrefferedFontSize { get; set; }
     public ColorTheme PrefferedColorTheme { get; set; }
+    public List<DictionaryDbModel> Dictionary {get; set; }
 }
