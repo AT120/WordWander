@@ -27,7 +27,7 @@ function BookItem(props){
             </Card.Body>
             <div style={{padding: '0 10px 5px 10px'}}>
                 <span style={{ fontSize:'12px'}} >{props.currentPercent} / 100 %</span>
-                <ProgressBar style={{height:'6px'}}  variant='info' striped  now={props.currentPage} max={props.pageNumber} />
+                <ProgressBar style={{height:'6px'}}  variant='info' striped  now={props.currentPercent} max={100} />
             </div>
         </Card>
     )

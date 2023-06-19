@@ -31,8 +31,8 @@ function LoginFields(){
     },[state.logedIn]);
     return (
 
-        <div className="d-flex justify-content-center vh-100" style={{marginTop:'20%'}}>
-        <Card className=" bg-light" style={{ width: '700px', height: '300px' }}>
+        <div className="d-flex justify-content-center" style={{marginTop:'20%'}}>
+        <Card className=" bg-light" style={{ width: '700px'}}>
             <Card.Header>
                 <h2 className="justify-content-center">Авторизация</h2>
             </Card.Header>
@@ -58,7 +58,7 @@ function LoginFields(){
                         />
                     </Form.Group>
                     {state.error && <p className="text-danger">{state.error}</p>}
-                <div className='d-flex justify-content-between'>
+                <div className='d-flex justify-content-between flex-wrap'>
                     <Button  style={{marginTop:'10px'}} variant="primary" onClick={handleClick}>
                         Войти
                     </Button>
