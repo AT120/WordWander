@@ -142,7 +142,7 @@ export function updateProgressThunkCreator(details) {
         const state = getState()
         const fraction = state.readerReducer.progress.fraction
         const bookId = state.readerReducer.bookId
-        if (fraction && bookId && fraction !== details.fraction)
+        if (fraction && bookId && details.fraction && fraction !== details.fraction)
             bookApi.sendProgress(bookId, details.fraction)
 
         dispatch(updateProgressActionCreator(details))

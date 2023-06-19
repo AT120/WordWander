@@ -13,8 +13,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
     <BrowserRouter>
-      <Routes>
-        <Route element={<Navigate to='/login' />} />
+      <Routes >
+        <Route path='/' element={<Navigate to='/login' />} />
         <Route path='login'  element={<LoginPage />} />
         <Route path='registration' element={<RegistrationPage />} />
         <Route element={<PrivateWrapper />}>
