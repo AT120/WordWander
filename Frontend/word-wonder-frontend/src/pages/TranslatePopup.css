@@ -50,7 +50,7 @@
     border-radius: 5px;
     max-width: 40%;
     max-height: 30%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-wrap: break-word;
     display: inline-block;
 
