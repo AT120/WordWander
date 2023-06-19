@@ -1,14 +1,14 @@
 import Form from 'react-bootstrap/Form';
 import { availableTranslators } from '../../../api/translate-api';
 import { useDispatch, useSelector } from 'react-redux';
-import { setNewTranslateApiActionCretor } from '../../../reducers/translate-reducer';
+import { setNewTranslateApiActionCreator } from '../../../reducers/translate-reducer';
 
 
 export default function TranslateApiSelector() {
     const dispatch = useDispatch()
     const translateApiType = useSelector(state => state.translateReducer.translateApiType)
     function changeTranslator(event) {
-        dispatch(setNewTranslateApiActionCretor(
+        dispatch(setNewTranslateApiActionCreator(
             parseInt(event.currentTarget.value)
         ))
     }

@@ -48,6 +48,12 @@ body {
     /* font-family: system-ui, sans-serif; */
 }
 
+foliate-view {
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
 
 #drop-target {
     height: 100vh;

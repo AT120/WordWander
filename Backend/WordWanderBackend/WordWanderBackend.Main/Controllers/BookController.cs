@@ -58,17 +58,38 @@ public class BookController : Controller
         }
     }
 
-    [HttpPut("{id}/languages")]
-    public async Task<ActionResult> UpdateLanguages(Guid id, LanguagesDTO languages)
+
+    [HttpGet("{id}/parameters")]
+    public async Task<ActionResult<ReaderParametersWithProgress>> GetParameters(Guid id)
+    {
+
+        try
+        {
+            var parameters = await _bookService.GetReaderParameters(
+                id,
+                ClaimsManager.GetIdClaim(User));
+            return parameters;
+        }
+        catch (BackendException be)
+        {
+            return Problem(be.UserMessage, statusCode: be.StatusCode);
+        }
+        catch
+        {
+            return Problem("Unknown server error", statusCode: 500);
+        }
+    }
+
+    [HttpPut("{id}/parameters")]
+    public async Task<ActionResult> SetParameters(Guid id, ReaderParameters parameters)
     {
         try
         {
-            await _bookService.SetBookLanguages(
+            await _bookService.SetReaderParameters(
                 id,
                 ClaimsManager.GetIdClaim(User),
-                languages.SourceLangCode,
-                languages.TargetLangCode);
-                
+                parameters);
+            
             return Ok();
         }
         catch (BackendException be)
