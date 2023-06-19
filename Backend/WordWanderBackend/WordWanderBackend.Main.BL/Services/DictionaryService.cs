@@ -34,17 +34,17 @@ namespace WordWanderBackend.Main.BL.Services
 			{
 				throw new ArgumentException($"The user doesn't have a book with this {bookId} id!");
 			}
-			/*
+			
 			if (!Languages.languages.Any(l => l.Language.Equals(DefaultLanguage)))
 			{
 				throw new ArgumentException($"There is no such language as  {DefaultLanguage} !");
 			}
-			//TODO: fix this checks
+			
 			if (!Languages.languages.Any(l => l.Language.Equals(TranslatedLangauge)))
 			{
 				throw new ArgumentException($"There is no such language as  {TranslatedLangauge} !");
 			}
-			*/
+			
 			var dictionary = new DictionaryDbModel
 			{
 				Book = book,

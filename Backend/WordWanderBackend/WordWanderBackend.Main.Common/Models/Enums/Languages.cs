@@ -46,7 +46,7 @@ namespace WordWanderBackend.Main.Common.Models.Enums
 	}
     public struct LanguageInfo
 	{
-        public LanguageInfo(string language,string languageCode)
+        public LanguageInfo(string languageCode ,string language)
         {
             Language = language;
             LanguageCode = languageCode;
