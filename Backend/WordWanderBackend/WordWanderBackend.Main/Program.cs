@@ -24,7 +24,7 @@ services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("http://localhost:3000") //TODO: in config
+            .WithOrigins("https://localhost:3000") //TODO: in config
     );
 });
 builder.AddDB<MainDbContext>("DbConnection");
@@ -38,6 +38,7 @@ services.AddTransient<IPasswordHasher<UserDbModel>, PasswordHasher<UserDbModel>>
 services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<ITranslateService, LibreTranslateService>();
 services.AddScoped<IBookService, BookService>();
+services.AddScoped<IInvitationService, InvitationService>();
 services.SetupCookieAuth();
 
 
