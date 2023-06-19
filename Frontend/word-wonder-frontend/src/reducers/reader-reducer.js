@@ -82,8 +82,12 @@ export function loadBookThunkCreator(guid) {
         const bookFile = await bookApi.loadBook(guid) //TODO: race condition
 
         if (params) {
-            dispatch(setTargetLanguageActionCreator(params.targetLanguage))
-            dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+            
+            if (params.targetLanguage)
+                dispatch(setTargetLanguageActionCreator(params.targetLanguage))
+            if (params.sourceLanguage)
+                dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+
             dispatch(setNewFontSizeActionCreator(params.fontSize))
             dispatch(setNewTranslateApiActionCreator(params.translationApi))
             dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100, shouldBeUpdated: true }))
