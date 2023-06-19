@@ -52,7 +52,7 @@ async function loadBook(id) {
     if (!resp || resp.status !== 200)
         return null //TODO: добавить обработку ошибок
     // return resp.data
-    return new File([resp.data], `book-${id}.fb2`, {type: 'application/x-fictionbook'}) //TODO:
+    return new File([resp.data], `book-${id}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка
 }
 
 async function sendProgress(bookId, fraction) {
