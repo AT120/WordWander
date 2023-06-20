@@ -50,6 +50,7 @@ namespace WordWanderBackend.Main.BL.Services
                 DefaultSequnce = DefaultSequnce,
                 TranslatedSequence = TranslatedSequence,
                 TranslatedLanguage = Languages.LanguageDictionary[TranslatedLangauge],
+                Favourite = false,
                 User = user
             };
 
@@ -73,9 +74,9 @@ namespace WordWanderBackend.Main.BL.Services
         public async Task<TranslationCollectonDTO> GetDictionary(Guid userId)
         {
 
-            //TODO: Добавить сортировку dictionary
+            //TODO: Добавить сортировку dictionary Favourite true/false
 
-            List<TranslationDto>? tranlations = await _context.Dictionary.Where(d => d.User.Id.Equals(userId)).Include(d => d.Book).Select(d => new TranslationDto
+            List<TranslationDto>? tranlations = await _context.Dictionary.Where(d => d.User.Id.Equals(userId)).Include(d => d.Book).OrderByDescending(d => d.CreationDate).OrderByDescending(d => d.Favourite).Select(d => new TranslationDto
             {
                 DefaultLanguage = d.DefaultLanguage,
                 DefaultSequnce = d.DefaultSequnce,
@@ -84,7 +85,8 @@ namespace WordWanderBackend.Main.BL.Services
                 TranslationId = d.Id,
                 BookId = d.Book.Id,
                 BookTitle = d.Book.Name,
-                Created = d.CreationDate
+                Created = d.CreationDate,
+                Favourite = d.Favourite,
 
             }).ToListAsync();
 
@@ -100,12 +102,67 @@ namespace WordWanderBackend.Main.BL.Services
                 .Where(d => d.User.Id == userId && d.Book.Id == bookId)
                 .Select(d => new ShortTranslationDTO
                 {
-					Id = d.Id,
+                    Id = d.Id,
                     OriginalString = d.DefaultSequnce,
                     TranslatedString = d.TranslatedSequence
                 }).ToListAsync();
 
             return translations;
         }
+		
+        public async Task ChangeTranslationFavoriteStatus(Guid TranslationId, Guid userId)
+        {
+            var translation = await _context.Dictionary.FirstOrDefaultAsync(d => d.Id.Equals(TranslationId) && d.User.Id.Equals(userId));
+            if (translation == null)
+            {
+                throw new ArgumentException($"There is no translation with this {TranslationId} id!");
+            }
+            translation.Favourite = !translation.Favourite;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EditTranslation(Guid TranslationId, Guid bookId, Guid userId, string DefaultLanguage, string DefaultSequnce, string TranslatedSequence, string TranslatedLangauge)
+        {
+            var translation = await _context.Dictionary.FirstOrDefaultAsync(d => d.Id.Equals(TranslationId) && d.User.Id.Equals(userId));
+
+            if (translation == null)
+            {
+                throw new ArgumentException($"There is no translation with this {TranslationId} id!");
+            }
+
+            if (!await _context.Books.AnyAsync(b => b.Id.Equals(bookId) && b.UserId.Equals(userId)))
+            {
+                throw new ArgumentException($"The user doesn't have a book with this {bookId} id!");
+            }
+
+            if (!Languages.languages.Any(l => l.Language.Equals(DefaultLanguage)))
+            {
+                throw new ArgumentException($"There is no such language as  {DefaultLanguage} !");
+            }
+
+            if (!Languages.languages.Any(l => l.Language.Equals(TranslatedLangauge)))
+            {
+                throw new ArgumentException($"There is no such language as  {TranslatedLangauge} !");
+            }
+
+            var book = await _context.Books.FindAsync(bookId);
+
+            if (book == null)
+            {
+                throw new ArgumentException($"There is no book with this {bookId} id!");
+            }
+
+            translation.DefaultLanguage = DefaultLanguage;
+            translation.DefaultSequnce = DefaultSequnce;
+            translation.TranslatedSequence = TranslatedSequence;
+            translation.TranslatedLanguage = TranslatedLangauge;
+            translation.Book = book;
+            translation.CreationDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+
+        }
+
     }
 }
