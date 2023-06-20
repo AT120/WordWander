@@ -38,8 +38,8 @@ export function addGroupThunkCreator(groupName) {
         const result = await groupsApi.addGroup(groupName)
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось создать группу"))
-
-        dispatch(loadTeacherGroupsThunkCreator())
+        else
+            dispatch(loadTeacherGroupsThunkCreator())
     }
 }
 
@@ -48,7 +48,8 @@ export function loadTeacherGroupsThunkCreator() {
         const result = await groupsApi.loadTeacherGroups()
         if (!result)
             dispatch(displayErrorActionCreator("Не удается загрузить ваш список групп"))
-        dispatch(setGroupsActionCreator(result.groups))
+        else
+            dispatch(setGroupsActionCreator(result.groups))
     }
 }
 
@@ -58,8 +59,8 @@ export function deleteGroupThunkCreator(groupId) {
         const result = await groupsApi.deleteGroup(groupId)
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось удалить группу"))
-
-        dispatch(loadTeacherGroupsThunkCreator())
+        else
+            dispatch(loadTeacherGroupsThunkCreator())
     }
 }
 
@@ -68,8 +69,8 @@ export function laodStudentsThunkCreator(groupId) {
         const result = await groupsApi.loadStudents(groupId)
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось удалить группу"))
-
-        dispatch(setStudentsActionCreator(groupId, result.users))
+        else
+            dispatch(setStudentsActionCreator(groupId, result.users))
     }
 }
 
