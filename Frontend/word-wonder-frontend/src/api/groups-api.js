@@ -58,7 +58,7 @@ async function getPossibleUsers(name,groupId){
         }
     })
     .catch(error => {
-//TODO: добавить обработку ошибок
+    //TODO: добавить обработку ошибок
     });
 }
 async function sendInvitation(groupId, userId){
@@ -68,7 +68,7 @@ async function sendInvitation(groupId, userId){
         }
     })
     .catch(error => {
-//TODO: добавить обработку ошибок
+
     });
 }
 export const groupsApi = {

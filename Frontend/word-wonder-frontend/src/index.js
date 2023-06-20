@@ -22,8 +22,8 @@ root.render(
       <Route element={<PrivateWrapper/>}>
         <Route path='list' element={<BookPage/>} />
         <Route path='dictionary' element={<Dictionary />} />
+        <Route path="groups" element={<GroupsPage />} />
       </Route>
-      <Route path="groups" element={<GroupsPage />} />
       <Route path="reader" element={<Reader />} />
     </Routes>
   </BrowserRouter>

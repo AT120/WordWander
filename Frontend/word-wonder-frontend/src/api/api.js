@@ -120,15 +120,12 @@ function login(login, password){
     });
 }
 
-function register(login, password){
-
-    const formData = new FormData();
-    formData.append('userName', login)
-    formData.append('password', password)
+function register(login, password,role){
     return instance.post('auth/register',    
         {
             userName: login,
-            password : password
+            password : password,
+            role: role? 1: 0
         } 
 ).then(response => {
         if(response.status ===200){
@@ -215,11 +212,11 @@ export const dictApi={
 function getInvitations(){
     return instance.get('users/invitations').then(response=>{
         if(response.status===200){
-            return response;
+            return response.data;
         }
     })
     .catch(error => {
-        console.log(error.response.data.error) 
+        return []
     });
 }
 function acceptInvite(id, accept){

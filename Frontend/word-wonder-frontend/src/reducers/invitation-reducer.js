@@ -21,15 +21,15 @@ export function loadInvitationsActionCreator(invitations){
 }
 
 export function loadInvitationsThunkCreator(){
-  return (dispatch)  => {invitationsApi.getInvitations().then(result=>dispatch(loadInvitationsActionCreator(result.data)))
+  return (dispatch)  => {invitationsApi.getInvitations().then(result=>dispatch(loadInvitationsActionCreator(result)))
   }
 }
 
 
 export function acceptInviteThunkCreator(id, accept){
     return async (dispatch)  => {
-       await invitationsApi.acceptInvite(id,accept).then(result=>dispatch(loadInvitationsActionCreator(result.data)));
-       invitationsApi.getInvitations().then(result=>dispatch(loadInvitationsActionCreator(result.data)))
+       await invitationsApi.acceptInvite(id,accept).then(result=>dispatch(loadInvitationsActionCreator(result)));
+       invitationsApi.getInvitations().then(result=>dispatch(loadInvitationsActionCreator(result)))
     }
 }
 export default invitationsReducer
