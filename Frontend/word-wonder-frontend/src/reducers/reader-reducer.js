@@ -70,7 +70,7 @@ const readerReducer = (state = initialState, action) => {
             return newState
         case ADD_TO_DICTIONARY:
             newState.dictionary = new Map(newState.dictionary);
-            newState.dictionary.set(action.word.toLowerCase(), [action.tranlation, action.id])
+            newState.dictionary.set(action.word.toLowerCase(), [action.translation, action.id])
             return newState;
         case REMOVE_FROM_DICTIONARY:
             newState.dictionary = new Map(newState.dictionary);
