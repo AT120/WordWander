@@ -15,6 +15,9 @@ namespace WordWanderBackend.Main.BL.Statics
             Guid.TryParse(User.FindFirst("id").Value, out userId);
             return userId;
         }
-
+        public static string GetRoleClaim(ClaimsPrincipal User)
+        {
+            return User.FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;        
+        }
     }
 }
