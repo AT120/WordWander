@@ -5,6 +5,9 @@ import logo from './favicon.ico'
 import { useEffect, useState } from 'react';
 import { authApi, checkAuth } from '../../api/api';
 import { useNavigate } from "react-router-dom";
+import InvitationDropdown from './Invitation-dropdown';
+import { Provider } from 'react-redux';
+import invitationStore from '../../store/invitationStore';
 
 function Navigation() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,7 +37,7 @@ function Navigation() {
     }, [window.location.pathname]);
     
   return (
-    
+    <Provider store={invitationStore}>
     <Navbar   fixed="top" bg="dark" expand="lg">
       <Navbar.Brand href="/" style={{marginLeft:'20px'}}>
       <img
@@ -50,6 +53,9 @@ function Navigation() {
           { isAuthenticated &&
           <NavLink className="nav-link"  to="/list" style={{color:'white', marginLeft:'15px'}}>Мои книги</NavLink>
           }
+          { isAuthenticated &&
+          <InvitationDropdown/>
+          }
           { !isAuthenticated &&
           <>
           <NavLink className="nav-link" to="/login" style={{color:'white', marginLeft:'15px'}}>Логин</NavLink>
@@ -64,6 +70,7 @@ function Navigation() {
  
       </Navbar.Collapse>
     </Navbar>
+    </Provider>
   );
 }
 

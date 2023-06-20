@@ -31,7 +31,7 @@ public class UserController : Controller
             return Problem(ex.Message, statusCode: 501);
         }
     }
-    [HttpGet("invitation/{invitationId}/{accept}")]
+    [HttpPost("invitation/{invitationId}/{accept}")]
     public async Task<IActionResult> GetUsersByNameToInvite(Guid invitationId, bool accept)
     {
         try

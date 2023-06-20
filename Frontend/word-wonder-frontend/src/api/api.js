@@ -210,3 +210,28 @@ export const dictApi={
     getDictionary:getDictionary,
     deleteTranslation:deleteTranslation
 }
+
+function getInvitations(){
+    return instance.get('users/invitations').then(response=>{
+        if(response.status===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+function acceptInvite(id, accept){
+    return instance.post(`users/invitation/${id}/${accept}`).then(response=>{
+        if(response.status===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+export const invitationsApi={
+    getInvitations: getInvitations,
+    acceptInvite: acceptInvite
+}

@@ -23,7 +23,7 @@ namespace WordWanderBackend.Main.BL.Services
 
         public async Task AcceptOrDeclineInvitation(Guid invitationId, Guid userId, bool accept)
         {
-            var invitation = await _context.Invations.Include(c=>c.Group).FirstOrDefaultAsync(x=>x.Id== invitationId);
+            var invitation = await _context.Invations.Include(c=>c.Group).ThenInclude(x=>x.Students).FirstOrDefaultAsync(x=>x.Id== invitationId);
             if (invitation == null)
             {
                 throw new ArgumentNullException("There is no invitation with this id!");
