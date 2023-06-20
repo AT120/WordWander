@@ -50,7 +50,7 @@ function Navigation() {
       </Navbar.Brand>
       <Navbar.Toggle style={{marginRight:'20px'}} className="navbar-dark" aria-controls="navbar-nav" />
       <Navbar.Collapse id="navbar-nav">
-        <Nav className='d-flex flex-md-row flex-column flex-grow-1'>
+        <Nav className='d-flex flex-lg-row flex-column flex-grow-1'>
 
           { isAuthenticated &&
           <>
