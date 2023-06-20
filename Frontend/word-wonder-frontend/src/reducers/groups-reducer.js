@@ -52,7 +52,12 @@ export function setGroupPossibleUsersActionCreator(groupId, users){
 
 export function setGroupPossibleUsersThunkCreator(name, groupId){
     return async (dispatch) =>{
-       await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
+        if(name!==""){
+            await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
+        }
+        else{
+            dispatch(setGroupPossibleUsersActionCreator(groupId,[]))
+        }
     }
 }
 function setStudentsActionCreator(groupId, students) {
