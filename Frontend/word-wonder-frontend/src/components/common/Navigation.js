@@ -49,22 +49,22 @@ function Navigation() {
       </Navbar.Brand>
       <Navbar.Toggle style={{marginRight:'20px'}} className="navbar-dark" aria-controls="navbar-nav" />
       <Navbar.Collapse id="navbar-nav">
-        <Nav  className="mr-auto ">
+        <Nav className='d-flex flex-md-row flex-column flex-grow-1'>
           { isAuthenticated &&
-          <NavLink className="nav-link"  to="/list" style={{color:'white', marginLeft:'15px'}}>Мои книги</NavLink>
+          <NavLink className="nav-link ms-3"  to="/list" style={{color:'white'}}>Мои книги</NavLink>
           }
           { isAuthenticated &&
           <InvitationDropdown/>
           }
           { !isAuthenticated &&
           <>
-          <NavLink className="nav-link" to="/login" style={{color:'white', marginLeft:'15px'}}>Логин</NavLink>
-          <NavLink className="nav-link" to="/registration" style={{color:'white', marginLeft:'15px'}}>Регистрация</NavLink>
+          <NavLink className="nav-link ms-3" to="/login" style={{color:'white'}}>Логин</NavLink>
+          <NavLink className="nav-link ms-3" to="/registration" style={{color:'white'}}>Регистрация</NavLink>
           </>
           }
                   {
           isAuthenticated &&
-          <NavLink className="nav-link my-sm-0"  style={{color:'white', marginLeft:'15px'}} onClick={handleClick}>Выйти</NavLink>
+          <NavLink className="nav-link ms-3 ms-lg-auto me-lg-3"  style={{color:'white'}} onClick={handleClick}>Выйти</NavLink>
         } 
         </Nav>
  

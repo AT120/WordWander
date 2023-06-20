@@ -9,8 +9,8 @@ namespace WordWanderBackend.Main.DAL.Models
         public double CurrentPercent { get; set; }
         public string Description { get; set; }
         public string Extension { get; set; }
-        public string SourceLanguageCode { get; set; }
-        public string TargetLanguageCode { get; set; }
+        public string? SourceLanguageCode { get; set; }
+        public string? TargetLanguageCode { get; set; }
 
         public Guid UserId { get; set; }
         public UserDbModel User { get; set; }

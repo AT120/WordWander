@@ -3,6 +3,7 @@ import { bookApi } from "../api/api";
 import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 import { loadBook } from "../foliate-js/reader-import";
 
+const CLEAN_UP = 100
 const GET_BOOK_FILE = 101
 const SET_BOOK = 102
 const SET_FONT_SIZE = 103
@@ -32,6 +33,11 @@ const readerReducer = (state = initialState, action) => {
     newState.progress = { ...state.progress }
 
     switch (action.type) {
+        case CLEAN_UP:
+            newState.bookId = 0
+            newState.bookView = 0
+            newState.book = 0
+            return newState
         case GET_BOOK_FILE:
             console.log(state.bookFile)
             return state
@@ -76,14 +82,22 @@ export function setBookViewActionCreator(bookView) {
     return { type: SET_BOOK_VIEW, bookView: bookView }
 }
 
+export function cleanupActionCreator() {
+    return { type: CLEAN_UP }
+}
+
 export function loadBookThunkCreator(guid) {
     return async (dispatch) => {
         const params = await bookApi.loadReaderParameters(guid)
         const bookFile = await bookApi.loadBook(guid) //TODO: race condition
 
         if (params) {
-            dispatch(setTargetLanguageActionCreator(params.targetLanguage))
-            dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+
+            if (params.targetLanguage)
+                dispatch(setTargetLanguageActionCreator(params.targetLanguage))
+            if (params.sourceLanguage)
+                dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+
             dispatch(setNewFontSizeActionCreator(params.fontSize))
             dispatch(setNewTranslateApiActionCreator(params.translationApi))
             dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100, shouldBeUpdated: true }))
@@ -117,7 +131,7 @@ export function sendReaderParametersThunkCreator() {
     return async (dispatch, getState) => {
         const state = getState()
         const bookId = state.readerReducer.bookId
-        
+
         const theme = state.readerReducer.theme
         let themeToApi = 0;
         if (theme === 'dark')

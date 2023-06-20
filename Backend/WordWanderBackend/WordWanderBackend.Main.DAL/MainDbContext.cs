@@ -1,11 +1,9 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WordWanderBackend.Main.DAL.Models;
 
 namespace WordWanderBackend.Main.DAL
 {
-    public class MainDbContext: DbContext //, IUserStore<UserDbModel>
+    public class MainDbContext: DbContext
     {
         public DbSet<BookDbModel> Books { get; set; }
         public DbSet<UserDbModel> Users { get; set; }

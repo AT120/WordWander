@@ -7,6 +7,6 @@ const reducers = combineReducers({
     readerReducer : readerReducer,
     translateReducer : translateReducer
 });
-const storeReader = createStore (reducers, applyMiddleware(thunk));
+const readerStore = createStore (reducers, applyMiddleware(thunk));
 
-export default storeReader;
+export default readerStore;
