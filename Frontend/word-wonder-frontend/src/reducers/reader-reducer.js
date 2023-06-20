@@ -2,6 +2,7 @@ import { getReaderCss } from "../components/reader/BookLoader";
 import { bookApi, dictApi } from "../api/api";
 import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 import { loadBook } from "../foliate-js/reader-import";
+import { displayErrorActionCreator } from "./error-reducer";
 
 const CLEAN_UP = 100
 const GET_BOOK_FILE = 101
@@ -122,8 +123,10 @@ function loadDictionaryActionCreator(dictionary) {
 function loadReaderParametersThunkCreator(guid) {
     return async (dispatch) => {
         const params = await bookApi.loadReaderParameters(guid)
-        if (!params)
+        if (!params) {
+            dispatch(displayErrorActionCreator("Не удалось восстановить настройки, будут использованы настройки по умолчанию"))
             return
+        }
 
         if (params.targetLanguage)
             dispatch(setTargetLanguageActionCreator(params.targetLanguage))
@@ -151,7 +154,10 @@ function loadBookDictionaryThunkCreator(guid) {
     return async (dispatch) => {
         const result = await dictApi.loadBookDictionary(guid)
         if (!result) {
-            //TODO: show error
+            dispatch(displayErrorActionCreator(
+                "Не удалось загрузить словарь для книги"
+            ))
+
         }
         else
             dispatch(loadDictionaryActionCreator(
@@ -172,6 +178,10 @@ export function loadBookThunkCreator(guid) {
         if (bookFile) {
             const book = await loadBook(bookFile)
             dispatch(setBookActionCreator(book, guid))
+        } else {
+            dispatch(displayErrorActionCreator(
+                "Не удалось загрузить книгу"
+            ))
         }
 
     }
@@ -228,7 +238,9 @@ export function addWordToDictThunkCreator(word, translation) {
             translatedSequence: translation
         })
         if (!result) {
-            //TODO: show error
+            dispatch(displayErrorActionCreator(
+                "Не удалось добавить слово в словарь"
+            ))
         } else {
             dispatch(addToDictionaryActionCreator(result, word, translation))
         }
@@ -239,7 +251,9 @@ export function deleteWordFromDictThunkCreator(id, word) {
     return async (dispatch, getState) => {
         const result = await dictApi.deleteTranslation(id)
         if (!result) {
-            //TODO: show error
+            dispatch(displayErrorActionCreator(
+                "Не удалось удалить слово из словаря"
+            ))
         } else {
             dispatch(deleteFromDictionaryActionCreator(word))
         }

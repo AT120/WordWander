@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export const baseURL = 'http://localhost:8080/api/'
 
@@ -47,12 +46,15 @@ function deleteBook(id) {
 }
 
 async function loadBook(id) {
-    const resp = await instance.get(`books/${id}/file`, { responseType: 'blob' })
-    // .catch(error => null) //TODO: добавить обработку ошибок
-    if (!resp || resp.status !== 200)
-        return null //TODO: добавить обработку ошибок
-    // return resp.data
-    return new File([resp.data], `book-${id}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка
+    try {
+
+        const resp = await instance.get(`books/${id}/file`, { responseType: 'blob' })
+        if (!resp || resp.status !== 200)
+            return null 
+        return new File([resp.data], `book-${id}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка
+    } catch {
+        return null
+    }
 }
 
 async function sendProgress(bookId, fraction) {
@@ -67,12 +69,10 @@ async function loadReaderParameters(bookId) {
     try {
         const resp = await instance.get(`books/${bookId}/parameters`)
         if (!resp || resp.status !== 200) {
-            console.log('Cant load reader parameters. The default ones will be used')
             return null
         }
         return resp.data
     } catch {
-        console.log('Cant load reader parameters. The default ones will be used')
         return null
     }
 }
@@ -200,19 +200,17 @@ function getDictionary() {
             }
         })
         .catch(error => {
-            console.log(error.response.data.error)
+            return null
         });
 }
 function deleteTranslation(translationId) {
     return instance.delete(`dictionary/delete/${translationId}`)
         .then(response => {
-            if (response.status === 200) {
+            if (response && response.status === 200) {
                 return response;
             }
         })
-        .catch(error => {
-            console.log(error.response.data.error)
-        });
+        .catch(() => null)
 }
 
 async function saveTranslation(data) {
