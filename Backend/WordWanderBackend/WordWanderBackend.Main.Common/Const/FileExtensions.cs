@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WordWanderBackend.Main.Common.Const
+﻿namespace WordWanderBackend.Main.Common.Const
 {
     public static class FileExtensions
     {

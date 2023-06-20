@@ -39,6 +39,7 @@ services.AddScoped<IAuthService, AuthService>();
 services.AddScoped<ITranslateService, LibreTranslateService>();
 services.AddScoped<IBookService, BookService>();
 services.AddScoped<IInvitationService, InvitationService>();
+services.AddScoped<IGroupService, GroupService>();
 services.SetupCookieAuth();
 
 
