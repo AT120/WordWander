@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjCommon.Exceptions;
+using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
 using WordWanderBackend.Main.Common.Models.Enums;
@@ -79,7 +80,7 @@ public class AuthController : Controller
     [Authorize]
     public async Task<IActionResult> CheckIfAuthorized()
     {
-        return Ok();
+        return Ok(ClaimsManager.GetRoleClaim(User));
     }
 
 

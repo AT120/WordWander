@@ -25,7 +25,7 @@ export default function GroupContainer() {
                 <Accordion>
                     {
                         groups.map((group) => {
-                            return <GroupItem id={group.id} name={group.name}/>
+                            return <GroupItem style={{color:"black", display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} id={group.id} name={group.name}/>
                         })
                     }
 

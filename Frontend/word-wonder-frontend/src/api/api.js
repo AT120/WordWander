@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const baseURL = 'http://localhost:8080/api/'
+export const baseURL='http://localhost:5194/api/'
 
 export const instance = axios.create({
     baseURL: baseURL,
@@ -119,18 +119,15 @@ function login(login, password) {
         });
 }
 
-function register(login, password) {
-
-    const formData = new FormData();
-    formData.append('userName', login)
-    formData.append('password', password)
-    return instance.post('auth/register',
+function register(login, password,role){
+    return instance.post('auth/register',    
         {
             userName: login,
-            password: password
-        }
-    ).then(response => {
-        if (response.status === 200) {
+            password : password,
+            role: role? 1: 0
+        } 
+).then(response => {
+        if(response.status ===200){
             return response;
         }
     })
@@ -229,5 +226,29 @@ export const dictApi = {
     getDictionary: getDictionary,
     deleteTranslation: deleteTranslation,
     loadBookDictionary: loadBookDictionary,
+}
 
+function getInvitations(){
+    return instance.get('users/invitations').then(response=>{
+        if(response.status===200){
+            return response.data;
+        }
+    })
+    .catch(error => {
+        return []
+    });
+}
+function acceptInvite(id, accept){
+    return instance.post(`users/invitation/${id}/${accept}`).then(response=>{
+        if(response.status===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+export const invitationsApi={
+    getInvitations: getInvitations,
+    acceptInvite: acceptInvite
 }

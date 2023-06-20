@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Enums;
 using WordWanderBackend.Main.DAL;
 using WordWanderBackend.Main.DAL.Models;
 
@@ -23,7 +24,7 @@ namespace WordWanderBackend.Main.BL.Services
 
         public async Task AcceptOrDeclineInvitation(Guid invitationId, Guid userId, bool accept)
         {
-            var invitation = await _context.Invations.Include(c=>c.Group).FirstOrDefaultAsync(x=>x.Id== invitationId);
+            var invitation = await _context.Invations.Include(c=>c.Group).ThenInclude(x=>x.Students).FirstOrDefaultAsync(x=>x.Id== invitationId);
             if (invitation == null)
             {
                 throw new ArgumentNullException("There is no invitation with this id!");
@@ -57,7 +58,14 @@ namespace WordWanderBackend.Main.BL.Services
             {
                 throw new ArgumentException("It is not your group!");
             }
-            var users = _context.Users.Include(x => x.TeacherGroups).Where(x => !x.TeacherGroups.Any(c => c.Id != groupId) && Regex.IsMatch(x.UserName, name)).OrderBy(x=>x.UserName.Length).Take(5).Select(z=>z.ToDTO()).ToList();
+            var users = _context.Users.Include(x => x.TeacherGroups)
+                .Include(x=>x.Invations)
+                .Include(x=>x.UserGroups)
+                .Where(x => x.Role==Role.Student && Regex.IsMatch(x.UserName, name) && !x.Invations.Any(c=>c.GroupId==groupId) && ! x.UserGroups.Any(c => c.Id == groupId))
+                .OrderBy(x=>x.UserName.Length)
+                .Take(5)
+                .Select(z=>z.ToDTO())
+                .ToList();
             return users;
         }
 
