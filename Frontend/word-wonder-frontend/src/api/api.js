@@ -3,10 +3,11 @@ import Cookies from 'js-cookie';
 
 export const baseURL='http://localhost:8080/api/'
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: baseURL,
     withCredentials : true
 })
+
 function getBooks(page, name, sortBy){
     return instance.get(`books/${page}`, {params: {name: name, sortedBy: sortBy}} )
     .then(response => {

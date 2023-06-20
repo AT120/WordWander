@@ -1,28 +1,16 @@
 import Navigation from "../../components/common/Navigation";
-import { Accordion } from "react-bootstrap";
-import GroupItem from "../../components/groups/GroupItem";
 import './Groups.css'
-import AddGroupButton from "../../components/groups/AddGroupButton";
+import groupsStore from "../../store/groupsStore";
+import { Provider } from 'react-redux';
+import GroupContainer from "../../components/groups/GroupContainer";
 
 export default function GroupsPage(params) {
+    
 
     return (
-        <div>
+        <Provider store={groupsStore}>
             <Navigation />
-            <div className="d-flex justify-content-center">
-                <div className="col col-lg-7" style={{ marginTop: '3.5rem' }}>
-
-                    <h2 className="d-flex justify-content-center">Группы:</h2>
-                    <Accordion>
-                        <GroupItem />
-
-                    </Accordion>
-
-                </div>
-
-                <AddGroupButton />
-
-            </div>
-        </div>
+            <GroupContainer />
+        </Provider>
     )
 }

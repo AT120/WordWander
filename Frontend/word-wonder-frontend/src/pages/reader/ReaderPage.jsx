@@ -1,5 +1,5 @@
-import { Provider, useDispatch } from 'react-redux';
-import storeReader from '../../store/storeReader';
+import { Provider } from 'react-redux';
+import storeReader from '../../store/readerStore';
 import "./TranslatePopup.css"
 import "./ReaderSettings.css"
 import BookLoader from '../../components/reader/BookLoader';

@@ -67,10 +67,18 @@ namespace WordWanderBackend.Main.Controllers
         }
 
         [HttpGet("groups")]
-        public async Task<ActionResult<GroupPageDTO>> GetGroupPage(int page)
+        public async Task<ActionResult<GroupPageDTO>> GetGroupPage(int page, bool? all)
         {
             try
             {
+                if (all.HasValue && all.Value)
+                {
+                    return await _groupService.GetAllGroups(
+                        ClaimsManager.GetIdClaim(User),
+                        true
+                    );
+                }
+                
                 return await _groupService.GetGroupPage(
                     page,
                     ClaimsManager.GetIdClaim(User),

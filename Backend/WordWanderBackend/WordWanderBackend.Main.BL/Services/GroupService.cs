@@ -19,7 +19,7 @@ public class GroupService : IGroupService
         _dbcontext = dbc;
     }
 
-    private async Task<GroupPageDTO> GetGroupPageTeacher(int page, Guid teacherId)
+    private async Task<GroupPageDTO> GetGroupsTeacher(Guid teacherId, int? page = null)
     {
         var user = await _dbcontext.Users
             .Include(u => u.TeacherGroups)
@@ -28,22 +28,27 @@ public class GroupService : IGroupService
 
         var groups = user.TeacherGroups
             .OrderBy(g => g.Name)
-            .Skip((page - 1) * PageSize)
-            .Take(PageSize)
             .Select(g => new GroupShortDTO
             {
                 Id = g.Id,
                 Name = g.Name
             });
 
+        if (page != null)
+            return new GroupPageDTO
+            {
+                TotalPages = user.UserGroups.Count / PageSize,
+                Groups = groups.Skip((page.Value - 1) * PageSize).Take(PageSize)
+            };
+
         return new GroupPageDTO
         {
-            TotalPages = user.TeacherGroups.Count / PageSize,
+            TotalPages = 1,
             Groups = groups
         };
     }
 
-    private async Task<GroupPageDTO> GetGroupPageUsers(int page, Guid userId)
+    private async Task<GroupPageDTO> GetGroupsUsers(Guid userId, int? page = null)
     {
         var user = await _dbcontext.Users
             .Include(u => u.UserGroups)
@@ -52,17 +57,23 @@ public class GroupService : IGroupService
 
         var groups = user.UserGroups
             .OrderBy(g => g.Name)
-            .Skip((page - 1) * PageSize)
-            .Take(PageSize)
             .Select(g => new GroupShortDTO
             {
                 Id = g.Id,
                 Name = g.Name
             });
 
+
+        if (page != null)
+            return new GroupPageDTO
+            {
+                TotalPages = user.UserGroups.Count / PageSize,
+                Groups = groups.Skip((page.Value - 1) * PageSize).Take(PageSize)
+            };
+
         return new GroupPageDTO
         {
-            TotalPages = user.UserGroups.Count / PageSize,
+            TotalPages = 1,
             Groups = groups
         };
     }
@@ -84,9 +95,18 @@ public class GroupService : IGroupService
             throw new BackendException(400, "Invalid page number");
 
         if (teacher)
-            return await GetGroupPageTeacher(page, userId);
+            return await GetGroupsTeacher(userId, page);
         else
-            return await GetGroupPageUsers(page, userId);
+            return await GetGroupsUsers(userId, page);
+    }
+
+
+    public async Task<GroupPageDTO> GetAllGroups(Guid userId, bool teacher)
+    {
+        if (teacher)
+            return await GetGroupsTeacher(userId);
+        else
+            return await GetGroupsUsers(userId);
     }
 
     public async Task CreateGroup(string name, Guid teacherId)

@@ -17,3 +17,10 @@
     height: 3rem;
     z-index: 10;
 }
+
+.add-new-name {
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+}
+

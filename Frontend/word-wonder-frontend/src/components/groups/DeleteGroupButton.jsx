@@ -1,8 +1,13 @@
+import { useDispatch } from "react-redux"
+import { deleteGroupThunkCreator } from "../../reducers/groups-reducer"
 
 
-export default function DeleteGroupButton({ className }) {
+export default function DeleteGroupButton({ className, groupId }) {
+    const dispatch = useDispatch()
+    
     function clickHandler(event) {
         event.stopPropagation()
+        dispatch(deleteGroupThunkCreator(groupId))
     }
 
     return (
