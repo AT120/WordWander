@@ -15,5 +15,6 @@ namespace WordWanderBackend.Main.BL.Statics
             Guid.TryParse(User.FindFirst("id").Value, out userId);
             return userId;
         }
+
     }
 }

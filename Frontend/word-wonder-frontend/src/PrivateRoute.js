@@ -31,7 +31,7 @@ const PrivateWrapper = () => {
       );
     }
   
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Outlet/> : <Navigate to="/login" />;
   };
 
     export default PrivateWrapper
