@@ -107,7 +107,14 @@ namespace WordWanderBackend.Main.Controllers
 		{
 			try
 			{
-				await _dictionaryService.EditTranslation(translationId,model.BookId, ClaimsManager.GetIdClaim(User),model.DefaultLanguage,model.DefaultSequnce,model.TranslatedSequence,model.TranslatedLangauge);
+				await _dictionaryService.EditTranslation(
+                    translationId,
+                    model.BookId,
+                    ClaimsManager.GetIdClaim(User),
+                    model.DefaultLanguage,
+                    model.DefaultSequence,
+                    model.TranslatedSequence,
+                    model.TranslatedLanguage);
 				return Ok();
 			}
 			catch (Exception ex)
