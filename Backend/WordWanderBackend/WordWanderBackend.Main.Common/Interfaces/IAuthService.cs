@@ -5,7 +5,7 @@ namespace WordWanderBackend.Main.Common.Interfaces;
 
 public interface IAuthService
 {
-    public Task Register(string username, string password, Role role);
+    public Task Register(string username, string password, Role role, HttpContext context);
     public Task Login(string username, string password, HttpContext context);
     public Task Logout(HttpContext context);
 }

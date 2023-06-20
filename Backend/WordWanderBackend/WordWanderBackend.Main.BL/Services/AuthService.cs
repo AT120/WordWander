@@ -24,21 +24,24 @@ public class AuthService : IAuthService
         _passwordHasher = ph;
     }
 
-    public async Task Register(string username, string password, Role role)
+    public async Task Register(string username, string password, Role role, HttpContext context)
     {
         if (password.Length < 5)
             throw new BackendException(400, "Password is too short");
 
-        await _dbcontext.Users.AddAsync(new UserDbModel
+        var user = new UserDbModel
         {
             UserName = username,
             Role = role,
             PasswordHash = _passwordHasher.HashPassword(null, password)
-        });
+        };
+
+        await _dbcontext.Users.AddAsync(user);
 
         try
         {
             await _dbcontext.SaveChangesAsync();
+            await CookieSignIn(user, context);
         }
         catch
         {

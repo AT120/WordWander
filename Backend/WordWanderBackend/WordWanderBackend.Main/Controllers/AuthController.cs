@@ -25,7 +25,8 @@ public class AuthController : Controller
             await _authService.Register(
                 creds.UserName,
                 creds.Password,
-                creds.Role ?? Role.Student);
+                creds.Role ?? Role.Student,
+                HttpContext);
             return Ok();
         }
         catch (BackendException be)
