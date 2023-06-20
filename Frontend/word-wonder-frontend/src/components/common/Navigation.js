@@ -10,14 +10,14 @@ function Navigation() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const handleClick = () =>{
-    authApi.logout().then(response=>
+  const handleClick = async() =>{
+    await authApi.logout().then(response=>
       navigate('/login', {state:{
         login:"",
         password:"",
         logedIn:false
     }})
-      )
+    )
     window.location.reload();
   }
     useEffect(() => {
