@@ -13,5 +13,7 @@ namespace WordWanderBackend.Main.Common.Interfaces
 		Task<TranslationCollectonDTO> GetDictionary(Guid userId);
 		Task DeleteTranslation(Guid TranslationId, Guid userId);
 		Task<IEnumerable<ShortTranslationDTO>> GetShortTranslations(Guid bookId, Guid userId);
+		Task ChangeTranslationFavoriteStatus(Guid TranslationId, Guid userId);
+		Task EditTranslation(Guid TranslationId, Guid bookId, Guid userId, string DefaultLanguage, string DefaultSequnce, string TranslatedSequence, string TranslatedLangauge);
 	}
 }
