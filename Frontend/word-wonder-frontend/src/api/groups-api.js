@@ -51,10 +51,32 @@ async function loadStudents(groupId) {
         return false
     }
 }
-
+async function getPossibleUsers(name,groupId){
+    return instance.get(`teacher/get/${name}/${groupId}`).then(response => {
+        if(response.status ===200){
+            return response.data;
+        }
+    })
+    .catch(error => {
+//TODO: добавить обработку ошибок
+    });
+}
+async function sendInvitation(groupId, userId){
+    return instance.post(`teacher/invitations/${groupId}/${userId}`).then(response => {
+        if(response.status ===200){
+            return response;
+        }
+    })
+    .catch(error => {
+//TODO: добавить обработку ошибок
+    });
+}
 export const groupsApi = {
     addGroup,
     loadTeacherGroups,
     deleteGroup,
     loadStudents,
+    getPossibleUsers,
+    sendInvitation
+
 }

@@ -1,5 +1,6 @@
-export default function AddStudentButton({className}) {
+export default function AddStudentButton({ className, addingIsOpen, setAddingIsOpen }) {
     function clickHandler(event) {
+        setAddingIsOpen(!addingIsOpen);
         event.stopPropagation()
     }
 

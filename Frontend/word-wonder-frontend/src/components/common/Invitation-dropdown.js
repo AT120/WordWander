@@ -22,7 +22,7 @@ function InvitationDropdown() {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {state.invitations.length!==0 && state.invitations.map((value)=>{
+        {state.invitations!==0 && state.invitations.map((value)=>{
             return <DropdownItem style={{color:"black", display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}  key={value.id}>{value.groupName} <div><Button onClick={()=>invite(value.id,true)} size="sm" variant="success">✓</Button><Button size="sm" variant="danger" onClick={()=>invite(value.id,false)}>✕</Button></div></DropdownItem>
         })
         }
