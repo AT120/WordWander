@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CloseButton, } from "react-bootstrap";
 import ToGlosbe from "./ToGlosbe";
 import ToReversoContext from "./ToReversoContext";
+import AddToDictionary from "./ToDictionary";
 
 let prevText = ''
 export default function TranslateDesktop({ translation, reference, targetLang, sourceLang }) {
@@ -40,6 +41,14 @@ export default function TranslateDesktop({ translation, reference, targetLang, s
                         targetLang={targetLang}
                         size="1.5rem"
                     />
+                    
+                    <AddToDictionary 
+                        width="1.7rem"
+                        height="1.5rem"
+                        word={textToTranslate}
+                        translation={translatedText}
+                    />
+
                 </div>
 
                 <div className="spacer"></div>
