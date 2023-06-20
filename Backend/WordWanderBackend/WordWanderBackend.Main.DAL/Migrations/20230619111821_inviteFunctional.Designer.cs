@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WordWanderBackend.Main.DAL;
@@ -11,9 +12,11 @@ using WordWanderBackend.Main.DAL;
 namespace WordWanderBackend.Main.DAL.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230619111821_inviteFunctional")]
+    partial class inviteFunctional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,11 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SourceLanguageCode")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("TargetLanguageCode")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
@@ -94,7 +99,7 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TranslatedLanguage")
+                    b.Property<string>("TranslatedLangauge")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -179,9 +184,6 @@ namespace WordWanderBackend.Main.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(12);
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
 
                     b.Property<string>("UserName")
                         .IsRequired()

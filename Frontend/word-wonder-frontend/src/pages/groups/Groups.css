@@ -1,0 +1,26 @@
+.add-student-button {
+    background: none;
+    border-radius: 100%;
+    border-color: green;
+    border-width: 0.2rem;
+    width: 3rem;
+    height: 3rem;
+    z-index: 10;
+}
+
+.delete-group-button {
+    background: none;
+    border-radius: 100%;
+    border-color: red;
+    border-width: 0.2rem;
+    width: 3rem;
+    height: 3rem;
+    z-index: 10;
+}
+
+.add-new-name {
+    position: fixed;
+    bottom: 120px;
+    right: 20px;
+}
+

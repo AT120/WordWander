@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 export const baseURL = 'http://localhost:8080/api/'
 
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: baseURL,
     withCredentials: true
 })
