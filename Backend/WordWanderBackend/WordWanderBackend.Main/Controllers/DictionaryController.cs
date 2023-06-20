@@ -43,7 +43,6 @@ namespace WordWanderBackend.Main.Controllers
 			{
 
 				var dictionary = await _dictionaryService.GetDictionary(ClaimsManager.GetIdClaim(User));
-				//var books = await _bookListService.GetUserBooks(page, name, ClaimsManager.GetIdClaim(User), sortedBy);
 				return Ok(dictionary);
 			}
 			catch (Exception ex)
@@ -58,7 +57,6 @@ namespace WordWanderBackend.Main.Controllers
 		{
 			try
 			{
-				//				await _bookListService.DeleteBookFromList(id, ClaimsManager.GetIdClaim(User));
 				await _dictionaryService.DeleteTranslation(translationId, ClaimsManager.GetIdClaim(User));
 				return Ok();
 			}
@@ -67,6 +65,38 @@ namespace WordWanderBackend.Main.Controllers
 				return BadRequest(ex.Message);
 			}
 		}
+
+		[Authorize]
+		[HttpPut("favorite/{translationId}")]
+		public async Task<IActionResult> ChangeTranslationFavoriteStatus(Guid translationId)
+		{
+			try
+			{
+				await _dictionaryService.ChangeTranslationFavoriteStatus(translationId, ClaimsManager.GetIdClaim(User));
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[Authorize]
+		[HttpPut("edit/{translationId}")]
+		public async Task<IActionResult> EditTranslation(Guid translationId, TranslationToSaveDTO model)
+		{
+			try
+			{
+				await _dictionaryService.EditTranslation(translationId,model.BookId, ClaimsManager.GetIdClaim(User),model.DefaultLanguage,model.DefaultSequnce,model.TranslatedSequence,model.TranslatedLangauge);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+
 
 
 	}

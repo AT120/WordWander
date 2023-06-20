@@ -12,5 +12,7 @@ namespace WordWanderBackend.Main.Common.Interfaces
 		Task SaveTranslationToDictionary(Guid bookId, Guid userId, string DefaultLanguageCode, string DefaultSequnce, string TranslatedSequence, string TranslatedLangaugeCode);
 		Task<TranslationCollectonDTO> GetDictionary(Guid userId);
 		Task DeleteTranslation(Guid TranslationId, Guid userId);
+		Task ChangeTranslationFavoriteStatus(Guid TranslationId, Guid userId);
+		Task EditTranslation(Guid TranslationId, Guid bookId, Guid userId, string DefaultLanguage, string DefaultSequnce, string TranslatedSequence, string TranslatedLangauge);
 	}
 }
