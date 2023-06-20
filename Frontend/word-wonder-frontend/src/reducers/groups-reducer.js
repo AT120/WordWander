@@ -1,17 +1,19 @@
 import { groupsApi } from "../api/groups-api"
 import { displayErrorActionCreator } from "./error-reducer"
 
-const SET_GROUPS = 0;
-const SET_STUDENTS = 1;
-const SET_GROUP_POSSIBLE_USERS="SET_GROUP_POSSIBLE_USERS"
+const SET_GROUPS = 0
+const SET_STUDENTS = 1
+const SET_GROUP_POSSIBLE_USERS = "SET_GROUP_POSSIBLE_USERS"
+const SET_USER_ROLE = 2
 
 const initialState = {
+    teacher: false,
     groups: [],
     students: {}
 }
-function setPossibleUsersToCurrentGroups(state, users, groupId){
+function setPossibleUsersToCurrentGroups(state, users, groupId) {
     state.groups.forEach(element => {
-        if(element.id==groupId){
+        if (element.id == groupId) {
             element.possibleUsers = users
             console.log("test")
             return
@@ -29,7 +31,9 @@ const groupsReducer = (state = initialState, action) => {
             return newState
         case SET_GROUP_POSSIBLE_USERS:
             setPossibleUsersToCurrentGroups(newState, action.users, action.groupId)
-            console.log(newState.groups)
+            return newState
+        case SET_USER_ROLE:
+            newState.teacher = (action.role === "Teacher")
             return newState
         default:
             return newState
@@ -40,23 +44,27 @@ const groupsReducer = (state = initialState, action) => {
 function setGroupsActionCreator(groups) {
     return { type: SET_GROUPS, groups: groups }
 }
-export function sendInvitationThunkCreator(groupId, userId, name){
-    return async (dispatch) =>{
-       await groupsApi.sendInvitation(groupId,userId)
-       await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
+export function sendInvitationThunkCreator(groupId, userId, name) {
+    return async (dispatch) => {
+        await groupsApi.sendInvitation(groupId, userId)
+        await groupsApi.getPossibleUsers(name, groupId).then(data => dispatch(setGroupPossibleUsersActionCreator(groupId, data)))
     }
 }
-export function setGroupPossibleUsersActionCreator(groupId, users){
-    return {type: SET_GROUP_POSSIBLE_USERS, groupId:groupId, users:users}
+export function setGroupPossibleUsersActionCreator(groupId, users) {
+    return { type: SET_GROUP_POSSIBLE_USERS, groupId: groupId, users: users }
 }
 
-export function setGroupPossibleUsersThunkCreator(name, groupId){
-    return async (dispatch) =>{
-       await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
+export function setGroupPossibleUsersThunkCreator(name, groupId) {
+    return async (dispatch) => {
+        await groupsApi.getPossibleUsers(name, groupId).then(data => dispatch(setGroupPossibleUsersActionCreator(groupId, data)))
     }
 }
 function setStudentsActionCreator(groupId, students) {
     return { type: SET_STUDENTS, groupId: groupId, students: students }
+}
+
+export function setUserRoleActionCreator(role) {
+    return { type: SET_USER_ROLE, role: role }
 }
 
 export function addGroupThunkCreator(groupName) {
@@ -65,13 +73,18 @@ export function addGroupThunkCreator(groupName) {
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось создать группу"))
         else
-            dispatch(loadTeacherGroupsThunkCreator())
+            dispatch(loadGroupsThunkCreator())
     }
 }
 
-export function loadTeacherGroupsThunkCreator() {
-    return async (dispatch) => {
-        const result = await groupsApi.loadTeacherGroups()
+export function loadGroupsThunkCreator() {
+    return async (dispatch, getState) => {
+        const teacher = getState().groupsReducer.teacher
+        
+        const result = (teacher) 
+            ? await groupsApi.loadTeacherGroups()
+            : await groupsApi.loadUserGroups()
+
         if (!result)
             dispatch(displayErrorActionCreator("Не удается загрузить ваш список групп"))
         else
@@ -86,11 +99,11 @@ export function deleteGroupThunkCreator(groupId) {
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось удалить группу"))
         else
-            dispatch(loadTeacherGroupsThunkCreator())
+            dispatch(loadGroupsThunkCreator())
     }
 }
 
-export function laodStudentsThunkCreator(groupId) {
+export function loadStudentsThunkCreator(groupId) {
     return async (dispatch) => {
         const result = await groupsApi.loadStudents(groupId)
         if (!result)

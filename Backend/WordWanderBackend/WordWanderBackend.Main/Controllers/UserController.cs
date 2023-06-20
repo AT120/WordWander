@@ -1,8 +1,10 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
+using WordWanderBackend.Main.Common.Models.DTO;
 
 namespace WordWanderBackend.Main.Controllers;
 
@@ -11,13 +13,15 @@ namespace WordWanderBackend.Main.Controllers;
 [Authorize]
 public class UserController : Controller
 {
-    private readonly IBookService _bookService;
+    private readonly IGroupService _groupService;
     private readonly IInvitationService _invitationService;
-    public UserController(IBookService bookService, IInvitationService invitationService)
+    public UserController(IGroupService groupService, IInvitationService invitationService)
     {
-        _bookService = bookService;
+        _groupService = groupService;
         _invitationService = invitationService;
     }
+
+
     [HttpGet("invitations")]
     public async Task<IActionResult> GetInvintations()
     {
@@ -51,6 +55,24 @@ public class UserController : Controller
         {
             return Problem(ex.Message, statusCode: 501);
 
+        }
+    }
+
+    [HttpGet("groups")]
+    public async Task<ActionResult<GroupPageDTO>> GetUsersGroups()
+    {
+        try
+        {
+            var groups = await _groupService.GetAllGroups(ClaimsManager.GetIdClaim(User), false);
+            return groups;
+        }
+        catch (BackendException be)
+        {
+            return Problem(be.UserMessage, statusCode: be.StatusCode);
+        }
+        catch
+        {
+            return Problem("Uknown server error", statusCode: 500);
         }
     }
 }

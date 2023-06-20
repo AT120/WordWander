@@ -3,10 +3,11 @@ import AddStudentButton from "./AddStudentButton";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { laodStudentsThunkCreator as loadStudentsThunkCreator } from "../../reducers/groups-reducer";
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
+import { loadStudentsThunkCreator as loadStudentsThunkCreator } from "../../reducers/groups-reducer";
 import UsersDropdown from "./UserDropdown";
-export default function GroupItem({ name, id }) {
+
+
+export default function GroupItemTeacher({ name, id }) {
     const students = useSelector(state => state.groupsReducer.students?.[id])
     const [addingIsOpen, setAddingIsOpen] = useState(false);
     const dispatch = useDispatch()
@@ -17,11 +18,13 @@ export default function GroupItem({ name, id }) {
 
     return (
 
-        <Accordion.Item eventKey={id}>
+        <Accordion.Item eventKey={id} key={id}>
             <Accordion.Header className="d-flex flex-row" >
                 <h4 className="d-flex flex-grow-1">{name}</h4>
 
-                {addingIsOpen && <UsersDropdown groupId={id}/>}
+                <div className="me-2">
+                    {addingIsOpen && <UsersDropdown groupId={id}/>}
+                </div>
 
                 <div className="me-5">
 

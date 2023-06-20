@@ -2,16 +2,21 @@ import Navigation from "../../components/common/Navigation";
 import './Groups.css'
 import groupsStore from "../../store/groupsStore";
 import { Provider } from 'react-redux';
-import GroupContainer from "../../components/groups/GroupContainer";
+import GroupContainerTeacher from "../../components/groups/GroupContainerTeacher";
 import { useOutletContext } from "react-router-dom";
+import GroupContainerUser from "../../components/groups/GroupContainerUser";
 
 export default function GroupsPage(params) {
     const role = useOutletContext()
-    console.log(role)
     return (
         <Provider store={groupsStore}>
             <Navigation />
-            <GroupContainer />
+            {
+                (role === "Teacher") 
+                    ? <GroupContainerTeacher />
+                    : <GroupContainerUser />
+            }
+            
         </Provider>
     )
 }

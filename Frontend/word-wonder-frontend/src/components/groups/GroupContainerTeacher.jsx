@@ -1,18 +1,19 @@
 import { Accordion } from "react-bootstrap";
-import GroupItem from "./GroupItem";
+import GroupItemTeacher from "./GroupItemTeacher";
 import AddGroupButton from "./AddGroupButton";
 import ErrorsListener from "../common/ErrorsListener";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadTeacherGroupsThunkCreator } from "../../reducers/groups-reducer";
+import { loadGroupsThunkCreator, setUserRoleActionCreator } from "../../reducers/groups-reducer";
 
 
-export default function GroupContainer() {
+export default function GroupContainerTeacher() {
     const groups = useSelector(state => state.groupsReducer.groups)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(loadTeacherGroupsThunkCreator())
+        dispatch(setUserRoleActionCreator("Teacher"))
+        dispatch(loadGroupsThunkCreator())
     }, [])
 
     return (
@@ -25,7 +26,16 @@ export default function GroupContainer() {
                 <Accordion>
                     {
                         groups.map((group) => {
-                            return <GroupItem style={{color:"black", display: 'flex', justifyContent: 'space-between', alignItems: 'center'}} id={group.id} name={group.name}/>
+                            return <GroupItemTeacher 
+                                style={{ 
+                                    color: "black", 
+                                    display: 'flex', 
+                                    justifyContent: 'space-between', 
+                                    alignItems: 'center'
+                                }}
+                                id={group.id}
+                                name={group.name}
+                            />
                         })
                     }
 

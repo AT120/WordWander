@@ -28,6 +28,18 @@ async function loadTeacherGroups() {
     }
 }
 
+async function loadUserGroups() {
+    try {
+        const resp = await instance.get('/users/groups')
+        if (resp.status !== 200)
+            return null
+        
+        return resp.data;
+    } catch {
+        return null
+    }
+}
+
 async function deleteGroup(groupId) {
     try {
         const resp = await instance.delete(`/teacher/groups/${groupId}`)
@@ -77,6 +89,6 @@ export const groupsApi = {
     deleteGroup,
     loadStudents,
     getPossibleUsers,
-    sendInvitation
-
+    sendInvitation,
+    loadUserGroups
 }
