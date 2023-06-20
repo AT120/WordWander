@@ -13,7 +13,7 @@ function setPossibleUsersToCurrentGroups(state, users, groupId){
     state.groups.forEach(element => {
         if(element.id==groupId){
             element.possibleUsers = users
-            console.log("test")
+
             return
         }
     });
@@ -29,7 +29,7 @@ const groupsReducer = (state = initialState, action) => {
             return newState
         case SET_GROUP_POSSIBLE_USERS:
             setPossibleUsersToCurrentGroups(newState, action.users, action.groupId)
-            console.log(newState.groups)
+
             return newState
         default:
             return newState

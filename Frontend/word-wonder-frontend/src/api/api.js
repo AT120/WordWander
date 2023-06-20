@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
+
 
 export const baseURL='http://localhost:5194/api/'
 
@@ -31,7 +31,6 @@ function postBook(title, description, file){
         }
     })
     .catch(error => {
-        console.log(error.response.data)
         return error.response.data
     });
 }

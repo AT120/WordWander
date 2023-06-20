@@ -150,7 +150,6 @@ export function setDeleteErrorActionCreator(id,error){
 export function postBookThunkCreator(title, description, file, page){
     return async (dispatch) =>{
     var statusCode = await bookApi.postBook(title, description, file).then(data=>{
-        console.log(data)
         if(data.status!=200){
             if(data.detail===undefined){
                 dispatch(errorToPostBookActionCreator("Enter book Title and add file!"))

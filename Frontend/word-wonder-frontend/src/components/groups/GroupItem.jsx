@@ -1,10 +1,9 @@
-import { Accordion, AccordionButton } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import AddStudentButton from "./AddStudentButton";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { laodStudentsThunkCreator as loadStudentsThunkCreator } from "../../reducers/groups-reducer";
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import UsersDropdown from "./UserDropdown";
 export default function GroupItem({ name, id }) {
     const students = useSelector(state => state.groupsReducer.students?.[id])

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useState } from "react";
+
 import { Dropdown, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { acceptInviteThunkCreator, loadInvitationsThunkCreator } from "../../reducers/invitation-reducer";
@@ -12,7 +12,6 @@ function InvitationDropdown() {
     }
     useEffect(()=>{
         dispatch(loadInvitationsThunkCreator())
-        console.log(state.invitations)
     },[])
 
     return (

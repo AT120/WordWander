@@ -6,7 +6,7 @@ import Footer from "../common/Footer";
 import storeDictionary from "../../store/dictionaryStore";
 
 function Dictionary() {
-	console.log("dictionary");
+
 	return (
 		<div>
 			<Navigation />
