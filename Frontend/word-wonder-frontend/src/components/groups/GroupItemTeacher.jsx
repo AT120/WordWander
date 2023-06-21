@@ -48,7 +48,7 @@ export default function GroupItemTeacher({ name, id }) {
                     (students.length == 0) ? 'В этой группе никого нет' :
                         students.map((student) => {
                             return (
-                                <div className="d-flex justify-content-between">
+                                <div className="d-flex justify-content-between mt-2">
                                 <a 
                                     className="border-bottom" 
                                     onClick={() => goToStudent(student.id, student.userName)} 
