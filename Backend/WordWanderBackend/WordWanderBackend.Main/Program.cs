@@ -24,7 +24,7 @@ services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
-            .WithOrigins("http://localhost:3000") //TODO: in config
+            .WithOrigins(builder.Configuration["ClientOrigin"])
     );
 });
 builder.AddDB<MainDbContext>("DbConnection");

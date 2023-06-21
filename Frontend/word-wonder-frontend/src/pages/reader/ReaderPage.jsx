@@ -17,11 +17,8 @@ function Reader() {
     return (
         <Provider store={storeReader}>
             <ReaderSettings />
-            {/* TODO: авторизация */}
             <TranslatePopup />
-            {/* <FileLoader /> */}
             <BookLoader fileId={location.state} />
-            {/* <BookNavigation /> */}
         </Provider>
     )
 }

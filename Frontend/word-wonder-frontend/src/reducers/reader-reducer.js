@@ -77,7 +77,6 @@ const readerReducer = (state = initialState, action) => {
             newState.dictionary = new Map(newState.dictionary);
             newState.dictionary.delete(action.word.toLowerCase())
             return newState
-        //TODO:
         default:
             return state
     }
