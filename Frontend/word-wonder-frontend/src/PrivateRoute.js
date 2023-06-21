@@ -6,7 +6,7 @@ import { checkAuth } from './api/api';
 import { Spinner } from 'react-bootstrap';
 
 
-const PrivateWrapper = () => {
+const PrivateWrapper = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
   
@@ -30,8 +30,12 @@ const PrivateWrapper = () => {
         </div>
       );
     }
-  
-    return isAuthenticated ? <Outlet context={isAuthenticated}/> : <Navigate to="/login" />;
+    if(props.needAuth){
+      return isAuthenticated ? <Outlet context={isAuthenticated}/> : <Navigate to="/login" />;
+    }
+    else{
+      return !isAuthenticated ? <Outlet/> : <Navigate to="/list" />;
+    }
   };
 
     export default PrivateWrapper
