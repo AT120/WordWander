@@ -34,7 +34,6 @@ export default function GroupContainerUser() {
 
             </div>
 
-            <AddGroupButton />
             <ErrorsListener />
         </div>
     )
