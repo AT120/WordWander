@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Nav} from 'react-bootstrap';
 import { NavLink, useOutletContext } from 'react-router-dom';
-import logo from './favicon.ico'
+import logo from './book.png'
 import { useEffect, useState } from 'react';
 import { authApi, checkAuth } from '../../api/api';
 import { useNavigate } from "react-router-dom";

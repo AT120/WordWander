@@ -17,10 +17,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes >
-      <Route path='/' element={<Navigate to='/login' />} />
-      <Route path='login' element={<LoginPage />} />
-      <Route path='registration' element={<RegistrationPage />} />
-      <Route element={<PrivateWrapper/>}>
+      <Route element={<PrivateWrapper needAuth={false}/>}>
+        <Route path='/' element={<Navigate to='/login' />} />
+        <Route path='login' element={<LoginPage />} />
+        <Route path='registration' element={<RegistrationPage />} />
+      </Route>
+      <Route element={<PrivateWrapper needAuth={true}/>}>
         <Route path='list' element={<BookPage/>} />
         <Route path='dictionary' element={<Dictionary />} />
         <Route path='member-info' element={<GroupMemberInfo />} />

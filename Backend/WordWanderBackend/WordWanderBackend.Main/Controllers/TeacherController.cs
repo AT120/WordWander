@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
@@ -231,5 +231,27 @@ namespace WordWanderBackend.Main.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("groups/{groupId}/delete/{userId}")]
+        public async Task<IActionResult> DeleteUserFromGroup(Guid groupId, Guid userId)
+        {
+            try
+            {
+               await _groupService.DeleteStudentFromGroup(ClaimsManager.GetIdClaim(User), groupId, userId);
+                return Ok();
+            }
+            catch(ArgumentNullException ex)
+            {
+                return Problem(ex.Message,statusCode:404);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 403);
+            }
+            catch(Exception ex)
+            {
+                return Problem(ex.Message, statusCode: 500);
+            }
+        }
+
     }
 }

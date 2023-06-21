@@ -41,7 +41,12 @@ const groupsReducer = (state = initialState, action) => {
     }
 }
 
-
+export function deleteUserFromGroupThunkCreator(userId, groupId){
+    return async (dispatch) => {
+        await groupsApi.deleteUserFromGroup(groupId, userId)
+         dispatch(loadStudentsThunkCreator(groupId))
+        }
+}
 function setGroupsActionCreator(groups) {
     return { type: SET_GROUPS, groups: groups }
 }
@@ -109,8 +114,9 @@ export function loadStudentsThunkCreator(groupId) {
         const result = await groupsApi.loadStudents(groupId)
         if (!result)
             dispatch(displayErrorActionCreator("Не удалось удалить группу"))
-        else
+        else{
             dispatch(setStudentsActionCreator(groupId, result.users))
+        }
     }
 }
 
