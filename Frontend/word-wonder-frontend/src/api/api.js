@@ -263,3 +263,8 @@ function acceptInvite(id, accept){
         console.log(error.response.data.error) 
     });
 }
+
+export const invitationsApi={
+    getInvitations: getInvitations,
+    acceptInvite: acceptInvite
+}

@@ -83,7 +83,7 @@ namespace WordWanderBackend.Main.BL.Services
 				DefaultLanguage=d.DefaultLanguage,
 				DefaultSequnce=d.DefaultSequnce,
 				TranslatedSequence=d.TranslatedSequence,
-				TranslatedLangauge=d.TranslatedLangauge,
+				TranslatedLangauge=d.TranslatedLanguage,
 				TranslationId=d.Id,
 				BookId=d.Book.Id,
 				BookTitle=d.Book.Name,
