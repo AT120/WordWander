@@ -19,8 +19,7 @@ async function loadBookList(studentId, name, sortBy) {
 
 async function loadDictionary(studentId) {
     try {
-        console.log(`load Dictionary ${studentId}`)
-        const resp =await instance.get(
+        const resp = await instance.get(
             `teacher/student/${studentId}/dictionary`,
         )
         if (!resp || resp.status !== 200)
@@ -34,13 +33,12 @@ async function loadDictionary(studentId) {
 }
 
 
-async function loadBookFile(id) {
+async function loadBookFile(bookId) {
     try {
-
-        const resp = await instance.get(`teacher/student/books/${id}/file`, { responseType: 'blob' })
+        const resp = await instance.get(`teacher/student/books/${bookId}/file`, { responseType: 'blob' })
         if (!resp || resp.status !== 200)
             return null 
-        return new File([resp.data], `book-${id}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка
+        return new File([resp.data], `book-${bookId}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка
     } catch {
         return null
     }

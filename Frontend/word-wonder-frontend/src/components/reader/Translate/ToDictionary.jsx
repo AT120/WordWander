@@ -3,8 +3,12 @@ import { addWordToDictThunkCreator, deleteWordFromDictThunkCreator } from "../..
 
 export default function ToDictionary({ width, height, word, translation }) {
     const dictionary = useSelector(state => state.readerReducer.dictionary)
+    const foreign = useSelector(state => state.readerReducer.foreign)
     const dispatch = useDispatch()
     
+    if (foreign)
+        return
+
     function addToDict(word, translation) {
         dispatch(addWordToDictThunkCreator(word, translation))
     }

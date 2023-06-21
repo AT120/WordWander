@@ -18,7 +18,7 @@ function Reader() {
         <Provider store={storeReader}>
             <ReaderSettings />
             <TranslatePopup />
-            <BookLoader fileId={location.state} />
+            <BookLoader fileId={location.state.id} foreign={location.state.foreign} />
         </Provider>
     )
 }

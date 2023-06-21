@@ -3,6 +3,7 @@ import { bookApi, dictApi } from "../api/api";
 import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 import { loadBook } from "../foliate-js/reader-import";
 import { displayErrorActionCreator } from "./error-reducer";
+import { memberInfoApi } from "../api/member-info-api";
 
 const CLEAN_UP = 100
 const GET_BOOK_FILE = 101
@@ -14,8 +15,10 @@ const SET_BOOK_VIEW = 106
 const LOAD_DICTIONARY = 107
 const ADD_TO_DICTIONARY = 108
 const REMOVE_FROM_DICTIONARY = 109
+const SET_FOREIGN = 110
 
 const initialState = {
+    foreign: false,
     dictionary: new Map(),
     bookId: null,
     bookView: 0,
@@ -77,9 +80,16 @@ const readerReducer = (state = initialState, action) => {
             newState.dictionary = new Map(newState.dictionary);
             newState.dictionary.delete(action.word.toLowerCase())
             return newState
+        case SET_FOREIGN:
+            newState.foreign = action.foreign
+            return newState
         default:
             return state
     }
+}
+
+export function setForeingActionCreator(foreign) {
+    return { type: SET_FOREIGN, foreign: foreign }
 }
 
 export function setNewFontSizeActionCreator(fontSize) {
@@ -121,7 +131,7 @@ function loadDictionaryActionCreator(dictionary) {
 
 function loadReaderParametersThunkCreator(guid) {
     return async (dispatch) => {
-        const params = await bookApi.loadReaderParameters(guid)
+        const params = await bookApi.loadReaderParameters(guid) //TODO: access to book parameters
         if (!params) {
             dispatch(displayErrorActionCreator("Не удалось восстановить настройки, будут использованы настройки по умолчанию"))
             return
@@ -150,7 +160,10 @@ function loadReaderParametersThunkCreator(guid) {
 }
 
 function loadBookDictionaryThunkCreator(guid) {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        if (getState().readerReducer.foreign)
+            return;
+
         const result = await dictApi.loadBookDictionary(guid)
         if (!result) {
             dispatch(displayErrorActionCreator(
@@ -169,10 +182,13 @@ function loadBookDictionaryThunkCreator(guid) {
 }
 
 export function loadBookThunkCreator(guid) {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         dispatch(loadReaderParametersThunkCreator(guid))
         dispatch(loadBookDictionaryThunkCreator(guid))
-        const bookFile = await bookApi.loadBook(guid)
+        const foreign = getState().readerReducer.foreign
+        const bookFile = (foreign) 
+            ? await bookApi.loadBook(guid) 
+            : await memberInfoApi.loadBookFile(guid)
 
         if (bookFile) {
             const book = await loadBook(bookFile)
@@ -192,10 +208,15 @@ export function updateProgressActionCreator(details) {
 
 export function sendReaderParametersThunkCreator() {
     return async (dispatch, getState) => {
+
         const state = getState()
         const bookId = state.readerReducer.bookId
-
+        const foreign = state.readerReducer.foreign
         const theme = state.readerReducer.theme
+
+        if (foreign)
+            return;
+
         let themeToApi = 0;
         if (theme === 'dark')
             themeToApi = 1
@@ -216,13 +237,16 @@ export function sendReaderParametersThunkCreator() {
 
 export function updateProgressThunkCreator(details) {
     return async (dispatch, getState) => {
+
         const state = getState()
         const fraction = state.readerReducer.progress.fraction
         const bookId = state.readerReducer.bookId
+        dispatch(updateProgressActionCreator(details))
+        if (state.readerReducer.foreign)
+            return;
         if (fraction && bookId && details.fraction && fraction !== details.fraction)
             bookApi.sendProgress(bookId, details.fraction)
 
-        dispatch(updateProgressActionCreator(details))
     }
 }
 
