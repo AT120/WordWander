@@ -1,5 +1,5 @@
 //import API
-
+import { memberInfoApi } from "../api/member-info-api";
 import { act } from "react-dom/test-utils";
 
 
@@ -18,10 +18,10 @@ const groupMemberInfoReducer = (state = initialState, action) => {
 	let newState = { ...state };
 
 	switch (action.type) {
-		case GET_MEMBER_DICTIONARY:
+		case GET_MEMBER_BOOKS:
 			newState.books = action.books;
 			return newState;
-		case GET_MEMBER_BOOKS:
+		case GET_MEMBER_DICTIONARY:
 			newState.translations = action.translations;
 			return newState;
 		default:
@@ -30,12 +30,31 @@ const groupMemberInfoReducer = (state = initialState, action) => {
 };
 
 export function getMemberDictionaryActionCreator(translations) {
+	console.log(translations)
 	return { type: GET_MEMBER_DICTIONARY, translations: translations };
 }
 
 export function getMemberBookActionCreator(books) {
 	return { type: GET_MEMBER_BOOKS, books: books };
 }
+
+//TODO: Actions for search params update
+
+export function getMemberDictionaryThunkCreator(studentId) {
+	return async (dispatch)=>{
+	await memberInfoApi.loadDictionary(studentId).then(data=>{
+		console.log(data)
+		dispatch(getMemberDictionaryActionCreator(data))
+	})
+	}
+}
+
+export function getMemberBookThunkCreator() {
+	
+}
+
+
+
 
 
 

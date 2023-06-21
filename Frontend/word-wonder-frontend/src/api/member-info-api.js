@@ -2,7 +2,7 @@ import { instance } from "./api";
 
 async function loadBookList(studentId, name, sortBy) {
     try {
-        const resp = instance.get(
+        const resp = await instance.get(
             `/teacher/student/${studentId}/books`,
             { name: name, sortedBy: sortBy }
         )
@@ -19,7 +19,8 @@ async function loadBookList(studentId, name, sortBy) {
 
 async function loadDictionary(studentId) {
     try {
-        const resp = instance.get(
+        console.log(`load Dictionary ${studentId}`)
+        const resp =await instance.get(
             `teacher/student/${studentId}/dictionary`,
         )
         if (!resp || resp.status !== 200)
@@ -36,7 +37,7 @@ async function loadDictionary(studentId) {
 async function loadBookFile(id) {
     try {
 
-        const resp = await instance.get(`teacher/student/${studentId}/dictionary`, { responseType: 'blob' })
+        const resp = await instance.get(`teacher/student/books/${id}/file`, { responseType: 'blob' })
         if (!resp || resp.status !== 200)
             return null 
         return new File([resp.data], `book-${id}.fb2`) //TODO: работает и так, но лучше получать расширение с бэка

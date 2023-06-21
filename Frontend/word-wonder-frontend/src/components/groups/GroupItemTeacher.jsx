@@ -20,7 +20,7 @@ export default function GroupItemTeacher({ name, id }) {
     }
 
     function goToStudent(id, name) {
-        navigate("/member-info", { id: id, name: name })
+        navigate("/member-info", { state:{id: id, name: name} })
     }
 
     return (
