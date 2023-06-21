@@ -31,7 +31,7 @@ const PrivateWrapper = (props) => {
       );
     }
     if(props.needAuth){
-      return isAuthenticated ? <Outlet context={isAuthenticated}/> : <Navigate to="/login" />;
+      return isAuthenticated!=false ? <Outlet context={isAuthenticated}/> : <Navigate to="/login" />;
     }
     else{
       return !isAuthenticated ? <Outlet/> : <Navigate to="/list" />;
