@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using ProjCommon.Exceptions;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Enums;
 using WordWanderBackend.Main.Common.Models.Settings;
 using WordWanderBackend.Main.DAL;
 
@@ -76,13 +77,18 @@ public class BookService : IBookService
 
         var book = await _dbcontext.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookId)
             ?? throw new BackendException(404, $"Book does not exist");
-
-        //TODO: check language existence
-        if (parameters.SourceLanguage != null)
+        
+        if (parameters.SourceLanguage != null) {
+            if (!Languages.LanguageDictionary.ContainsKey(parameters.SourceLanguage))
+                throw new BackendException(400, $"{parameters.SourceLanguage} is not a valid language code");
             book.SourceLanguageCode = parameters.SourceLanguage;
-        if (parameters.TargetLanguage != null)
+        }
+        if (parameters.TargetLanguage != null) {
+            if (!Languages.LanguageDictionary.ContainsKey(parameters.TargetLanguage))
+                throw new BackendException(400, $"{parameters.TargetLanguage} is not a valid language code");
             book.TargetLanguageCode = parameters.TargetLanguage;
-
+        }
+        
         user.PrefferedApi = parameters.TranslationApi;
         user.PrefferedColorTheme = parameters.ColorTheme;
         user.PrefferedFontSize = parameters.FontSize;
