@@ -1,9 +1,9 @@
-import { Accordion, AccordionButton } from "react-bootstrap";
+import { Accordion, AccordionButton, Button } from "react-bootstrap";
 import AddStudentButton from "./AddStudentButton";
 import DeleteGroupButton from "./DeleteGroupButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { loadStudentsThunkCreator as loadStudentsThunkCreator } from "../../reducers/groups-reducer";
+import { deleteUserFromGroupThunkCreator, loadStudentsThunkCreator as loadStudentsThunkCreator } from "../../reducers/groups-reducer";
 import UsersDropdown from "./UserDropdown";
 import { useNavigate } from 'react-router-dom';
 
@@ -23,6 +23,9 @@ export default function GroupItemTeacher({ name, id }) {
         navigate("/member-info", { id: id, name: name })
     }
 
+    const handleClick = async (userId, groupId) =>{
+       await dispatch(deleteUserFromGroupThunkCreator(userId,groupId))
+    }
     return (
 
         <Accordion.Item eventKey={id} key={id}>
@@ -46,11 +49,12 @@ export default function GroupItemTeacher({ name, id }) {
                         students.map((student) => {
                             return (
                                 <a 
-                                    className="border-bottom" 
+                                    className="border-bottom d-flex justify-content-between" 
                                     onClick={() => goToStudent(student.id, student.userName)} 
                                     style={{cursor: "pointer"}}
                                 >
                                     <h5>{student.userName}</h5>
+                                    <Button variant="danger" size="sm"  onClick={()=>handleClick(student.id, id)}>Исключить</Button>
                                 </a>
                             )
                         })

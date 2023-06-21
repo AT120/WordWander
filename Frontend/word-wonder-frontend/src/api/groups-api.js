@@ -83,6 +83,16 @@ async function sendInvitation(groupId, userId){
 
     });
 }
+async function deleteUserFromGroup(groupId, userId){
+    return instance.delete(`teacher/groups/${groupId}/delete/${userId}`).then(response => {
+        if(response.status ===200){
+            return response;
+        }
+    })
+    .catch(error => {
+
+    });
+}
 export const groupsApi = {
     addGroup,
     loadTeacherGroups,
@@ -90,5 +100,6 @@ export const groupsApi = {
     loadStudents,
     getPossibleUsers,
     sendInvitation,
-    loadUserGroups
+    loadUserGroups,
+    deleteUserFromGroup
 }
