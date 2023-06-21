@@ -12,5 +12,6 @@ namespace WordWanderBackend.Main.Common.Models.DTO
         public string Name { get; set; }
         public string Description { get; set; }
         public int CurrentPercent { get; set; }
+        public DateTime LastTime { get; set; }
     }
 }
