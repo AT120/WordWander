@@ -172,7 +172,7 @@ export function postBookThunkCreator(title, description, file, page) {
             console.log(data)
             if (data.status != 200) {
                 if (data.detail === undefined) {
-                    dispatch(errorToPostBookActionCreator("Enter book Title and add file!"))
+                    dispatch(errorToPostBookActionCreator("Введите название файла и добавьте файл!"))
                 }
                 else {
                     dispatch(errorToPostBookActionCreator(data.detail))
