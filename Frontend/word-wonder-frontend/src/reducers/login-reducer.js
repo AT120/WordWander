@@ -47,8 +47,8 @@ export function setLogedInActionCreator(status){
   return  {type:SET_LOG_IN, status:status}
 }
 export function loginThunkCretor(login, password){
-    return (dispatch) =>{
-        authApi.login(login, password).then(response=>{
+    return async (dispatch) =>{
+       await authApi.login(login, password).then(response=>{
             if(response.status===200){
                 dispatch(setLogedInActionCreator(true))
             }
