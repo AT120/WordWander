@@ -10,4 +10,5 @@ public interface IGroupService
     Task CreateGroup(string name, Guid teacherId);
     Task<IEnumerable<UserDTO>> GetGroupUsers(Guid groupId, Guid teacherId);
     Task DeleteStudentFromGroup(Guid teacherId, Guid groupId, Guid userId);
+    Task ExitGroup(Guid groupId, Guid userId);
 }

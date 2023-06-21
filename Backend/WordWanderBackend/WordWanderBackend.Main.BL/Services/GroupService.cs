@@ -165,4 +165,11 @@ public class GroupService : IGroupService
         group.Students.Remove(user);
         await _dbcontext.SaveChangesAsync();
     }
+
+    public async Task ExitGroup(Guid groupId, Guid userId)
+    {
+        await _dbcontext.StudentGroup
+            .Where(x => x.GroupId == groupId && x.UserId == userId)
+            .ExecuteDeleteAsync();
+    }
 }

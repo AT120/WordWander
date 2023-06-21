@@ -1,13 +1,19 @@
-import { useDispatch } from "react-redux"
-import { deleteGroupThunkCreator } from "../../reducers/groups-reducer"
+import { useDispatch, useSelector } from "react-redux"
+import { deleteGroupThunkCreator, exitGroupThunkCreator } from "../../reducers/groups-reducer"
 
 
 export default function DeleteGroupButton({ className, groupId }) {
+    const teacher = useSelector(state => state.groupsReducer.teacher)
     const dispatch = useDispatch()
     
+
     function clickHandler(event) {
         event.stopPropagation()
-        dispatch(deleteGroupThunkCreator(groupId))
+        if (teacher)
+            dispatch(deleteGroupThunkCreator(groupId))
+        else
+            dispatch(exitGroupThunkCreator(groupId))
+
     }
 
     return (

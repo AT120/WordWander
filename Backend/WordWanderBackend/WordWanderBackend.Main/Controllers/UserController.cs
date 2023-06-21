@@ -75,4 +75,22 @@ public class UserController : Controller
             return Problem("Uknown server error", statusCode: 500);
         }
     }
+
+    [HttpDelete("groups/{groupId}")]
+    public async Task<ActionResult> ExitGroup(Guid groupId)
+    {
+        try
+        {
+            await _groupService.ExitGroup(groupId, ClaimsManager.GetIdClaim(User));
+            return Ok();
+        }
+        catch (BackendException be)
+        {
+            return Problem(be.UserMessage, statusCode: be.StatusCode);
+        }
+        catch
+        {
+            return Problem("Uknown server error", statusCode: 500);
+        }
+    }
 }

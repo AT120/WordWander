@@ -41,11 +41,11 @@ const groupsReducer = (state = initialState, action) => {
     }
 }
 
-export function deleteUserFromGroupThunkCreator(userId, groupId){
+export function deleteUserFromGroupThunkCreator(userId, groupId) {
     return async (dispatch) => {
         await groupsApi.deleteUserFromGroup(groupId, userId)
-         dispatch(loadStudentsThunkCreator(groupId))
-        }
+        dispatch(loadStudentsThunkCreator(groupId))
+    }
 }
 function setGroupsActionCreator(groups) {
     return { type: SET_GROUPS, groups: groups }
@@ -60,9 +60,9 @@ export function setGroupPossibleUsersActionCreator(groupId, users) {
     return { type: SET_GROUP_POSSIBLE_USERS, groupId: groupId, users: users }
 }
 
-export function setGroupPossibleUsersThunkCreator(name, groupId){
-    return async (dispatch) =>{
-       await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
+export function setGroupPossibleUsersThunkCreator(name, groupId) {
+    return async (dispatch) => {
+        await groupsApi.getPossibleUsers(name, groupId).then(data => dispatch(setGroupPossibleUsersActionCreator(groupId, data)))
     }
 }
 function setStudentsActionCreator(groupId, students) {
@@ -86,8 +86,8 @@ export function addGroupThunkCreator(groupName) {
 export function loadGroupsThunkCreator() {
     return async (dispatch, getState) => {
         const teacher = getState().groupsReducer.teacher
-        
-        const result = (teacher) 
+
+        const result = (teacher)
             ? await groupsApi.loadTeacherGroups()
             : await groupsApi.loadUserGroups()
 
@@ -113,13 +113,22 @@ export function loadStudentsThunkCreator(groupId) {
     return async (dispatch) => {
         const result = await groupsApi.loadStudents(groupId)
         if (!result)
-            dispatch(displayErrorActionCreator("Не удалось удалить группу"))
-        else{
+            dispatch(displayErrorActionCreator("Не удалось загрузить участников группы"))
+        else {
             dispatch(setStudentsActionCreator(groupId, result.users))
         }
     }
 }
 
+export function exitGroupThunkCreator(groupId) {
+    return async (dispatch) => {
+        const result = await groupsApi.exitGroup(groupId)
+        if (!result)
+            dispatch(displayErrorActionCreator("Не удалось выйти из группы"))
+        else
+            dispatch(loadGroupsThunkCreator())
 
+    }
+}
 
 export default groupsReducer;

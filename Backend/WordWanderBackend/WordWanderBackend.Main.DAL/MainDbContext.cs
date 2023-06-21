@@ -10,16 +10,20 @@ namespace WordWanderBackend.Main.DAL
         public DbSet<DictionaryDbModel> Dictionary { get; set; }
         public DbSet<InvitationDbModel> Invations { get; set; }
         public DbSet<GroupDbModel> Groups { get; set; }
+        public DbSet<StudentGroupDbModel> StudentGroup { get; set; }
         public MainDbContext(DbContextOptions<MainDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+
+
             modelBuilder.Entity<GroupDbModel>()
             .HasMany(g => g.Students)
             .WithMany(u => u.UserGroups)
-            .UsingEntity(j => j.ToTable("GroupStudents"));
+            .UsingEntity<StudentGroupDbModel>();
+            
 
             modelBuilder.Entity<GroupDbModel>()
             .HasOne(g => g.Teacher)
