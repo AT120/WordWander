@@ -10,5 +10,6 @@ namespace WordWanderBackend.Main.Common.Models.Enums
     {
         NameAsc,
         NameDesc,
+        TimeDesc
     }
 }

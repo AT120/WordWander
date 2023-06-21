@@ -1,6 +1,6 @@
 import {Card, ProgressBar} from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
-import { deleteBookThunkCreator } from '../../reducers/book-list-reducer';
+import { deleteBookThunkCreator, setBookTimeActionCreator } from '../../reducers/book-list-reducer';
 import { useNavigate } from 'react-router-dom';
 
 function BookItem(props){
@@ -10,6 +10,7 @@ function BookItem(props){
         dispatch(deleteBookThunkCreator(props.id, props.page, props.searchName, props.sortBy))
     }
     const handleClickRead = ()=>{
+        dispatch(setBookTimeActionCreator(props.id))
         navigate("/reader",{state:props.id})
     }
     return(

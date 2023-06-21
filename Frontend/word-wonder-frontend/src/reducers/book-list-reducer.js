@@ -100,7 +100,11 @@ const bookListReducer = (state = initialState, action) => {
 export function loadBooksActionCreator(books, page, sortBy, searchName = "") {
     return { type: LOAD_BOOKS, books: books.books, page: page, numberOfPages: books.numberOfPages, searchName: searchName, sortBy: sortBy }
 }
-
+export function setBookTimeActionCreator(id){
+    return (dispatch) => {
+        bookApi.setBookTime(id)
+    }
+}
 export function loadBooksThunkCreator(page, name = null, sortBy = null) {
     return (dispatch) => {
         bookApi.getBooks(Math.max(page, 1), name, sortBy).then(data => {
