@@ -48,14 +48,16 @@ export default function GroupItemTeacher({ name, id }) {
                     (students.length == 0) ? 'В этой группе никого нет' :
                         students.map((student) => {
                             return (
+                                <div className="d-flex justify-content-between">
                                 <a 
-                                    className="border-bottom d-flex justify-content-between" 
+                                    className="border-bottom" 
                                     onClick={() => goToStudent(student.id, student.userName)} 
                                     style={{cursor: "pointer"}}
                                 >
-                                    <h5>{student.userName}</h5>
-                                    <Button variant="danger" size="sm"  onClick={()=>handleClick(student.id, id)}>Исключить</Button>
+                                    <h5>{student.userName}</h5>    
                                 </a>
+                                <Button variant="danger" size="sm"  onClick={()=>handleClick(student.id, id)}>Исключить</Button>
+                                </div>
                             )
                         })
 
