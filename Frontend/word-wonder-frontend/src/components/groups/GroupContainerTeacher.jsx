@@ -35,6 +35,7 @@ export default function GroupContainerTeacher() {
                                 }}
                                 id={group.id}
                                 name={group.name}
+                                key={group.id}
                             />
                         })
                     }

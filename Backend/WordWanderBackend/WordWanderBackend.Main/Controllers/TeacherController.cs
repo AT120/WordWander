@@ -4,6 +4,7 @@ using ProjCommon.Exceptions;
 using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Enums;
 
 namespace WordWanderBackend.Main.Controllers
 {
@@ -14,12 +15,21 @@ namespace WordWanderBackend.Main.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly IInvitationService _invitationService;
+        private readonly IBookService _bookService;
+        private readonly IBookListService _bookListService;
+        private readonly IDictionaryTranslationService _dictionaryService;
         public TeacherController(
             IInvitationService invitationService,
-            IGroupService groupService)
+            IGroupService groupService,
+            IBookService bookService,
+            IBookListService bookListService,
+            IDictionaryTranslationService dictionaryService)
         {
             _invitationService = invitationService;
             _groupService = groupService;
+            _bookService = bookService;
+            _bookListService = bookListService;
+            _dictionaryService = dictionaryService;
         }
 
         [HttpPost("invitations/{groupId}/{invitedId}")]
@@ -78,7 +88,7 @@ namespace WordWanderBackend.Main.Controllers
                         true
                     );
                 }
-                
+
                 return await _groupService.GetGroupPage(
                     page,
                     ClaimsManager.GetIdClaim(User),
@@ -160,5 +170,66 @@ namespace WordWanderBackend.Main.Controllers
             }
         }
 
+        [HttpGet("student/{studentId}/books")]
+        public async Task<ActionResult<BooksPaginationDTO>> GetStudentsBooks(
+            Guid studentId,
+            BookSortParam? sortedBy,
+            string name = "")
+        {
+            try
+            {
+                var books = await _bookListService.GetUserBooks(
+                    null,
+                    name,
+                    studentId,
+                    sortedBy,
+                    ClaimsManager.GetIdClaim(User));
+                return books;
+            }
+            catch (BackendException be)
+            {
+                return Problem(be.UserMessage, statusCode: be.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message, statusCode: 500);
+            }
+        }
+
+        [HttpGet("student/books/{bookId}/file")]
+        public async Task<IActionResult> GetStudentBook(Guid bookId)
+        {
+            try
+            {
+                var file = await _bookService.GetBookFile(bookId, ClaimsManager.GetIdClaim(User));
+                return new FileStreamResult(file, "application/octet-stream");
+            }
+            catch (BackendException be)
+            {
+                return Problem(be.UserMessage, statusCode: be.StatusCode);
+            }
+            catch
+            {
+                return Problem("Unknown server error", statusCode: 500);
+            }
+        }
+
+        [HttpGet("student/{studentId}/dictionary")]
+        public async Task<ActionResult<TranslationCollectonDTO>> GetStudentsDictionary(Guid studentId)
+        {
+            try
+            {
+                var dictionary = await _dictionaryService.GetDictionary(studentId, ClaimsManager.GetIdClaim(User));
+                return Ok(dictionary);
+            }
+            catch (BackendException be)
+            {
+                return Problem(be.UserMessage, statusCode: be.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

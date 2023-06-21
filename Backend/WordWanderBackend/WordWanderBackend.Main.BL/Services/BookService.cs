@@ -36,8 +36,12 @@ public class BookService : IBookService
 
     public async Task<FileStream> GetBookFile(Guid id, Guid userId)
     {
-        var book = await _dbcontext.Books.FirstOrDefaultAsync(x => x.UserId == userId && x.Id == id)
-            ?? throw new BackendException(404, $"This user {userId} haven't got book with this {id} id!");
+        var book = await _dbcontext.Books.FindAsync(id)
+            ?? throw new BackendException(404, $"You have no access to book ${id}");
+
+        if (book.UserId != userId && !await _dbcontext.AnyCommonGroup(book.UserId, userId))
+            throw new BackendException(404, $"You have no access to book ${id}");
+
 
         var filePath = Path.Combine(_storageSettings.FolderPath, book.Id.ToString() + book.Extension);
 
@@ -49,12 +53,12 @@ public class BookService : IBookService
     {
         var user = await _dbcontext.Users.FindAsync(userId)
             ?? throw new BackendException(403, "User does not exist");
-        
+
         var book = await _dbcontext.Books.FindAsync(bookId);
 
         if (book == null || book.UserId != userId)
             throw new BackendException(404, "Book does not exist");
-        
+
         return new ReaderParametersWithProgress
         {
             ColorTheme = user.PrefferedColorTheme,

@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Reader from './pages/reader/ReaderPage';
 import Dictionary from './components/dictionary/dictionary';
 import GroupsPage from './pages/groups/GroupsPage';
+import GroupMemberInfo from './components/group-member-info/groupMemberInfo';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -22,6 +23,7 @@ root.render(
       <Route element={<PrivateWrapper/>}>
         <Route path='list' element={<BookPage/>} />
         <Route path='dictionary' element={<Dictionary />} />
+        <Route path='member-info' element={<GroupMemberInfo />} />
         <Route path="groups" element={<GroupsPage />} />
       </Route>
       <Route path="reader" element={<Reader />} />
