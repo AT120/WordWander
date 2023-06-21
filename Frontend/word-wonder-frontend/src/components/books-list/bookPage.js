@@ -13,7 +13,7 @@ function BookPage() {
     <div>
       <Navigation/>
       <Provider  store={listStore}>
-      <div className="App">
+      <div className="App" style={{marginBottom:'40px'}}>
         <div style={{ marginTop: '60px' }} className='container'>
           <h3>Ваши книги</h3>
           <SearchElem />
