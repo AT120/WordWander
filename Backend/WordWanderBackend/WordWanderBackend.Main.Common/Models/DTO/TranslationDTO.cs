@@ -9,9 +9,9 @@ namespace WordWanderBackend.Main.Common.Models.DTO
 	public class TranslationDto
 	{
 		public Guid TranslationId { get; set; }
-		public Guid BookId { get; set; }
+		public Guid? BookId { get; set; }
 
-		public string BookTitle { get; set; }
+		public string? BookTitle { get; set; }
 		public DateTime? Created { get; set; }
 		public string DefaultLanguage { get; set; }
 		public string DefaultSequnce { get; set; }

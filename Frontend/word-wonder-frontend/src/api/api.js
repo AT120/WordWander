@@ -205,8 +205,25 @@ function deleteTranslation(translationId){
 function saveTranslation(){
 
 }
+
+
+function changeFavouriteStatus(tranlsationId){
+    console.log("changingFavouriteStatus")
+    return instance.put(`dictionary/favorite/${tranlsationId}`)
+    .then(response=>{
+        if(response.status===200){
+            return response;
+        }
+    })
+    .catch(error => {
+        console.log(error.response.data.error) 
+    });
+}
+
+
 export const dictApi={
     saveTranslation:saveTranslation,
     getDictionary:getDictionary,
-    deleteTranslation:deleteTranslation
+    deleteTranslation:deleteTranslation,
+    changeFavouriteStatus:changeFavouriteStatus
 }

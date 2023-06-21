@@ -47,6 +47,7 @@ function Translations() {
 										key={value.translationId}
 										creationDate={value.created}
 										bookTitle={value.bookTitle}
+										favourite={value.favourite}
 									/>
 								);
 							})

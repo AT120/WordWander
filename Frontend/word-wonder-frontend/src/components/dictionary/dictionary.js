@@ -11,7 +11,7 @@ function Dictionary() {
 		<div>
 			<Navigation />
 			<Provider store={storeDictionary}>
-				<div className="Dictionary">
+				<div className="Dictionary mb-5">
 					<div style={{ marginTop: "60px" }} className="container">
 						<div className="ms-2 pt-2 mb-3">
                         <h3><svg

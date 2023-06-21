@@ -1,66 +1,63 @@
 import { Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { deleteTranslationThunkCreator } from "../../reducers/dictionary-reducer";
+import FavouriteStar from "./FavouriteStar";
+import BookTitle from "./bookTitle";
+
+
 
 function TranslationItem(props) {
-
-    const dispatch = useDispatch()
+	const dispatch = useDispatch();
 
 	const deleteTranslation = () => {
 		console.log("deleting translation with id: " + props.translationId);
-        dispatch(deleteTranslationThunkCreator(props.translationId))
+		dispatch(deleteTranslationThunkCreator(props.translationId));
 	};
 
-     const timeSince= ()=> {
+	const timeSince = () => {
+		var seconds = Math.floor(
+			(new Date() - new Date(props.creationDate)) / 1000
+		);
+		console.log("timesince");
+		var interval = seconds / 31536000;
 
-        var seconds = Math.floor((new Date() - new Date(props.creationDate)) / 1000);
-      console.log("timesince")
-        var interval = seconds / 31536000;
-      
-        if (interval > 1) {
-            console.log( Math.floor(interval) + " years")
-          return Math.floor(interval) + " years ago";
-        }
-        interval = seconds / 2592000;
-        if (interval > 1) {
-            console.log( Math.floor(interval) + " months")
-          return Math.floor(interval) + " months ago";
-        }
-        interval = seconds / 86400;
-        if (interval > 1) {
-            console.log( Math.floor(interval) + " days")
-          return Math.floor(interval) + " days ago";
-        }
-        interval = seconds / 3600;
-        if (interval > 1) {
-            console.log(Math.floor(interval) + " hours")
-          return Math.floor(interval) + " hours ago";
-        }
-        interval = seconds / 60;
-        if (interval > 1) {
-            console.log(Math.floor(interval) + " minutes ago")
-          return Math.floor(interval) + " minutes ago";
-        }
-        console.log( Math.floor(seconds) + " seconds ago")
-        return Math.floor(seconds) + " seconds ago";
-      }
+		if (interval > 1) {
+			console.log(Math.floor(interval) + " years");
+			return Math.floor(interval) + " years ago";
+		}
+		interval = seconds / 2592000;
+		if (interval > 1) {
+			console.log(Math.floor(interval) + " months");
+			return Math.floor(interval) + " months ago";
+		}
+		interval = seconds / 86400;
+		if (interval > 1) {
+			console.log(Math.floor(interval) + " days");
+			return Math.floor(interval) + " days ago";
+		}
+		interval = seconds / 3600;
+		if (interval > 1) {
+			console.log(Math.floor(interval) + " hours");
+			return Math.floor(interval) + " hours ago";
+		}
+		interval = seconds / 60;
+		if (interval > 1) {
+			console.log(Math.floor(interval) + " minutes ago");
+			return Math.floor(interval) + " minutes ago";
+		}
+		console.log(Math.floor(seconds) + " seconds ago");
+		return Math.floor(seconds) + " seconds ago";
+	};
 
 	return (
 		<Card>
 			<Card.Header>
-				<div className="d-flex ">
-					<span className="me-auto align-self-center">
-						{" "}
-						Книга:
-						<strong>
-							{" "}
-							<u>{props.bookTitle}</u>
-						</strong>
-					</span>
-                    
-                    <div className="align-self-center">{timeSince()}</div>
+				<div className="d-flex">
+					<FavouriteStar favourite={props.favourite} translationId={props.translationId}/>
+					<BookTitle title={props.bookTitle}/>
+					<div className="align-self-center">{timeSince()}</div>
 					<button
-						className="btn btn-sm btn-outline-secondary border-0"
+						className="btn btn-sm btn-outline-secondary border-0 me-1"
 						onClick={deleteTranslation}
 					>
 						<svg
@@ -76,23 +73,20 @@ function TranslationItem(props) {
 					</button>
 				</div>
 			</Card.Header>
-			<Card.Body className="d-flex">
-				<div className="col">
-					<div className="col">
-						<div>
-							{" "}
+			<Card.Body>
+				<div className="row justify-content-around">
+					<div className="col-5">
+						<span>
 							Исходный язык <strong>{props.originalLanguage}</strong>
-						</div>
-						<div className="mt-2">{props.originalSequence}</div>
+						</span>
+						<textarea className="form-control mt-1" defaultValue={props.originalSequence} style={{height:35}} disabled/>
 					</div>
-
-					<hr />
-
-					<div className="col">
-						<div>
-							Язык перевода <strong>{props.translationLanguage}</strong>{" "}
-						</div>
-						<div className="mt-2">{props.translatedSequence}</div>
+					<div className="vr px-0 col-2" />
+					<div className="col-5">
+						<span>
+							Язык перевода <strong>{props.translationLanguage}</strong>
+						</span>
+						<textarea className="form-control mt-1" defaultValue={props.translatedSequence} style={{height:35}} disabled/>
 					</div>
 				</div>
 			</Card.Body>
@@ -101,7 +95,3 @@ function TranslationItem(props) {
 }
 
 export default TranslationItem;
-/*
-            <span>{props.creationDate}</span>
-            <span>{props.translationId}</span>
-*/

@@ -21,19 +21,27 @@ namespace WordWanderBackend.Main.BL.Services
 		{
 			_context = context;
 		}
-		public async Task SaveTranslationToDictionary(Guid bookId , Guid userId,string DefaultLanguage, string DefaultSequnce,string TranslatedSequence, string TranslatedLangauge)
+		public async Task SaveTranslationToDictionary(Guid? bookId , Guid userId,string DefaultLanguage, string DefaultSequnce,string TranslatedSequence, string TranslatedLangauge)
 		{
-			var book = await _context.Books.FindAsync(bookId);
+
+			var user = await _context.Users.FindAsync(userId);
+
+			BookDbModel book = null;
+			if (bookId != null) { 
+			  book = await _context.Books.FindAsync(bookId);
 			
 			if (book == null) {
 				throw new ArgumentException($"There is no book with this {bookId} id!");
 			}
-			var user = await _context.Users.FindAsync(userId);
-			//Check if user have book with such bookId
-			if (!await _context.Books.AnyAsync(b=>b.Id.Equals(bookId)&& b.UserId.Equals(userId)))
-			{
-				throw new ArgumentException($"The user doesn't have a book with this {bookId} id!");
+
+				if (!await _context.Books.AnyAsync(b => b.Id.Equals(bookId) && b.UserId.Equals(userId)))
+				{
+					throw new ArgumentException($"The user doesn't have a book with this {bookId} id!");
+				}
 			}
+			
+			//Check if user have book with such bookId
+
 			
 			if (!Languages.languages.Any(l => l.Language.Equals(DefaultLanguage)))
 			{
@@ -76,8 +84,6 @@ namespace WordWanderBackend.Main.BL.Services
 		public async Task<TranslationCollectonDTO> GetDictionary(Guid userId)
 		{
 
-			//TODO: Добавить сортировку dictionary Favourite true/false
-
 			List<TranslationDto>? tranlations = await _context.Dictionary.Where(d=>d.User.Id.Equals(userId)).Include(d=>d.Book).OrderByDescending(d=>d.CreationDate).OrderByDescending(d=>d.Favourite).Select(d=> new TranslationDto
 			{
 				DefaultLanguage=d.DefaultLanguage,
@@ -109,7 +115,7 @@ namespace WordWanderBackend.Main.BL.Services
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task EditTranslation(Guid TranslationId, Guid bookId, Guid userId, string DefaultLanguage, string DefaultSequnce, string TranslatedSequence, string TranslatedLangauge)
+		public async Task EditTranslation(Guid TranslationId, Guid? bookId, Guid userId, string DefaultLanguage, string DefaultSequnce, string TranslatedSequence, string TranslatedLangauge)
 		{
 			var translation = await _context.Dictionary.FirstOrDefaultAsync(d => d.Id.Equals(TranslationId) && d.User.Id.Equals(userId));
 
