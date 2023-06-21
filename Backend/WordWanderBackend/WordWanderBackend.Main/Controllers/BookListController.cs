@@ -27,7 +27,6 @@ namespace WordWonderBackend.Main.Controllers
         {
             try
             {
-
                 var books = await _bookListService.GetUserBooks(page, name, ClaimsManager.GetIdClaim(User), sortedBy);
                 return Ok(books);
             }
@@ -41,8 +40,6 @@ namespace WordWonderBackend.Main.Controllers
         {
             try
             {
-                var cookie = Request.Cookies[".AspNetCore.Cookies"];
-                Console.WriteLine(cookie);
                 await _bookListService.PostBookToList(file, title, description, ClaimsManager.GetIdClaim(User));
                 return Ok();
             }

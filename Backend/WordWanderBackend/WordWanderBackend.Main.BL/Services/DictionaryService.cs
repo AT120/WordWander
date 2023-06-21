@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using ProjCommon.Exceptions;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
 using WordWanderBackend.Main.Common.Models.Enums;
@@ -75,8 +76,10 @@ namespace WordWanderBackend.Main.BL.Services
         }
 
 
-        public async Task<TranslationCollectonDTO> GetDictionary(Guid userId)
+        public async Task<TranslationCollectonDTO> GetDictionary(Guid userId, Guid? teacherId = null)
         {
+            if (teacherId != null && !await _context.AnyCommonGroup(userId, teacherId.Value))
+                throw new BackendException(403, "Teacher can not access requested user");
 
 			List<TranslationDto>? tranlations = await _context.Dictionary.Where(d=>d.User.Id.Equals(userId)).Include(d=>d.Book).OrderByDescending(d=>d.CreationDate).OrderByDescending(d=>d.Favourite).Select(d=> new TranslationDto
 			{

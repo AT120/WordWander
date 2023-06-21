@@ -40,5 +40,14 @@ namespace WordWanderBackend.Main.DAL
                 .Property(u => u.PrefferedFontSize)
                 .HasDefaultValue(12);     
         }
+
+        public async Task<bool> AnyCommonGroup(Guid studentId, Guid teacherId)
+        {
+            return await Users
+                .Where(u => u.Id == studentId)
+                .AnyAsync(u => 
+                    u.UserGroups.Any(g => g.TeacherId == teacherId)
+                );
+        }
     }
 }
