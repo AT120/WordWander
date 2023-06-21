@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -143,5 +144,25 @@ public class GroupService : IGroupService
             Id = s.Id,
             UserName = s.UserName
         });
+    }
+
+    public async Task DeleteStudentFromGroup(Guid teacherId, Guid groupId, Guid userId)
+    {
+        var group = await _dbcontext.Groups.Include(c=>c.Students).FirstOrDefaultAsync(x => x.Id == groupId);
+        if (group == null)
+        {
+            throw new ArgumentNullException($"There is no group with this {groupId} id!");
+        }
+        if (group.TeacherId != teacherId)
+        {
+            throw new InvalidOperationException($"You can't edit group with this {groupId} id");
+        }
+        var user = await _dbcontext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        if (user == null)
+        {
+            throw new ArgumentNullException($"There is no user with this {userId} id!");
+        }
+        group.Students.Remove(user);
+        await _dbcontext.SaveChangesAsync();
     }
 }
