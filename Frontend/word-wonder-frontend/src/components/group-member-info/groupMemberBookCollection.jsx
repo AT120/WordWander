@@ -6,35 +6,20 @@ import { getMemberBookThunkCreator } from "../../reducers/group-member-info-redu
 import SearchElem from "../books-list/search";
 import Books from "../books-list/books";
 import PaginationBar from "../books-list/paginationBar";
+import { setStudentIdActionCreator } from "../../reducers/book-list-reducer";
 
 
-export default  function GroupMemberBookCollection(){
-    console.log("groupMemberBookCollection")
-    const state =useSelector((state)=>state.groupMemberInfoReducer);
+export default function GroupMemberBookCollection({ studentId }) {
     const dispatch = useDispatch();
-    
+    dispatch(setStudentIdActionCreator(studentId))
 
-
-
-    const location = useLocation()
-
-    
-    
-    console.log(state)
-
-
-
-return(
-<div>
-<div className="App">
-        <div style={{ marginTop: '60px' }} className='container'>
-          <SearchElem />
-          <Books/>
-          <PaginationBar/>
-          </div>  
-      </div>
-</div>
-)
+    return (
+        <div>
+            <SearchElem />
+            <Books />
+            <PaginationBar />
+        </div>
+    )
 
 }
 

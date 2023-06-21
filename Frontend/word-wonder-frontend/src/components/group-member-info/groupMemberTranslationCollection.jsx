@@ -20,7 +20,7 @@ export default function GroupMemberTranslationCollection(){
 		!Array.isArray(state.translations) ||
 		!state.translations.length
 	) {
-        console.log(state)
+        // console.log(state)
 		return (
 			<div className="d-flex  position-relative top-50 start-50 translate-middle justify-content-center">
                 <div >
@@ -30,7 +30,7 @@ export default function GroupMemberTranslationCollection(){
 		);
         }
         else{
-            console.log(state)
+            // console.log(state)
             return(
             <div>
                 <div className="card-deck">

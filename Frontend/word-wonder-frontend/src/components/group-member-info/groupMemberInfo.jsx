@@ -9,10 +9,7 @@ import Footer from "../common/Footer";
 
 export default function GroupMemberInfo() {
 	const role = useOutletContext();
-	//redirect
-	//role !teacher - redirect  -> groups
     const location = useLocation()
-    //console.log(`location: `, location)  
 
 	const navigate = useNavigate();
 	if (role !== "Teacher") navigate("/groups");

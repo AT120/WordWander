@@ -15,6 +15,7 @@ function BookPage() {
       <Provider  store={listStore}>
       <div className="App">
         <div style={{ marginTop: '60px' }} className='container'>
+          <h3>Ваши книги</h3>
           <SearchElem />
           <Books/>
           <PaginationBar/>

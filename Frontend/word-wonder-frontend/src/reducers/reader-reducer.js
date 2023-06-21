@@ -3,7 +3,7 @@ import { bookApi, dictApi } from "../api/api";
 import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 import { loadBook } from "../foliate-js/reader-import";
 import { displayErrorActionCreator } from "./error-reducer";
-import { memberInfoApi } from "../api/member-info-api";
+import  memberInfoApi  from "../api/member-info-api";
 
 const CLEAN_UP = 100
 const GET_BOOK_FILE = 101
@@ -187,8 +187,8 @@ export function loadBookThunkCreator(guid) {
         dispatch(loadBookDictionaryThunkCreator(guid))
         const foreign = getState().readerReducer.foreign
         const bookFile = (foreign) 
-            ? await bookApi.loadBook(guid) 
-            : await memberInfoApi.loadBookFile(guid)
+            ? await memberInfoApi.loadBookFile(guid)
+            : await bookApi.loadBook(guid) 
 
         if (bookFile) {
             const book = await loadBook(bookFile)

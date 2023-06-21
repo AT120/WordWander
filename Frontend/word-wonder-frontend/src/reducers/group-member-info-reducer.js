@@ -1,5 +1,5 @@
 //import API
-import { memberInfoApi } from "../api/member-info-api";
+import memberInfoApi  from "../api/member-info-api";
 import { act } from "react-dom/test-utils";
 
 
@@ -30,7 +30,7 @@ const groupMemberInfoReducer = (state = initialState, action) => {
 };
 
 export function getMemberDictionaryActionCreator(translations) {
-	console.log(translations)
+	// console.log(translations)
 	return { type: GET_MEMBER_DICTIONARY, translations: translations };
 }
 
@@ -43,7 +43,7 @@ export function getMemberBookActionCreator(books) {
 export function getMemberDictionaryThunkCreator(studentId) {
 	return async (dispatch)=>{
 	await memberInfoApi.loadDictionary(studentId).then(data=>{
-		console.log(data)
+		// console.log(data)
 		dispatch(getMemberDictionaryActionCreator(data))
 	})
 	}
