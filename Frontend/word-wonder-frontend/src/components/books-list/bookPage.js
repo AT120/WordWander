@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import listStore from '../../store/listStore';
 import Navigation from '../common/Navigation';
 import Footer from '../common/Footer';
-import { useOutletContext } from 'react-router-dom';
+
 function BookPage() {
   return (
     <div>

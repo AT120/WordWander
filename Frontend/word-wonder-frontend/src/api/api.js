@@ -1,6 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-export const baseURL = 'http://localhost:5194/api/'
+
+export const baseURL='http://localhost:5194/api/'
 
 export const instance = axios.create({
     baseURL: baseURL,
@@ -25,13 +26,12 @@ function postBook(title, description, file) {
         .then(response => {
             if (response.status === 200) {
 
-                return response;
-            }
-        })
-        .catch(error => {
-            console.log(error.response.data)
-            return error.response.data
-        });
+            return response;
+        }
+    })
+    .catch(error => {
+        return error.response.data
+    });
 }
 function deleteBook(id) {
     return instance.delete(`books/delete/${id}`)

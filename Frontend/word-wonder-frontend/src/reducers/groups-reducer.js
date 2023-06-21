@@ -15,7 +15,7 @@ function setPossibleUsersToCurrentGroups(state, users, groupId) {
     state.groups.forEach(element => {
         if (element.id == groupId) {
             element.possibleUsers = users
-            console.log("test")
+
             return
         }
     });
@@ -31,6 +31,7 @@ const groupsReducer = (state = initialState, action) => {
             return newState
         case SET_GROUP_POSSIBLE_USERS:
             setPossibleUsersToCurrentGroups(newState, action.users, action.groupId)
+
             return newState
         case SET_USER_ROLE:
             newState.teacher = (action.role === "Teacher")
@@ -54,9 +55,9 @@ export function setGroupPossibleUsersActionCreator(groupId, users) {
     return { type: SET_GROUP_POSSIBLE_USERS, groupId: groupId, users: users }
 }
 
-export function setGroupPossibleUsersThunkCreator(name, groupId) {
-    return async (dispatch) => {
-        await groupsApi.getPossibleUsers(name, groupId).then(data => dispatch(setGroupPossibleUsersActionCreator(groupId, data)))
+export function setGroupPossibleUsersThunkCreator(name, groupId){
+    return async (dispatch) =>{
+       await groupsApi.getPossibleUsers(name,groupId).then(data=>dispatch(setGroupPossibleUsersActionCreator(groupId,data)))
     }
 }
 function setStudentsActionCreator(groupId, students) {

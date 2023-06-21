@@ -44,7 +44,7 @@ const readerReducer = (state = initialState, action) => {
             newState.book = 0
             return newState
         case GET_BOOK_FILE:
-            console.log(state.bookFile)
+
             return state
         case SET_BOOK_VIEW:
             newState.bookView = action.bookView
