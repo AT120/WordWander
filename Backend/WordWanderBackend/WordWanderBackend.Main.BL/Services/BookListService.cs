@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Aspose.Words;
-using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
+using ProjCommon.Exceptions;
+using WordWanderBackend.Main.Common.Const;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
 using WordWanderBackend.Main.Common.Models.Enums;
+using WordWanderBackend.Main.Common.Models.Settings;
 using WordWanderBackend.Main.DAL;
 using WordWanderBackend.Main.DAL.Models;
-using Aspose.Words.WebExtensions;
-using WordWanderBackend.Main.Common.Models.Settings;
-using Microsoft.Extensions.Options;
-using WordWanderBackend.Main.Common.Const;
-using FB2Library;
-using System.IO;
-using SkiaSharp;
-using System.Net.Mime;
 
 namespace WordWanderBackend.Main.BL.Services
 {
@@ -30,8 +25,16 @@ namespace WordWanderBackend.Main.BL.Services
         }
 
 
-        public async Task<BooksPaginationDTO> GetUserBooks(int page, string name, Guid userId, BookSortParam? sort)
+        public async Task<BooksPaginationDTO> GetUserBooks(
+            int? page,
+            string name,
+            Guid userId,
+            BookSortParam? sort,
+            Guid? teacherId = null)
         {
+            if (teacherId != null && !await _context.AnyCommonGroup(userId, teacherId.Value))
+                throw new BackendException(403, "Teacher can not access requested user");
+
             int pageCount;
             var query = _context.Books.Where(x => Regex.IsMatch(x.Name, name) && x.UserId == userId).AsQueryable();
             int bookCount = await query.CountAsync();
@@ -56,10 +59,21 @@ namespace WordWanderBackend.Main.BL.Services
                 case null:
                     break;
             }
-            var books = await query.Skip(_pageSize * (page - 1))
-                        .Take(_pageSize)
-                        .Select(x => x.ToShortDTO())
-                        .ToListAsync();
+
+            List<BookShortDTO> books = null;
+
+            if (page != null)
+            {
+                books = await query.Skip(_pageSize * (page.Value - 1))
+                            .Take(_pageSize)
+                            .Select(x => x.ToShortDTO())
+                            .ToListAsync();
+            }
+            else
+            {
+                books = await query.Select(x => x.ToShortDTO()).ToListAsync();
+                pageCount = 1;
+            }
 
             return new BooksPaginationDTO(books, pageCount);
         }
