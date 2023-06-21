@@ -50,7 +50,9 @@ export function getMemberDictionaryThunkCreator(studentId) {
 }
 
 export function getMemberBookThunkCreator() {
-	
+	// return async (dispatch) =>{
+	// 	await 
+	// }
 }
 
 
