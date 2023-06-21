@@ -20,7 +20,7 @@ export default function GroupItemTeacher({ name, id }) {
     }
 
     const goToStudent = () => {
-        navigate("/member-info", { id: id })
+        navigate("/member-info", { state: {id,name}})
     }
 
     return (
@@ -45,7 +45,7 @@ export default function GroupItemTeacher({ name, id }) {
                         (students.length == 0) ? 'В этой группе никого нет' :
                             students.map((student) => {
                                 return (
-                                    <a className="border-bottom" onClick={goToStudent} style={{cursor: "pointer"}}>
+                                    <a className="border-bottom" onClick={goToStudent} style={{cursor: "pointer"}} key={id}>
                                         <h5>{student.userName}</h5>
                                     </a>
                                 )
