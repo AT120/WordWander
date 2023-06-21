@@ -56,7 +56,7 @@ public class BookService : IBookService
 
         var book = await _dbcontext.Books.FindAsync(bookId);
 
-        if (book == null || book.UserId != userId)
+        if (book == null || (book.UserId != userId && !await _dbcontext.AnyCommonGroup(book.UserId, userId)))
             throw new BackendException(404, "Book does not exist");
 
         return new ReaderParametersWithProgress
