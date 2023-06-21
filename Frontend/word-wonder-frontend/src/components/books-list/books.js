@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  loadBooksThunkCreator, setLocationStateActionCreator } from "../../reducers/book-list-reducer";
+import {  loadBooksThunkCreator} from "../../reducers/book-list-reducer";
 import BookItem from "./bookItem";
 import { useLocation } from "react-router-dom";
 function Books(){
