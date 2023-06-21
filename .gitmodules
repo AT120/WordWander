@@ -1,0 +1,6 @@
+[submodule "Backend/LibreTranslate/LibreTranslate"]
+	path = Backend/LibreTranslate/LibreTranslate
+	url = https://github.com/LibreTranslate/LibreTranslate.git
+[submodule "Frontend/word-wonder-frontend/src/foliate-js"]
+	path = Frontend/word-wonder-frontend/src/foliate-js
+	url = https://github.com/AT120/foliate-js.git
