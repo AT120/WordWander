@@ -15,7 +15,7 @@ namespace WordWanderBackend.Main.DAL.Models
 	public string DefaultLanguage { get; set; }
 	public string DefaultSequnce { get; set; }
 	public string? TranslatedSequence { get; set; }
-	public string TranslatedLangauge { get; set; }
+	public string TranslatedLanguage { get; set; }
 	public bool Favourite {get; set; } 
 
 

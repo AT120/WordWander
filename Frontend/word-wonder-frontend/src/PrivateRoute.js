@@ -13,7 +13,7 @@ const PrivateWrapper = () => {
     useEffect(() => {
       checkAuth.checkLogin()
         .then(data => {
-          setIsAuthenticated(data !== undefined);
+          setIsAuthenticated(data);
           setIsLoading(false);
         })
         .catch(error => {
@@ -31,7 +31,7 @@ const PrivateWrapper = () => {
       );
     }
   
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
+    return isAuthenticated ? <Outlet context={isAuthenticated}/> : <Navigate to="/login" />;
   };
 
     export default PrivateWrapper

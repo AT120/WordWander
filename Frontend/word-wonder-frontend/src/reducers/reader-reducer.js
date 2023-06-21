@@ -1,7 +1,8 @@
 import { getReaderCss } from "../components/reader/BookLoader";
-import { bookApi } from "../api/api";
+import { bookApi, dictApi } from "../api/api";
 import { setNewTranslateApiActionCreator, setSourceLanguageActionCreator, setTargetLanguageActionCreator } from "./translate-reducer";
 import { loadBook } from "../foliate-js/reader-import";
+import { displayErrorActionCreator } from "./error-reducer";
 
 const CLEAN_UP = 100
 const GET_BOOK_FILE = 101
@@ -10,8 +11,12 @@ const SET_FONT_SIZE = 103
 const UPDATE_PROGRESS = 104
 const SET_THEME = 105
 const SET_BOOK_VIEW = 106
+const LOAD_DICTIONARY = 107
+const ADD_TO_DICTIONARY = 108
+const REMOVE_FROM_DICTIONARY = 109
 
 const initialState = {
+    dictionary: new Map(),
     bookId: null,
     bookView: 0,
     book: 0,
@@ -61,6 +66,18 @@ const readerReducer = (state = initialState, action) => {
         case SET_THEME:
             newState.theme = action.theme
             return newState
+        case LOAD_DICTIONARY:
+            newState.dictionary = new Map(action.dictionary);
+            return newState
+        case ADD_TO_DICTIONARY:
+            newState.dictionary = new Map(newState.dictionary);
+            newState.dictionary.set(action.word.toLowerCase(), [action.translation, action.id])
+            return newState;
+        case REMOVE_FROM_DICTIONARY:
+            newState.dictionary = new Map(newState.dictionary);
+            newState.dictionary.delete(action.word.toLowerCase())
+            return newState
+        //TODO:
         default:
             return state
     }
@@ -86,38 +103,85 @@ export function cleanupActionCreator() {
     return { type: CLEAN_UP }
 }
 
-export function loadBookThunkCreator(guid) {
+export function addToDictionaryActionCreator(id, word, translation) {
+    return {
+        type: ADD_TO_DICTIONARY,
+        word: word,
+        translation: translation,
+        id: id
+    }
+}
+
+export function deleteFromDictionaryActionCreator(word) {
+    return { type: REMOVE_FROM_DICTIONARY, word: word }
+}
+
+function loadDictionaryActionCreator(dictionary) {
+    return { type: LOAD_DICTIONARY, dictionary: dictionary }
+}
+
+function loadReaderParametersThunkCreator(guid) {
     return async (dispatch) => {
         const params = await bookApi.loadReaderParameters(guid)
-        const bookFile = await bookApi.loadBook(guid) //TODO: race condition
+        if (!params) {
+            dispatch(displayErrorActionCreator("Не удалось восстановить настройки, будут использованы настройки по умолчанию"))
+            return
+        }
 
-        if (params) {
+        if (params.targetLanguage)
+            dispatch(setTargetLanguageActionCreator(params.targetLanguage))
+        if (params.sourceLanguage)
+            dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
 
-            if (params.targetLanguage)
-                dispatch(setTargetLanguageActionCreator(params.targetLanguage))
-            if (params.sourceLanguage)
-                dispatch(setSourceLanguageActionCreator(params.sourceLanguage))
+        dispatch(setNewFontSizeActionCreator(params.fontSize))
+        dispatch(setNewTranslateApiActionCreator(params.translationApi))
+        dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100, shouldBeUpdated: true }))
+        switch (params.colorTheme) {
+            case 0:
+                dispatch(updateThemeActionCreator('light dark'))
+                break;
+            case 1:
+                dispatch(updateThemeActionCreator('dark'))
+                break;
+            case 2:
+                dispatch(updateThemeActionCreator('light'))
+                break;
+        }
+    }
+}
 
-            dispatch(setNewFontSizeActionCreator(params.fontSize))
-            dispatch(setNewTranslateApiActionCreator(params.translationApi))
-            dispatch(updateProgressActionCreator({ fraction: params.readingProgress / 100, shouldBeUpdated: true }))
-            switch (params.colorTheme) {
-                case 0:
-                    dispatch(updateThemeActionCreator('light dark'))
-                    break;
-                case 1:
-                    dispatch(updateThemeActionCreator('dark'))
-                    break;
-                case 2:
-                    dispatch(updateThemeActionCreator('light'))
-                    break;
-            }
+function loadBookDictionaryThunkCreator(guid) {
+    return async (dispatch) => {
+        const result = await dictApi.loadBookDictionary(guid)
+        if (!result) {
+            dispatch(displayErrorActionCreator(
+                "Не удалось загрузить словарь для книги"
+            ))
 
         }
+        else
+            dispatch(loadDictionaryActionCreator(
+                result.dictionary.map((val) => [
+                    val['originalString'].toLowerCase(),
+                    [val['translatedString'], val['id']]
+                ])
+            ))
+    }
+}
+
+export function loadBookThunkCreator(guid) {
+    return async (dispatch) => {
+        dispatch(loadReaderParametersThunkCreator(guid))
+        dispatch(loadBookDictionaryThunkCreator(guid))
+        const bookFile = await bookApi.loadBook(guid)
 
         if (bookFile) {
             const book = await loadBook(bookFile)
             dispatch(setBookActionCreator(book, guid))
+        } else {
+            dispatch(displayErrorActionCreator(
+                "Не удалось загрузить книгу"
+            ))
         }
 
     }
@@ -160,6 +224,39 @@ export function updateProgressThunkCreator(details) {
             bookApi.sendProgress(bookId, details.fraction)
 
         dispatch(updateProgressActionCreator(details))
+    }
+}
+
+export function addWordToDictThunkCreator(word, translation) {
+    return async (dispatch, getState) => {
+        const state = getState()
+        const result = await dictApi.saveTranslation({
+            bookId: state.readerReducer.bookId,
+            defaultLanguage: state.translateReducer.sourceLanguage,
+            translatedLanguage: state.translateReducer.targetLanguage,
+            defaultSequence: word,
+            translatedSequence: translation
+        })
+        if (!result) {
+            dispatch(displayErrorActionCreator(
+                "Не удалось добавить слово в словарь"
+            ))
+        } else {
+            dispatch(addToDictionaryActionCreator(result, word, translation))
+        }
+    }
+}
+
+export function deleteWordFromDictThunkCreator(id, word) {
+    return async (dispatch, getState) => {
+        const result = await dictApi.deleteTranslation(id)
+        if (!result) {
+            dispatch(displayErrorActionCreator(
+                "Не удалось удалить слово из словаря"
+            ))
+        } else {
+            dispatch(deleteFromDictionaryActionCreator(word))
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Button, Card } from "react-bootstrap";
-import { changeFieldsActionCreator, registerThunkCretor } from "../../reducers/registration-reducer";
+import { changeCheckboxActionCreator, changeFieldsActionCreator, registerThunkCretor } from "../../reducers/registration-reducer";
 import { useNavigate, NavLink  } from "react-router-dom";
 import React, { useEffect } from "react";
 import { bookInitialState } from "../../reducers/book-list-reducer";
@@ -18,7 +18,10 @@ function RegistrationFields(){
                 break;
        }}
        const handleClick = () => {
-            dispatch(registerThunkCretor(state.login, state.password))           
+            dispatch(registerThunkCretor(state.login, state.password,state.checkbox))           
+       }
+       const handleCheckboxClick = () => {
+            dispatch(changeCheckboxActionCreator())
        }
        useEffect(()=>{
         if(state.logedIn){
@@ -26,8 +29,8 @@ function RegistrationFields(){
         }
     },[state.logedIn]);
     return (
-        <div className="d-flex justify-content-center vh-100" style={{marginTop:'20%'}}>
-        <Card className=" bg-light" style={{ width: '700px', height: '300px' }}>
+        <div className="d-flex justify-content-center" style={{marginTop:'20%'}}>
+        <Card className=" bg-light" style={{ width: '700px' }}>
             <Card.Header>
                 <h2 className="justify-content-center">Регистрация</h2>
             </Card.Header>
@@ -43,13 +46,21 @@ function RegistrationFields(){
                         />
                     </Form.Group>
             
-                    <Form.Group controlId="password">
+                    <Form.Group >
                         <Form.Label>Пароль</Form.Label>
                         <Form.Control
                         type="password"
                         value={state.password}
                         onChange={handleChangeWrapper(1)}
                         placeholder="Введите пароль"
+                        />
+                    </Form.Group>
+                    <Form.Group style={{marginTop:'2px'}}>
+                        <Form.Check
+                        type="checkbox"
+                        label="Зарегистрироваться как учитель"
+                        checked={state.checkbox}
+                        onChange={handleCheckboxClick}
                         />
                     </Form.Group>
                     {state.error && <p className="text-danger">{state.error}</p>}

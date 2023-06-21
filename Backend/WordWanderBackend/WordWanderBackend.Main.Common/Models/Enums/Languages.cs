@@ -8,8 +8,44 @@ using System.Threading.Tasks;
 
 namespace WordWanderBackend.Main.Common.Models.Enums
 {
-	public static class Languages
-	{
+    public static class Languages
+    {
+        public static IReadOnlyDictionary<string, string> LanguageDictionary { get;  private set; }
+            = new Dictionary<string, string>
+        {
+            {"en","English"},
+            {"ru","Russian"},
+            {"ar","Arabic"},
+            {"az","Azerbaijani"},
+            {"ca","Catalan"},
+            {"zh","Chinese"},
+            {"cs","Czech"},
+            {"da","Danish"},
+            {"nl","Dutch"},
+            {"eo","Esperanto"},
+            {"fi","Finnish"},
+            {"fr","French"},
+            {"de","German"},
+            {"el","Greek"},
+            {"he","Hebrew"},
+            {"hi","Hindi"},
+            {"hu","Hungarian"},
+            {"id","Indonesian"},
+            {"ga","Irish"},
+            {"it","Italian"},
+            {"ja","Japanese"},
+            {"ko","Korean"},
+            {"fa","Persian"},
+            {"pl","Polish"},
+            {"pt","Portuguese"},
+            {"sk","Slovak"},
+            {"es","Spanish"},
+            {"sv","Swedish"},
+            {"th","Thai"},
+            {"tr","Turkish"},
+            {"uk","Ukranian"},
+        };
+
         public static LanguageInfo[] languages = new LanguageInfo[] {
             new LanguageInfo("en","English"),
             new LanguageInfo("ru","Russian"),
@@ -43,16 +79,16 @@ namespace WordWanderBackend.Main.Common.Models.Enums
             new LanguageInfo("tr","Turkish"),
             new LanguageInfo("uk","Ukranian"),
         };
-	}
+    }
     public struct LanguageInfo
-	{
-        public LanguageInfo(string languageCode ,string language)
+    {
+        public LanguageInfo(string languageCode, string language)
         {
             Language = language;
             LanguageCode = languageCode;
         }
-       public string Language;
-       public string LanguageCode;
+        public string Language;
+        public string LanguageCode;
     }
 
 }

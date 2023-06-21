@@ -4,6 +4,7 @@ import FontAndThemeTracker from "./BookView/FontAndThemeTracker";
 import ProgressTracker from "./BookView/ProgressTracker";
 import BookNavigation from "./BookView/BookNavigation";
 import { setBookViewActionCreator, updateProgressThunkCreator } from "../../reducers/reader-reducer";
+import ErrorsListener from "../common/ErrorsListener";
 
 export default function BookView() {
     const book = useSelector(state => state.readerReducer.book)
@@ -35,6 +36,7 @@ export default function BookView() {
             <FontAndThemeTracker />
             <ProgressTracker  />
             <BookNavigation />
+            <ErrorsListener />
         </div>
     );
 }

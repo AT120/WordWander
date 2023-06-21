@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjCommon.Exceptions;
 using WordWanderBackend.Main.Common.Const;
 using WordWanderBackend.Main.Common.Interfaces;
+using WordWanderBackend.Main.Common.Models.Enums;
 using WordWanderBackend.Main.DAL;
 using WordWanderBackend.Main.DAL.Models;
 
@@ -23,20 +24,24 @@ public class AuthService : IAuthService
         _passwordHasher = ph;
     }
 
-    public async Task Register(string username, string password)
+    public async Task Register(string username, string password, Role role, HttpContext context)
     {
         if (password.Length < 5)
             throw new BackendException(400, "Password is too short");
 
-        await _dbcontext.Users.AddAsync(new UserDbModel
+        var user = new UserDbModel
         {
             UserName = username,
+            Role = role,
             PasswordHash = _passwordHasher.HashPassword(null, password)
-        });
+        };
+
+        await _dbcontext.Users.AddAsync(user);
 
         try
         {
             await _dbcontext.SaveChangesAsync();
+            await CookieSignIn(user, context);
         }
         catch
         {
@@ -67,7 +72,11 @@ public class AuthService : IAuthService
 
     private static async Task CookieSignIn(UserDbModel user, HttpContext context)
     {
-        var claims = new List<Claim> { new Claim(ClaimsType.UserId, user.Id.ToString()) };
+        var claims = new List<Claim> { 
+            new Claim(ClaimsType.UserId, user.Id.ToString()) ,
+            new Claim(ClaimsType.Role, user.Role.ToString())
+        };
+
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await context.SignInAsync(new ClaimsPrincipal(identity));
     }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ToReversoContext from "./ToReversoContext";
 import ToGlosbe from "./ToGlosbe";
+import ToDictionary from "./ToDictionary";
 
 function countSpaces(text) {
     let spaces = 0
@@ -64,6 +65,14 @@ export default function TranslateMobile({ translation, sourceLang, targetLang })
                 </button>
                 <div className="d-flex ms-auto">
                     <div className="me-3">
+                        <ToDictionary
+                            width="3.4rem"
+                            height="3rem"
+                            word={textToTranslate}
+                            translation={translatedText}
+                        />
+                    </div>
+                    <div className="me-3">
                         <ToGlosbe
                             textToTranslate={textToTranslate}
                             sourceLang={sourceLang}
@@ -80,6 +89,7 @@ export default function TranslateMobile({ translation, sourceLang, targetLang })
                             size="3rem"
                         />
                     </div>
+
                 </div>
             </div>
 

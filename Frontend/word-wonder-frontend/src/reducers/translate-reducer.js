@@ -15,7 +15,7 @@ const initialState = {
         translatedText: '',
         position: { x: 0, y: 0 }
     },
-    sourceLanguage: 'en', //TODO: убрать
+    sourceLanguage: 'en',
     targetLanguage: 'ru',
     translateApiType: availableTranslators.LibreTranslate,
 }
@@ -78,8 +78,16 @@ export function newTextToTranslateThunkCreator(text, event) {
 
         dispatch({ type: NEW_TEXT_TO_TRANSLATE, text: text, event: event })
         const state = getState().translateReducer
-        const translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
-        if (translatedText)
+        const dictionary = getState().readerReducer.dictionary
+        
+        let dictText = dictionary.get(text.toLowerCase())?.[0]
+        let translatedText = await translate(text, state.sourceLanguage, state.targetLanguage);
+        
+        if (dictText && translatedText)
+            dispatch({ type: NEW_TRANSLATED_TEXT, text: `${dictText} (${translatedText})` })
+        else if (dictText)
+            dispatch({ type: NEW_TRANSLATED_TEXT, text: dictText })
+        else if (translatedText)
             dispatch({ type: NEW_TRANSLATED_TEXT, text: translatedText })
         else
             console.log('ээээ') //TODO: обработка ошибок

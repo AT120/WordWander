@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjCommon.Exceptions;
+using WordWanderBackend.Main.BL.Statics;
 using WordWanderBackend.Main.Common.Interfaces;
 using WordWanderBackend.Main.Common.Models.DTO;
+using WordWanderBackend.Main.Common.Models.Enums;
 
 namespace WordWanderBackend.Main.Controllers;
 
@@ -17,11 +19,15 @@ public class AuthController : Controller
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register(UserCredsDTO creds)
+    public async Task<ActionResult> Register(UserRegisterCredsDTO creds)
     {
         try
         {
-            await _authService.Register(creds.UserName, creds.Password);
+            await _authService.Register(
+                creds.UserName,
+                creds.Password,
+                creds.Role ?? Role.Student,
+                HttpContext);
             return Ok();
         }
         catch (BackendException be)
@@ -71,11 +77,11 @@ public class AuthController : Controller
         }
     }
     [HttpGet("authorized")]
-    [Authorize] 
+    [Authorize]
     public async Task<IActionResult> CheckIfAuthorized()
     {
-        return Ok();
+        return Ok(ClaimsManager.GetRoleClaim(User));
     }
-    
-    
+
+
 }

@@ -1,27 +1,31 @@
 import React from 'react';
 import { Navbar, Nav} from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useOutletContext } from 'react-router-dom';
 import logo from './favicon.ico'
 import { useEffect, useState } from 'react';
 import { authApi, checkAuth } from '../../api/api';
 import { useNavigate } from "react-router-dom";
+import InvitationDropdown from './Invitation-dropdown';
+import { Provider } from 'react-redux';
+import invitationStore from '../../store/invitationStore';
 
 function Navigation() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const role = useOutletContext()
+  const [isAuthenticated, setIsAuthenticated] = useState(role!=undefined);
   const navigate = useNavigate();
-  const handleClick = () =>{
-    authApi.logout().then(response=>
+  const handleClick = async () => {
+    await authApi.logout().then(response=>
       navigate('/login', {state:{
         login:"",
         password:"",
         logedIn:false
     }})
-      )
+    )
     window.location.reload();
   }
-    useEffect(() => {
-      checkAuth.checkLogin()
+    useEffect( () => {
+       checkAuth.checkLogin()
         .then(data => {
           setIsAuthenticated(data !== undefined);
           setIsLoading(false);
@@ -34,7 +38,7 @@ function Navigation() {
     }, [window.location.pathname]);
     
   return (
-    
+    <Provider store={invitationStore}>
     <Navbar   fixed="top" bg="dark" expand="lg">
       <Navbar.Brand href="/" style={{marginLeft:'20px'}}>
       <img
@@ -46,24 +50,34 @@ function Navigation() {
       </Navbar.Brand>
       <Navbar.Toggle style={{marginRight:'20px'}} className="navbar-dark" aria-controls="navbar-nav" />
       <Navbar.Collapse id="navbar-nav">
-        <Nav  className="mr-auto ">
+        <Nav className='d-flex flex-lg-row flex-column flex-grow-1'>
+
           { isAuthenticated &&
-          <NavLink className="nav-link"  to="/list" style={{color:'white', marginLeft:'15px'}}>Мои книги</NavLink>
+          <>
+          <NavLink className="nav-link ms-3"  to="/list" style={{color:'white'}}>Мои книги</NavLink>
+          <NavLink className="nav-link ms-3"  to="/dictionary" style={{color:'white'}}>Словарь</NavLink>
+          <NavLink className="nav-link ms-3"  to="/groups" style={{color:'white'}}>Группы</NavLink>
+          </>
           }
+          { isAuthenticated &&
+          <InvitationDropdown/>
+          }
+          
           { !isAuthenticated &&
           <>
-          <NavLink className="nav-link" to="/login" style={{color:'white', marginLeft:'15px'}}>Логин</NavLink>
-          <NavLink className="nav-link" to="/registration" style={{color:'white', marginLeft:'15px'}}>Регистрация</NavLink>
+          <NavLink className="nav-link ms-3" to="/login" style={{color:'white'}}>Логин</NavLink>
+          <NavLink className="nav-link ms-3" to="/registration" style={{color:'white'}}>Регистрация</NavLink>
           </>
           }
                   {
           isAuthenticated &&
-          <NavLink className="nav-link my-sm-0"  style={{color:'white', marginLeft:'15px'}} onClick={handleClick}>Выйти</NavLink>
+          <NavLink className="nav-link ms-3 ms-lg-auto me-lg-3"  style={{color:'white'}} onClick={handleClick}>Выйти</NavLink>
         } 
         </Nav>
  
       </Navbar.Collapse>
     </Navbar>
+    </Provider>
   );
 }
 
