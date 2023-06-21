@@ -99,9 +99,9 @@ namespace WordWanderBackend.Main.BL.Services
             var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
             if (File.Exists(filePath))
             {
-                await Task.Run(() => File.Delete(filePath));
                 _context.Remove(book);
                 await _context.SaveChangesAsync();
+                await Task.Run(() => File.Delete(filePath));
             }
             else
             {
