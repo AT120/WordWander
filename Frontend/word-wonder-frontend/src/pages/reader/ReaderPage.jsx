@@ -6,6 +6,7 @@ import BookLoader from '../../components/reader/BookLoader';
 import TranslatePopup from '../../components/reader/TranslatePopup';
 import ReaderSettings from '../../components/reader/ReaderSettings';
 import { useLocation } from 'react-router';
+import CloseBook from '../../components/reader/CloseBook';
 // import "./Reader.css"
 
 function Reader() {
@@ -17,6 +18,7 @@ function Reader() {
     return (
         <Provider store={storeReader}>
             <ReaderSettings />
+            <CloseBook />
             <TranslatePopup />
             <BookLoader fileId={location.state.id} foreign={location.state.foreign} />
         </Provider>
