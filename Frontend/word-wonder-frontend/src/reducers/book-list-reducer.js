@@ -1,4 +1,5 @@
 import { bookApi } from "../api/api";
+import memberInfoApi from "../api/member-info-api";
 import { loadBook } from "../foliate-js/reader-import";
 
 const LOAD_BOOKS = "LOAD_BOOKS";
@@ -12,7 +13,11 @@ const CHANGE_MODAL_STATE = "CHANGE_MODAL_STATE";
 const START_LOADING = "START_LOADING";
 const SHOW_ERROR_MESSAGE = "SHOW_ERROR_MESSAGE"
 const SHOW_DELETE_ERROR = "SHOW_DELETE_ERROR"
+const SET_STUDENT_ID = "SET_STUDENT_ID"
+
+
 export const bookInitialState = {
+    studentId: null,
     books: [],
     numberOfPages: 0,
     page: 1,
@@ -92,9 +97,17 @@ const bookListReducer = (state = initialState, action) => {
             newState.deleteErrorIn = action.id
             newState.deleteError = action.error
             return newState
+        case (SET_STUDENT_ID):
+            newState.studentId = action.studentId
+            return newState
         default:
             return newState
     }
+}
+
+
+export function setStudentIdActionCreator(id) {
+    return { type: SET_STUDENT_ID, studentId: id }
 }
 
 export function loadBooksActionCreator(books, page, sortBy, searchName = "") {
@@ -106,10 +119,19 @@ export function setBookTimeActionCreator(id) {
     }
 }
 export function loadBooksThunkCreator(page, name = null, sortBy = null) {
-    return (dispatch) => {
-        bookApi.getBooks(Math.max(page, 1), name, sortBy).then(data => {
-            dispatch(loadBooksActionCreator(data, page, sortBy, name))
-        })
+    return async (dispatch, getState) => {
+        const studentId = getState().booksPage.studentId
+        if (studentId) {
+            const res = await memberInfoApi.loadBookList(studentId, Math.max(page, 1), name, sortBy)
+            if (res)
+                dispatch(loadBooksActionCreator(res, page, sortBy, name))
+                
+        }
+        else {
+            bookApi.getBooks(Math.max(page, 1), name, sortBy).then(data => {
+                dispatch(loadBooksActionCreator(data, page, sortBy, name))
+            })
+        }
     }
 }
 

@@ -173,13 +173,14 @@ namespace WordWanderBackend.Main.Controllers
         [HttpGet("student/{studentId}/books")]
         public async Task<ActionResult<BooksPaginationDTO>> GetStudentsBooks(
             Guid studentId,
+            int? page,
             BookSortParam? sortedBy,
             string name = "")
         {
             try
             {
                 var books = await _bookListService.GetUserBooks(
-                    null,
+                    page,
                     name,
                     studentId,
                     sortedBy,

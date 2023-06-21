@@ -20,7 +20,6 @@ function Translations() {
 		!Array.isArray(state.translations.translationDtos) ||
 		!state.translations.translationDtos.length
 	) {
-		console.log(" null");
 		return (
 			<div>
                 <div className="position-absolute top-50 start-50 translate-middle">

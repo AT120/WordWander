@@ -9,25 +9,23 @@ import Footer from "../common/Footer";
 
 export default function GroupMemberInfo() {
 	const role = useOutletContext();
-	//redirect
-	//role !teacher - redirect  -> groups
     const location = useLocation()
-    console.log(`location:${location}` , location)  
 
 	const navigate = useNavigate();
 	if (role !== "Teacher") navigate("/groups");
 
+	//TODO: страница для отображения некорректного id
 	return (
 		<div>
 			<Provider store={GroupMemberInfoStore}>
 				<Navigation />
 				<div className="GroupMemberInfo mb-5">
-					<div style={{ marginTop: "60px" }} className="container">
+					<div style={{ marginTop: "60px" }} className="container border border-3  rounded">
 						<div className="ms-2 pt-2 mb-3">
-							<h3> Пользователь:Имя пользователя </h3>
+							<h3> Пользователь:<strong> {location.state.name}</strong> </h3>
 						</div>
 
-						<GroupMemberInfoContainer />
+						<GroupMemberInfoContainer/>
 					</div>
 				</div>
 			</Provider>
