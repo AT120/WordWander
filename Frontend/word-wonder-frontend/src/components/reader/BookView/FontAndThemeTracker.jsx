@@ -56,6 +56,7 @@ function updateDocumentTheme(theme) {
 }
 function resetDocumentTheme() {
     document.documentElement.className = ''
+    document.documentElement.style.colorScheme = ''
 }
 
 export default function FontAndThemeTracker() {
