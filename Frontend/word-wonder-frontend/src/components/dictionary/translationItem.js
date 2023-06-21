@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { deleteTranslationThunkCreator } from "../../reducers/dictionary-reducer";
 import FavouriteStar from "./FavouriteStar";
 import BookTitle from "./bookTitle";
-
+import { TimeSince } from "../common/AuxiliaryFunctions";
 
 
 function TranslationItem(props) {
@@ -13,49 +13,14 @@ function TranslationItem(props) {
 		console.log("deleting translation with id: " + props.translationId);
 		dispatch(deleteTranslationThunkCreator(props.translationId));
 	};
-
-	const timeSince = () => {
-		var seconds = Math.floor(
-			(new Date() - new Date(props.creationDate)) / 1000
-		);
-		console.log("timesince");
-		var interval = seconds / 31536000;
-
-		if (interval > 1) {
-			console.log(Math.floor(interval) + " years");
-			return Math.floor(interval) + " years ago";
-		}
-		interval = seconds / 2592000;
-		if (interval > 1) {
-			console.log(Math.floor(interval) + " months");
-			return Math.floor(interval) + " months ago";
-		}
-		interval = seconds / 86400;
-		if (interval > 1) {
-			console.log(Math.floor(interval) + " days");
-			return Math.floor(interval) + " days ago";
-		}
-		interval = seconds / 3600;
-		if (interval > 1) {
-			console.log(Math.floor(interval) + " hours");
-			return Math.floor(interval) + " hours ago";
-		}
-		interval = seconds / 60;
-		if (interval > 1) {
-			console.log(Math.floor(interval) + " minutes ago");
-			return Math.floor(interval) + " minutes ago";
-		}
-		console.log(Math.floor(seconds) + " seconds ago");
-		return Math.floor(seconds) + " seconds ago";
-	};
-
+	console.log(props)
 	return (
 		<Card>
 			<Card.Header>
 				<div className="d-flex">
 					<FavouriteStar favourite={props.favourite} translationId={props.translationId}/>
-					<BookTitle title={props.bookTitle}/>
-					<div className="align-self-center">{timeSince()}</div>
+					<BookTitle title={props.bookTitle} className="ms-3"/>
+					<div className="align-self-center">{TimeSince(props.creationDate)}</div>
 					<button
 						className="btn btn-sm btn-outline-secondary border-0 me-1"
 						onClick={deleteTranslation}

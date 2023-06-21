@@ -7,11 +7,6 @@ import GroupMemberTranslationItem from "./groupMemberTranslationItem";
 
 
 
-
-
-
-
-
 export default function GroupMemberTranslationCollection(){
     const state =useSelector((state)=>state.groupMemberInfoReducer);
     const dispatch = useDispatch();
@@ -41,7 +36,17 @@ export default function GroupMemberTranslationCollection(){
                 <div className="card-deck">
                     {
                         state.translations.map((value)=>{return(
-                            <GroupMemberTranslationItem/>
+                            <GroupMemberTranslationItem 
+                            originalLanguage={value.defaultLanguage}
+                            originalSequence={value.defaultSequnce}
+                            translationLanguage={value.translatedLangauge}
+                            translatedSequence={value.translatedSequence}
+                            bookId={value.bookId}
+                            translationId={value.translationId}
+                            key={value.translationId}
+                            creationDate={value.created}
+                            bookTitle={value.bookTitle}
+                            favourite={value.favourite}/>
                         )})
                     }
                     
