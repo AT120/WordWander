@@ -25,7 +25,7 @@ function RegistrationFields(){
        }
        useEffect(()=>{
         if(state.logedIn){
-        navigate("/list",{state:{bookInitialState}})
+            window.location.href="/list"
         }
     },[state.logedIn]);
     return (

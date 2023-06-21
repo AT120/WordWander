@@ -109,7 +109,7 @@ export const bookApi = {
     setBookTime : setBookTime
 }
 
-function login(login, password) {
+async function login(login, password) {
 
     const formData = new FormData();
     formData.append('userName', login)
@@ -129,7 +129,7 @@ function login(login, password) {
         });
 }
 
-function register(login, password,role){
+async function register(login, password,role){
     return instance.post('auth/register',    
         {
             userName: login,
@@ -147,7 +147,7 @@ function register(login, password,role){
 }
 
 
-function logout() {
+async function logout() {
 
     const formData = new FormData();
     return instance.post('auth/logout',)

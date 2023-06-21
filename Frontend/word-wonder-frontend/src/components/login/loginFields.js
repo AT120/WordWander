@@ -26,7 +26,7 @@ function LoginFields(){
             dispatch(stateFromLocationActionCreator(location.state))
         }
         if(state.logedIn){
-        navigate("/list")
+        window.location.href="/list"
         }
     },[state.logedIn]);
     return (
