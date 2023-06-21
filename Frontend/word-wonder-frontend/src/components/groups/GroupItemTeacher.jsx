@@ -19,8 +19,8 @@ export default function GroupItemTeacher({ name, id }) {
             dispatch(loadStudentsThunkCreator(id))
     }
 
-    const goToStudent = () => {
-        navigate("/member-info", { id: id })
+    function goToStudent(id, name) {
+        navigate("/member-info", { id: id, name: name })
     }
 
     return (
@@ -42,14 +42,18 @@ export default function GroupItemTeacher({ name, id }) {
             <Accordion.Body onEntering={loadStudents}>
                 {
                     (!students) ? 'Загрузка...' :
-                        (students.length == 0) ? 'В этой группе никого нет' :
-                            students.map((student) => {
-                                return (
-                                    <a className="border-bottom" onClick={goToStudent} style={{cursor: "pointer"}}>
-                                        <h5>{student.userName}</h5>
-                                    </a>
-                                )
-                            })
+                    (students.length == 0) ? 'В этой группе никого нет' :
+                        students.map((student) => {
+                            return (
+                                <a 
+                                    className="border-bottom" 
+                                    onClick={() => goToStudent(student.id, student.userName)} 
+                                    style={{cursor: "pointer"}}
+                                >
+                                    <h5>{student.userName}</h5>
+                                </a>
+                            )
+                        })
 
                 }
             </Accordion.Body>
