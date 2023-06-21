@@ -105,7 +105,7 @@ namespace WordWanderBackend.Main.BL.Services
 
         public async Task DeleteBookFromList(Guid id, Guid userId)
         {
-            var book = _context.Books.FirstOrDefault(x => x.Id == id && x.UserId == userId);
+            var book = _context.Books.Include(c=>c.Dictionary).FirstOrDefault(x => x.Id == id && x.UserId == userId);
             if (book == null)
             {
                 throw new ArgumentException($"There is no book with this {id} id!");
@@ -113,6 +113,7 @@ namespace WordWanderBackend.Main.BL.Services
             var filePath = _storageSettings.FolderPath + book.Id + book.Extension;
             if (File.Exists(filePath))
             {
+                book.Dictionary.ForEach(c => c.Book = null);
                 _context.Remove(book);
                 await _context.SaveChangesAsync();
                 await Task.Run(() => File.Delete(filePath));
