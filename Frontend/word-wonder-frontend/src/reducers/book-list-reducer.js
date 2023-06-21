@@ -100,7 +100,7 @@ const bookListReducer = (state = initialState, action) => {
 export function loadBooksActionCreator(books, page, sortBy, searchName = "") {
     return { type: LOAD_BOOKS, books: books.books, page: page, numberOfPages: books.numberOfPages, searchName: searchName, sortBy: sortBy }
 }
-export function setBookTimeActionCreator(id){
+export function setBookTimeActionCreator(id) {
     return (dispatch) => {
         bookApi.setBookTime(id)
     }
@@ -133,15 +133,23 @@ export function setAddBookParamsActionCreator(title = null, description = null, 
 
 export function loadBookFileThunkCreator(file) {
     return async (dispatch) => {
-        const book = await loadBook(file)
-        if (book)
-            dispatch(setAddBookParamsActionCreator(
-                book.metadata.title,
-                book.metadata.description?.replace(/<(.|\n)*?>/g, ''),
-                file
-            ))
-        else 
+        try {
+
+            const book = await loadBook(file)
+            if (book)
+                dispatch(setAddBookParamsActionCreator(
+                    book.metadata.title,
+                    book.metadata.description?.replace(/<(.|\n)*?>/g, ''),
+                    file
+                ))
+            else {
+                dispatch(setAddBookParamsActionCreator(null, null, file))
+                dispatch(errorToPostBookActionCreator("Формат книги не поддерживается"))
+            }
+        } catch {
             dispatch(setAddBookParamsActionCreator(null, null, file))
+            dispatch(errorToPostBookActionCreator("Формат книги не поддерживается"))
+        }
     }
 }
 
