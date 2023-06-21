@@ -87,7 +87,16 @@ async function sendReaderParameters(bookId, params) {
         console.log('Cant sync reader params')
     }
 }
-
+async function setBookTime(id){
+    return instance.put(`books/setTime/${id}`).then(response => {
+        if (response.status === 200) {
+            return response
+        }
+    })
+    .catch(error => {
+        return error.response //TODO: добавить обработку ошибок
+    });
+}
 
 export const bookApi = {
     getBooks: getBooks,
@@ -97,6 +106,7 @@ export const bookApi = {
     sendProgress: sendProgress,
     loadReaderParameters: loadReaderParameters,
     sendReaderParameters: sendReaderParameters,
+    setBookTime : setBookTime
 }
 
 function login(login, password) {
