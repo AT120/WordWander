@@ -89,4 +89,19 @@ public class BookService : IBookService
 
         await _dbcontext.SaveChangesAsync();
     }
+
+    public async Task SetBookLastTimeOpening(Guid bookId, Guid userId)
+    {
+        var book = await _dbcontext.Books.FirstOrDefaultAsync(x => x.Id== bookId);
+        if (book == null)
+        {
+            throw new ArgumentNullException($"There is no book with this {bookId} id!");
+        }
+        if (book.UserId != userId)
+        {
+            throw new InvalidOperationException($"You can't edit book with this {bookId} id");
+        }
+        book.LastOpeningTime= DateTime.UtcNow;
+        await _dbcontext.SaveChangesAsync();
+    }
 }

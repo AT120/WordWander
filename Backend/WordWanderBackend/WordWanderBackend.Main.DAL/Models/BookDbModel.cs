@@ -11,7 +11,7 @@ namespace WordWanderBackend.Main.DAL.Models
         public string Extension { get; set; }
         public string? SourceLanguageCode { get; set; }
         public string? TargetLanguageCode { get; set; }
-
+        public DateTime LastOpeningTime { get; set; }
         public Guid UserId { get; set; }
         public UserDbModel User { get; set; }
 		public List<DictionaryDbModel> Dictionary { get; set; }
@@ -28,6 +28,7 @@ namespace WordWanderBackend.Main.DAL.Models
             Description = description;
             CurrentPercent = 0;
             Extension = extension;
+
         }
         public BookDbModel() { }
     }

@@ -101,4 +101,25 @@ public class BookController : Controller
             return Problem("Unknown server error", statusCode: 500);
         }
     }
+    [HttpPut("setTime/{id}")]
+    public async Task<IActionResult> SetBootLastOpening(Guid id)
+    {
+        try
+        {
+           await _bookService.SetBookLastTimeOpening(id, ClaimsManager.GetIdClaim(User));
+            return Ok();
+        }
+        catch (ArgumentNullException ex) 
+        { 
+            return Problem(ex.Message,statusCode: 404);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(ex.Message,statusCode: 403);
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message,statusCode: 500);
+        }
+    }
 }

@@ -56,7 +56,11 @@ namespace WordWanderBackend.Main.BL.Services
                 case BookSortParam.NameDesc:
                     query = query.OrderByDescending(x => x.Name).AsQueryable();
                     break;
+                case BookSortParam.TimeDesc:
+                    query = query.OrderByDescending(x => x.LastOpeningTime).AsQueryable();
+                    break;
                 case null:
+                    query = query.OrderByDescending(x => x.LastOpeningTime).AsQueryable();
                     break;
             }
 

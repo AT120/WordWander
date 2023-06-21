@@ -8,4 +8,5 @@ public interface IBookService
     Task UpdateProgress(Guid bookId, Guid userId, double PercentReaded);
     Task<ReaderParametersWithProgress> GetReaderParameters(Guid bookId, Guid userId);
     Task SetReaderParameters(Guid bookId, Guid userId, ReaderParameters parameters);
+    Task SetBookLastTimeOpening(Guid bookId, Guid userId);
 }
