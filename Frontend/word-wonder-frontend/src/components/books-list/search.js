@@ -23,20 +23,20 @@ function SearchElem() {
             <InputGroup>
                 <FormControl
                 type="text"
-                placeholder="Search..."
+                placeholder="Поиск..."
                 value={state.searchTerm}
                 onChange={handleSearch}
                 onKeyDown={handleKeyDown}
                 />
-                <DropdownButton id="dropdown-basic-button" title="Sort By">
+                <DropdownButton id="dropdown-basic-button" title="Сортировать">
                     <Dropdown.Item onClick={() => handleSortBy(0)} active={state.sortBy === 0}>
-                        TitleAsc
+                        Название↑
                     </Dropdown.Item>
                     <Dropdown.Item  onClick={() => handleSortBy(1)} active={state.sortBy === 1}>
-                        TitleDesc
+                        Название↓
                     </Dropdown.Item>
                     <Dropdown.Item  onClick={() => handleSortBy(null)} active={state.sortBy === null}>
-                        TimeDesc
+                        Время↓
                     </Dropdown.Item>
                 </DropdownButton>
             </InputGroup>

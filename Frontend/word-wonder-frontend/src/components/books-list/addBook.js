@@ -34,24 +34,27 @@ function AddBook() {
 
             <Modal show={state.showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Upload File</Modal.Title>
+                    <Modal.Title>Загрузить файл</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
+
                         <Form.Group>
-                            <Form.Label>Title</Form.Label>
+                            <Form.Label>Файл</Form.Label>
+                            <Form.Control type="file" onChange={handleChangeWrapper(2)}></Form.Control>
+                        </Form.Group>
+
+                        <Form.Group>
+                            <Form.Label>Название</Form.Label>
                             <Form.Control type="text" placeholder="Enter title" value={state.addBook.title} onChange={handleChangeWrapper(0)}></Form.Control>
                         </Form.Group>
 
                         <Form.Group>
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Описание</Form.Label>
                             <Form.Control type="textarea" rows={3} placeholder="Enter description" value={state.addBook.description} onChange={handleChangeWrapper(1)}></Form.Control>
                         </Form.Group>
 
-                        <Form.Group>
-                            <Form.Label>File</Form.Label>
-                            <Form.Control type="file" onChange={handleChangeWrapper(2)}></Form.Control>
-                        </Form.Group>
+
 
                     </Form>
                 </Modal.Body>
