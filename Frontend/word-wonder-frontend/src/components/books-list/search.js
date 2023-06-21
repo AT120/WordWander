@@ -36,7 +36,7 @@ function SearchElem() {
                         TitleDesc
                     </Dropdown.Item>
                     <Dropdown.Item  onClick={() => handleSortBy(null)} active={state.sortBy === null}>
-                        None
+                        TimeDesc
                     </Dropdown.Item>
                 </DropdownButton>
             </InputGroup>
